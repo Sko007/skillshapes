@@ -1,0 +1,118 @@
+application {
+  config {
+    baseName gateway,
+    applicationType gateway,
+    packageName com.devoteam.skillshapes,
+    authenticationType oauth2,
+    prodDatabaseType no,
+    databaseType no,
+    devDatabaseType no,
+    serverPort 8080,
+    clientFramework react,
+    blueprint quarkus,
+    buildTool maven,
+    languages [en, de],
+    nativeLanguage en,
+    serviceDiscoveryType eureka,
+    skipUserManagement true,
+  }
+  entities FrontendSkillShape, FrontendSkill, FrontendProfile 
+}
+application {
+  config {
+    baseName skillshapes,
+    applicationType microservice,
+    packageName com.devoteam.skillshapes,
+    authenticationType oauth2,
+    prodDatabaseType mariadb,
+    databaseType sql,
+    devDatabaseType mariadb,
+    clientFramework react,
+    serverPort 8081,
+    blueprint quarkus,
+    buildTool maven,
+    languages [en, de],
+    nativeLanguage en,
+    serviceDiscoveryType eureka,
+    skipUserManagement true,
+  }
+  entities Skill, UserProfile, ProfileSkill, SkillShape
+}
+/**
+ * Devoteam Profile
+ *
+ */
+ entity UserProfile{
+  firstName String,
+    lastName String,
+    email String,
+    generalKnowledge String,
+//    picture String,
+ }
+ /**
+ * The SkillShape class that represents the job and the skills related to it
+ * @author Devoteam
+ */
+entity SkillShape{
+  title String required, //Data Engineer
+  category String required, //Computer Science
+}
+
+/**
+ * The ProfileSkill represents the rating of the skill for each user 
+ * @author Devoteam
+ */
+entity ProfileSkill {
+  value Integer required min(1) max(4),
+}
+/**
+ * The Skill class representing a single skill with its name, category and rating (stars)
+ * @author Devoteam
+ */
+entity Skill{
+  name String required,
+  categoryName String required,
+}
+
+/**
+ * One SkillShape has multiple Skills associated with it
+ */
+relationship ManyToMany{
+  ProfileSkill to SkillShape
+}
+
+/**
+ * Skill can be in multiple ProfileSkill (consistency of skill information) 
+ * Profile has multiple ProfileSkills
+ */
+relationship OneToMany{
+  Skill to ProfileSkill,
+  UserProfile to ProfileSkill,
+}
+
+//FRONTEND RELATED
+
+relationship OneToMany{
+  FrontendSkillShape{Skill(id)} to FrontendSkill{SkillShape(id)}
+
+}
+relationship OneToMany{
+  FrontendProfile{SkillShape(id)} to FrontendSkillShape{Profile(id)}
+}
+
+entity FrontendProfile{
+  firstName String,
+  lastName String,
+  email String,
+  generalKnowledge String
+}
+
+entity FrontendSkill{
+  name String,
+  categoryName String,
+  value Integer,
+}
+entity FrontendSkillShape{
+  name String required,
+  category String required,
+}
