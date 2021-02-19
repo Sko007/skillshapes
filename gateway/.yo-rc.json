@@ -1,0 +1,54 @@
+{
+  "generator-jhipster": {
+    "authenticationType": "oauth2",
+    "cacheProvider": "ehcache",
+    "clientFramework": "react",
+    "serverPort": "8080",
+    "serviceDiscoveryType": "eureka",
+    "skipUserManagement": true,
+    "baseName": "gateway",
+    "buildTool": "maven",
+    "databaseType": "sql",
+    "devDatabaseType": "mariadb",
+    "enableHibernateCache": true,
+    "enableSwaggerCodegen": false,
+    "enableTranslation": true,
+    "jhiPrefix": "jhi",
+    "languages": ["en", "de"],
+    "messageBroker": false,
+    "nativeLanguage": "en",
+    "prodDatabaseType": "mariadb",
+    "searchEngine": false,
+    "skipClient": false,
+    "testFrameworks": [],
+    "websocket": false,
+    "applicationType": "gateway",
+    "packageName": "com.devoteam.skillshapes",
+    "packageFolder": "com/devoteam/skillshapes",
+    "blueprint": "quarkus",
+    "jhipsterVersion": "6.10.5",
+    "creationTimestamp": 1613738100744,
+    "skipServer": false,
+    "clientPackageManager": "npm",
+    "clientTheme": "none",
+    "clientThemeVariant": "",
+    "useSass": true,
+    "embeddableLaunchScript": false,
+    "authenticationTechnology": "other",
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [
+      {
+        "name": "generator-jhipster-quarkus",
+        "version": "1.0.0"
+      }
+    ],
+    "blueprints": [
+      {
+        "name": "generator-jhipster-quarkus",
+        "version": "1.0.0"
+      }
+    ]
+  },
+  "entities": []
+}
