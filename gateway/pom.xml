@@ -74,6 +74,19 @@
     <dependencies>
         <dependency>
             <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-rest-client</artifactId>
+          </dependency>
+          <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-resteasy-jackson</artifactId>
+          </dependency>
+          <dependency>
+            <groupId>com.github.fmcejudo</groupId>
+            <artifactId>quarkus-eureka</artifactId>
+            <version>0.0.10</version>
+          </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
             <artifactId>quarkus-undertow</artifactId>
         </dependency>
         <dependency>
@@ -693,4 +706,3 @@
         <!-- jhipster-needle-maven-add-profile -->
     </profiles>
 </project>
-
