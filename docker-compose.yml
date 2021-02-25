@@ -1,60 +1,66 @@
-version: '2'
+version: "2"
 services:
   gateway:
-    image: gateway
+    container_name: gateway
+    image: skillshapes/gateway:latest
     environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - 'SPRING_PROFILES_ACTIVE=prod,swagger'
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-      - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
-      - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
-      - 'SPRING_DATASOURCE_URL=jdbc:mariadb://gateway-mariadb:3306/gateway?useLegacyDatetimeCode=false&serverTimezone=UTC'
-      - 'SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster'
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      - _JAVA_OPTIONS=-Xmx1g -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev,swagger,api-docs,gateway
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:admin@jhipster-registry:8761/eureka
+      - CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config/master
+      - DATASOURCE_URL=jdbc:mariadb://gateway-mariadb:3306/gateway
+      - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+      - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_LOGOUT_URL=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/logout
       - JHIPSTER_SLEEP=120
-      - JHIPSTER_REGISTRY_PASSWORD=admin
     ports:
-      - '8080:8080'
+      - "127.0.0.1:8080:8080"
+    restart: on-failure
+    depends_on:
+      - gateway-mariadb
+      - jhipster-registry
+      - keycloak
   gateway-mariadb:
-    image: 'mariadb:10.5.3'
-    environment:
-      - MYSQL_USER=root
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_DATABASE=gateway
-    ports:
-      - '3306:3306'
-    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
-
+    container_name: gateway-db
+    extends:
+      file: gateway/src/main/docker/mariadb.yml
+      service: gateway-mariadb
   skillshapes:
-    image: skillshapes
+    container_name: skillshapes
+    image: skillshapes/skillshapes:latest
     environment:
-      - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - 'SPRING_PROFILES_ACTIVE=prod,swagger'
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-      - 'EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka'
-      - 'SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config'
-      - 'SPRING_DATASOURCE_URL=jdbc:mariadb://skillshapes-mariadb:3306/skillshapes?useLegacyDatetimeCode=false&serverTimezone=UTC'
-      - 'SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster'
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=internal
-      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=internal
+      - _JAVA_OPTIONS=-Xmx1g -Xms256m
+      - SPRING_PROFILES_ACTIVE=dev,swagger,api-docs,gateway"
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:admin@jhipster-registry:8761/eureka
+      - CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config/master
+      - DATASOURCE_URL=jdbc:mariadb://skillshapes-mariadb:3306/skillshapes
+      - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+      - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_LOGOUT_URL=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/logout
       - JHIPSTER_SLEEP=120
-      - JHIPSTER_REGISTRY_PASSWORD=admin
-  skillshapes-mariadb:
-    image: 'mariadb:10.5.3'
-    environment:
-      - MYSQL_USER=root
-      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
-      - MYSQL_DATABASE=skillshapes
     ports:
-      - '3306:3306'
-    command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
-
+      - "127.0.0.1:8081:8080"
+    restart: on-failure
+    depends_on:
+      - skillshapes-mariadb
+      - jhipster-registry
+      - keycloak
+  skillshapes-mariadb:
+    container_name: skillshapes-db
+    extends:
+      file: skillshapes/src/main/docker/mariadb.yml
+      service: skillshapes-mariadb
   jhipster-registry:
+    container_name: jhipster-registry
     extends:
       file: jhipster-registry.yml
       service: jhipster-registry
   keycloak:
+    container_name: keycloak
+    environment:
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
     extends:
       file: keycloak.yml
       service: keycloak
+networks:
+  default:
+    external:
+      name: skillshapes-network
