@@ -24,15 +24,15 @@ services:
     extends:
       file: gateway/src/main/docker/mariadb.yml
       service: gateway-mariadb
-  skillshapes:
-    container_name: skillshapes
-    image: skillshapes/skillshapes:latest
+  microservice:
+    container_name: microservice
+    image: skillshapes/microservice:latest
     environment:
       - _JAVA_OPTIONS=-Xmx1g -Xms256m
       - SPRING_PROFILES_ACTIVE=dev,swagger,api-docs,gateway"
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:admin@jhipster-registry:8761/eureka
       - CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config/master
-      - DATASOURCE_URL=jdbc:mariadb://skillshapes-mariadb:3306/skillshapes
+      - DATASOURCE_URL=jdbc:mariadb://microservice-mariadb:3306/skillshapes
       - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
       - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_LOGOUT_URL=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/logout
       - JHIPSTER_SLEEP=120
@@ -40,13 +40,13 @@ services:
       - "127.0.0.1:8081:8080"
     restart: on-failure
     depends_on:
-      - skillshapes-mariadb
+      - microservice-mariadb
       - jhipster-registry
       - keycloak
-  skillshapes-mariadb:
-    container_name: skillshapes-db
+  microservice-mariadb:
+    container_name: microservice-db
     extends:
-      file: skillshapes/src/main/docker/mariadb.yml
+      file: microservice/src/main/docker/mariadb.yml
       service: skillshapes-mariadb
   jhipster-registry:
     container_name: jhipster-registry
