@@ -32,13 +32,12 @@ Add the following to map all jhipster services to local.
 ```
 127.0.0.1 keycloak
 127.0.0.1 jhipster-registry
-127.0.0.1 gateway-mariadb
 127.0.0.1 skillshapes-mariadb
 ```
 
 ## Usage for Local Development
 
-Start keycloak, jhipster-registry and databases
+Start keycloak, jhipster-registry and database
 
 ```
 docker-compose -f local-development.yml up -d
