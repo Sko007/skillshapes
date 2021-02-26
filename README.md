@@ -84,6 +84,12 @@ Start all applications
 
 ```
 docker-compose up -d
+
+gateway
+http://localhost:8080
+
+microservice
+http://localhost:8081/q/swagger-ui/
 ```
 
 ### Service registry and configuration server:
