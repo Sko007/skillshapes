@@ -101,5 +101,4 @@ docker-compose up -d
 
 ### Additional Services:
 
-- [Keycloak server](http://localhost:9080)
-- ELK Stack
+- ELK Stack (in development)
