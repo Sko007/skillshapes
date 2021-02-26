@@ -5,6 +5,7 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { IUserProfile, defaultValue } from 'app/shared/model/user-profile.model';
+import { apiPrefix } from 'app/shared/util/url-utils';
 
 export const ACTION_TYPES = {
   FETCH_USERPROFILE_LIST: 'userProfile/FETCH_USERPROFILE_LIST',
@@ -95,7 +96,7 @@ export default (state: UserProfileState = initialState, action): UserProfileStat
   }
 };
 
-const apiUrl = '/api/user-profiles';
+const apiUrl = `${apiPrefix}/api/user-profiles`;
 
 // Actions
 

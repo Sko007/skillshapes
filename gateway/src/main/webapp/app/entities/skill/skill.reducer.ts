@@ -5,6 +5,7 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { ISkill, defaultValue } from 'app/shared/model/skill.model';
+import { apiPrefix } from 'app/shared/util/url-utils';
 
 export const ACTION_TYPES = {
   FETCH_SKILL_LIST: 'skill/FETCH_SKILL_LIST',
@@ -95,7 +96,7 @@ export default (state: SkillState = initialState, action): SkillState => {
   }
 };
 
-const apiUrl = 'api/skills';
+const apiUrl = `${apiPrefix}/api/skills`;
 
 // Actions
 

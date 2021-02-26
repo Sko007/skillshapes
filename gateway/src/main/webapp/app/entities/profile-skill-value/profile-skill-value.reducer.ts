@@ -5,6 +5,7 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { IProfileSkillValue, defaultValue } from 'app/shared/model/profile-skill-value.model';
+import { apiPrefix } from 'app/shared/util/url-utils';
 
 export const ACTION_TYPES = {
   FETCH_PROFILESKILLVALUE_LIST: 'profileSkillValue/FETCH_PROFILESKILLVALUE_LIST',
@@ -95,7 +96,7 @@ export default (state: ProfileSkillValueState = initialState, action): ProfileSk
   }
 };
 
-const apiUrl = 'api/profile-skill-values';
+const apiUrl = `${apiPrefix}/api/profile-skill-values`;
 
 // Actions
 

@@ -5,6 +5,7 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { ISkillShape, defaultValue } from 'app/shared/model/skill-shape.model';
+import { apiPrefix } from 'app/shared/util/url-utils';
 
 export const ACTION_TYPES = {
   FETCH_SKILLSHAPE_LIST: 'skillShape/FETCH_SKILLSHAPE_LIST',
@@ -95,7 +96,7 @@ export default (state: SkillShapeState = initialState, action): SkillShapeState 
   }
 };
 
-const apiUrl = 'api/skill-shapes';
+const apiUrl = `${apiPrefix}/api/skill-shapes`;
 
 // Actions
 
