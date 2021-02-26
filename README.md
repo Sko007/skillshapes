@@ -2,6 +2,8 @@
 
 Implementing a MS application that displays the Skill-Shapes of company employees using their CV data.
 
+![alt text](skillshape.png "SkillShape")
+
 ## Tools (Windows 10)
 
 - [Visual Studio Code](https://code.visualstudio.com/docs/?dv=win)
