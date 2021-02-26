@@ -58,6 +58,7 @@ Start microservice application
 
 ```
 cd microservice
+UPDATE src/main/resources/application.properties : quarkus.http.port=8081
 .\mvnw compile quarkus:dev -Ddebug=5006
 
 Service listens on - localhost:8081/q/dev

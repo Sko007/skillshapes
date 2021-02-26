@@ -14,7 +14,7 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
       - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     ports:
-      - "8080:8080"
+      - 8080:8080
     restart: on-failure
     depends_on:
       - jhipster-registry
@@ -32,7 +32,7 @@ services:
       - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_LOGOUT_URL=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/logout
       - JHIPSTER_SLEEP=120
     ports:
-      - "8081:8080"
+      - 8081:8080
     restart: on-failure
     depends_on:
       - microservice-mariadb
