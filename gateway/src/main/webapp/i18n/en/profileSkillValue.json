@@ -1,0 +1,24 @@
+{
+  "gatewayApp": {
+    "profileSkillValue": {
+      "home": {
+        "title": "Profile Skill Values",
+        "createLabel": "Create a new Profile Skill Value",
+        "createOrEditLabel": "Create or edit a Profile Skill Value",
+        "notFound": "No Profile Skill Values found"
+      },
+      "created": "A new Profile Skill Value is created with identifier {{ param }}",
+      "updated": "A Profile Skill Value is updated with identifier {{ param }}",
+      "deleted": "A Profile Skill Value is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete Profile Skill Value {{ id }}?"
+      },
+      "detail": {
+        "title": "Profile Skill Value"
+      },
+      "value": "Value",
+      "skill": "Skill",
+      "skillshape": "Skillshape"
+    }
+  }
+}

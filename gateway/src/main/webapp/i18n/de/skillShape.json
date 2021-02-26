@@ -1,0 +1,25 @@
+{
+  "gatewayApp": {
+    "skillShape": {
+      "home": {
+        "title": "Skill Shapes",
+        "createLabel": "Skill Shape erstellen",
+        "createOrEditLabel": "Skill Shape erstellen oder bearbeiten",
+        "notFound": "No Skill Shapes found"
+      },
+      "created": "Skill Shape erstellt mit ID {{ param }}",
+      "updated": "Skill Shape aktualisiert mit ID {{ param }}",
+      "deleted": "Skill Shape gelöscht mit ID {{ param }}",
+      "delete": {
+        "question": "Soll Skill Shape {{ id }} wirklich dauerhaft gelöscht werden?"
+      },
+      "detail": {
+        "title": "Skill Shape"
+      },
+      "title": "Title",
+      "category": "Category",
+      "skill": "Skill",
+      "owner": "Owner"
+    }
+  }
+}

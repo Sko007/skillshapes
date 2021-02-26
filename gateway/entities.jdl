@@ -1,0 +1,59 @@
+/**
+ * Devoteam Profile
+ *
+ */
+ entity UserProfile{
+  firstName String,
+    lastName String,
+    email String,
+    generalKnowledge String,
+//    picture String,
+ }
+
+/**
+ * The SkillShape class that represents the job and the skills related to it
+ * @author Devoteam
+ */
+entity SkillShape{
+  title String required, //Data Engineer
+  category String required, //Computer Science
+}
+
+/**
+ * The ProfileSkill represents the rating of the skill for each user 
+ * @author Devoteam
+ */
+entity ProfileSkillValue {
+  value Integer required min(1) max(4),
+}
+/**
+ * The Skill class representing a single skill with its name, category and rating (stars)
+ * @author Devoteam
+ */
+entity Skill{
+  name String required,
+  categoryName String required,
+}
+
+/**
+ * Skill (*) <-----> (*) UserProfile
+ */
+relationship ManyToMany{
+  Skill{owner} to UserProfile{skill}
+}
+
+/**
+ * SkillShape (*) <-----> (*) ProfileSkillValue
+ * SkillShape (*) <-----> (*) UserProfile
+ */
+relationship ManyToMany{
+  SkillShape{skill} to ProfileSkillValue{skillshape},
+  SkillShape{owner} to UserProfile{skillshape}
+}
+
+/**
+ * ProfileSkillValue (*) -----> (1) Skill 
+ */
+relationship ManyToOne {
+  ProfileSkillValue{skill} to Skill
+}
