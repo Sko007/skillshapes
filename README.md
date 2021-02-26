@@ -92,16 +92,11 @@ docker-compose up -d
 
 ### Applications and dependencies:
 
-- gateway (gateway application)
-- gateway's mariadb database
-- skillshapes (microservice application)
+- gateway (SpringBoot gateway application)
+- skillshapes (Quarkus microservice application)
 - skillshapes's mariadb database
 
 ### Additional Services:
 
 - [Keycloak server](http://localhost:9080)
 - ELK Stack
-
-```
-
-```
