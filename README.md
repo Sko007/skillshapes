@@ -11,6 +11,7 @@ Implementing a MS application that displays the Skill-Shapes of company employee
 - [Windows Terminal](https://www.microsoft.com/de-de/p/windows-terminal/9n0dx20hk701?rtc=1&activetab=pivot:overviewtab)
 - [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
 - [Chrome](https://www.google.com/chrome/)
+- [mvn](https://maven.apache.org/guides/getting-started/windows-prerequisites.html)
 
 ## Installation
 
