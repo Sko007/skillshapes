@@ -72,10 +72,10 @@ cd microservice
 ./mvnw -Pprod clean package -DskipTests```
 
 cd gateway
-./mvnw -Pprod clean package -DskipTests
+./mvnw package -Pprod verify jib:dockerBuild
 ````
 
-This should have created 2 images skillshapes/gateway and skillshapes/microservice in docker.
+This should have created 2 images gateway and skillshapes/microservice in docker.
 
 ## Usage for Dockerized Deployment
 

@@ -1,10 +1,5 @@
 version: "2"
 services:
-  gateway-mariadb:
-    container_name: gateway-db
-    extends:
-      file: gateway/src/main/docker/mariadb.yml
-      service: gateway-mariadb
   microservice-mariadb:
     container_name: microservice-db
     extends:

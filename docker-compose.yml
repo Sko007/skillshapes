@@ -17,7 +17,6 @@ services:
       - "8080:8080"
     restart: on-failure
     depends_on:
-      - gateway-mariadb
       - jhipster-registry
       - keycloak
   microservice:
