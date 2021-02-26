@@ -44,15 +44,6 @@ Start keycloak, jhipster-registry and databases
 docker-compose -f local-development.yml up -d
 ```
 
-Start gateway application
-
-```
-cd gateway
-.\mvnw compile quarkus:dev
-
-Service listens on - localhost:8080
-```
-
 Start microservice application
 
 ```
