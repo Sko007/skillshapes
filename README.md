@@ -84,23 +84,14 @@ Start all applications
 
 ```
 docker-compose up -d
-
-gateway
-http://localhost:8080
-
-microservice
-http://localhost:8081/q/swagger-ui/
-
-registry
-http://localhost:8761/
-
-keycloak
-http://localhost:9080/
 ```
 
-### Service registry and configuration server:
+### Applications:
 
+- [Gateway](localhost:8080)
+- [Microservice](http://localhost:8081/q/swagger-ui/)
 - [JHipster Registry](http://localhost:8761)
+- [Keycloak](http://localhost:9080/)
 
 ### Applications and dependencies:
 
