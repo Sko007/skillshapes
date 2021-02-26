@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity SkillShape.
+    -->
+    <changeSet id="20210226145538-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="skill_shape_id"
+                                 baseTableName="skill_shape_skill"
+                                 constraintName="fk_skill_shape_skill_skill_shape_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="skill_shape"/>
+
+        <addForeignKeyConstraint baseColumnNames="skill_id"
+                                 baseTableName="skill_shape_skill"
+                                 constraintName="fk_skill_shape_skill_skill_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="profile_skill_value"/>
+        
+        <addForeignKeyConstraint baseColumnNames="skill_shape_id"
+                                 baseTableName="skill_shape_owner"
+                                 constraintName="fk_skill_shape_owner_skill_shape_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="skill_shape"/>
+
+        <addForeignKeyConstraint baseColumnNames="owner_id"
+                                 baseTableName="skill_shape_owner"
+                                 constraintName="fk_skill_shape_owner_owner_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="user_profile"/>
+        
+    </changeSet>
+</databaseChangeLog>

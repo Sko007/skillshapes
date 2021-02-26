@@ -1,0 +1,42 @@
+{
+  "name": "Skill",
+  "fields": [
+    {
+      "fieldName": "name",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "categoryName",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "userProfile",
+      "otherEntityRelationshipName": "skill",
+      "relationshipName": "owner",
+      "otherEntityField": "id",
+      "ownerSide": true
+    }
+  ],
+  "changelogDate": "20210226145738",
+  "javadoc": "The Skill class representing a single skill with its name, category and rating (stars)\\n@author Devoteam",
+  "entityTableName": "skill",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "skillshapes",
+  "applications": "*",
+  "microserviceName": "skillshapes"
+}

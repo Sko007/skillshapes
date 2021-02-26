@@ -1,0 +1,50 @@
+{
+  "name": "SkillShape",
+  "fields": [
+    {
+      "fieldName": "title",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    },
+    {
+      "fieldName": "category",
+      "fieldType": "String",
+      "fieldValidateRules": [
+        "required"
+      ]
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "profileSkillValue",
+      "otherEntityRelationshipName": "skillshape",
+      "relationshipName": "skill",
+      "otherEntityField": "id",
+      "ownerSide": true
+    },
+    {
+      "relationshipType": "many-to-many",
+      "otherEntityName": "userProfile",
+      "otherEntityRelationshipName": "skillshape",
+      "relationshipName": "owner",
+      "otherEntityField": "id",
+      "ownerSide": true
+    }
+  ],
+  "changelogDate": "20210226145538",
+  "javadoc": "The SkillShape class that represents the job and the skills related to it\\n@author Devoteam",
+  "entityTableName": "skill_shape",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "skillshapes",
+  "applications": "*",
+  "microserviceName": "skillshapes"
+}

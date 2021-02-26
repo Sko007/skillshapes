@@ -1,6 +1,6 @@
 /**
- * User Profile
- * @author Devoteam
+ * Devoteam Profile
+ *
  */
  entity UserProfile{
   firstName String,
@@ -9,7 +9,8 @@
     generalKnowledge String,
 //    picture String,
  }
- /**
+
+/**
  * The SkillShape class that represents the job and the skills related to it
  * @author Devoteam
  */
@@ -19,7 +20,7 @@ entity SkillShape{
 }
 
 /**
- * The ProfileSkillValue represents the value (1-4) of the skill for each user 
+ * The ProfileSkill represents the rating of the skill for each user 
  * @author Devoteam
  */
 entity ProfileSkillValue {
@@ -34,15 +35,25 @@ entity Skill{
   categoryName String required,
 }
 
+/**
+ * Skill (*) <-----> (*) UserProfile
+ */
 relationship ManyToMany{
-  Skill to UserProfile
+  Skill{owner} to UserProfile{skill}
 }
 
+/**
+ * SkillShape (*) <-----> (*) ProfileSkillValue
+ * SkillShape (*) <-----> (*) UserProfile
+ */
 relationship ManyToMany{
-  SkillShape to ProfileSkillValue,
-  SkillShape to UserProfile,
+  SkillShape{skill} to ProfileSkillValue{skillshape},
+  SkillShape{owner} to UserProfile{skillshape}
 }
 
-relationship OneToMany{
-  Skill to ProfileSkillValue
+/**
+ * ProfileSkillValue (*) -----> (1) Skill 
+ */
+relationship ManyToOne {
+  ProfileSkillValue{skill} to Skill
 }
