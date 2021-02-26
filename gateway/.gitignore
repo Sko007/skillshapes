@@ -2,7 +2,7 @@
 # Project Specific
 ######################
 /src/main/webapp/content/css/main.css
-/target/classes/META-INF/resources**
+/target/classes/static/**
 /src/test/javascript/coverage/
 
 ######################

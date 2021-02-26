@@ -17,8 +17,7 @@
       "hystrix": "Hystrix",
       "diskSpace": "Festplattenspeicher",
       "mail": "Email",
-      "ping": "Application",
-      "db": "Datenbank"
+      "ping": "Application"
     },
     "table": {
       "service": "Dienst Name",

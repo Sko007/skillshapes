@@ -34,7 +34,7 @@ export const HealthPage = (props: IHealthPageProps) => {
   const renderModal = () => <HealthModal healthObject={healthObject} handleClose={handleClose} showModal={showModal} />;
 
   const { health, isFetching } = props;
-  const data = (health || {}).checks || {};
+  const data = (health || {}).components || {};
 
   return (
     <div>
@@ -42,6 +42,7 @@ export const HealthPage = (props: IHealthPageProps) => {
       <p>
         <Button onClick={getSystemHealth} color={isFetching ? 'btn btn-danger' : 'btn btn-primary'} disabled={isFetching}>
           <FontAwesomeIcon icon="sync" />
+          &nbsp;
           <Translate component="span" contentKey="health.refresh.button">
             Refresh
           </Translate>
@@ -61,7 +62,7 @@ export const HealthPage = (props: IHealthPageProps) => {
               {Object.keys(data).map((configPropKey, configPropIndex) =>
                 configPropKey !== 'status' ? (
                   <tr key={configPropIndex}>
-                    <td>{data[configPropKey].name}</td>
+                    <td>{configPropKey}</td>
                     <td>
                       <Badge color={data[configPropKey].status !== 'UP' ? 'danger' : 'success'}>{data[configPropKey].status}</Badge>
                     </td>

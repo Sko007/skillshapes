@@ -2,28 +2,24 @@ version: "2"
 services:
   gateway:
     container_name: gateway
-    image: skillshapes/gateway:latest
+    image: gateway:latest
     environment:
-      - _JAVA_OPTIONS=-Xmx1g -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev,swagger,api-docs,gateway
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:admin@jhipster-registry:8761/eureka
-      - CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config/master
-      - DATASOURCE_URL=jdbc:mariadb://gateway-mariadb:3306/gateway
-      - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
-      - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_LOGOUT_URL=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/logout
-      - JHIPSTER_SLEEP=120
+      - _JAVA_OPTIONS=-Xmx512m -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger
+      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
+      - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
+      - JHIPSTER_SLEEP=30 # gives time for other services to boot before the application
     ports:
-      - "127.0.0.1:8080:8080"
+      - "8080:8080"
     restart: on-failure
     depends_on:
       - gateway-mariadb
       - jhipster-registry
       - keycloak
-  gateway-mariadb:
-    container_name: gateway-db
-    extends:
-      file: gateway/src/main/docker/mariadb.yml
-      service: gateway-mariadb
   microservice:
     container_name: microservice
     image: skillshapes/microservice:latest

@@ -48,7 +48,7 @@ export const ConfigurationPage = (props: IConfigurationPageProps) => {
         <Translate contentKey="configuration.filter">Filter</Translate>
       </span>{' '}
       <Input type="search" value={filter} onChange={changeFilter} name="search" id="search" />
-      <label>Quarkus configuration</label>
+      <label>Spring configuration</label>
       <Table className="table table-striped table-bordered table-responsive d-table">
         <thead>
           <tr>
