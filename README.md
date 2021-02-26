@@ -68,13 +68,13 @@ Service listens on - localhost:8081/q/dev
 
 Build docker images for gateway and microservice
 
-````
+```
 cd microservice
-./mvnw -Pprod clean package -DskipTests```
+./mvnw -Pprod clean package -DskipTests
 
 cd gateway
 ./mvnw package -Pprod verify jib:dockerBuild
-````
+```
 
 This should have created 2 images gateway and skillshapes/microservice in docker.
 
@@ -90,6 +90,12 @@ http://localhost:8080
 
 microservice
 http://localhost:8081/q/swagger-ui/
+
+registry
+http://localhost:8761/
+
+keycloak
+http://localhost:9080/
 ```
 
 ### Service registry and configuration server:
