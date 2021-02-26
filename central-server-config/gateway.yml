@@ -2,3 +2,6 @@ jhipster:
   metrics:
     logs: # do report metrics in the logs for gateway applications
       enabled: false
+logging:
+  logstash: # Forward logs to logstash over a socket, used by LoggingConfiguration
+    enabled: true
