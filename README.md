@@ -46,17 +46,7 @@ Start keycloak, jhipster-registry and database
 docker-compose -f local-development.yml up -d
 ```
 
-Start gateway application
-
-```
-cd gateway
-mvn
-
-Service listens on - localhost:8080
-
-```
-
-Start microservice application
+First start microservice application
 
 ```
 cd microservice
@@ -64,6 +54,16 @@ UPDATE src/main/resources/application.properties : quarkus.http.port=8081
 .\mvnw compile quarkus:dev -Ddebug=5006
 
 Service listens on - localhost:8081/q/dev
+
+```
+
+Then start gateway application
+
+```
+cd gateway
+mvn
+
+Service listens on - localhost:8080
 
 ```
 
@@ -103,6 +103,20 @@ docker-compose up -d
 - skillshapes (Quarkus microservice application)
 - skillshapes's mariadb database
 
-### Additional Services:
+### Logging with ELK Stack:
 
-- ELK Stack (in development)
+Start elastic search, logstash and kibana
+
+```
+docker-compose -f elkstack.yml up -d
+```
+
+- Go to [Kibana Dashboard](http://localhost:5601).
+- Click on Kibana (visualize & analyze) and select _create index pattern_ (bottom).
+- Type in "logstash-\*" and click next step.
+- Use filter "@timestamp" and click create index pattern.
+- Go to discover tab
+
+### CI / CD
+
+- Working on Jenkins integration (in development)

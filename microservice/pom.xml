@@ -206,6 +206,14 @@
       <groupId>io.quarkus</groupId>
       <artifactId>quarkus-container-image-docker</artifactId>
     </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-logging-gelf</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>io.quarkus</groupId>
+      <artifactId>quarkus-hibernate-search-orm-elasticsearch</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <defaultGoal>compile quarkus:dev</defaultGoal>

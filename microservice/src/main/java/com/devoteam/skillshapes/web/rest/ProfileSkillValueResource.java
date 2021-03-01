@@ -37,7 +37,7 @@ public class ProfileSkillValueResource {
     String applicationName;
 
 
-    
+
     /**
      * {@code POST  /profile-skill-values} : Create a new profileSkillValue.
      *

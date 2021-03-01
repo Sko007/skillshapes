@@ -13,16 +13,18 @@ services:
       # Use single node discovery in order to disable production mode and avoid bootstrap checks.
       # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
-      # Force publishing on the 'elk' overlay.
-      network.publish_host: _eth0_
-    deploy:
-      mode: replicated
-      replicas: 1
+    networks:
+      - elk
 
   logstash:
     container_name: logstash
     image: docker.elastic.co/logstash/logstash:7.11.1
+    volumes:
+      - source: ./elk/logstash/pipeline/gelf.conf
+        target: /usr/share/logstash/pipeline/gelf.conf
+        type: bind
     ports:
+      - "12201:12201/udp"
       - "5044:5044"
       - "5000:5000"
       - "9600:9600"
@@ -31,19 +33,25 @@ services:
         target: /usr/share/logstash/pipeline/logstash.conf
     environment:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
-    deploy:
-      mode: replicated
-      replicas: 1
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
 
   kibana:
     container_name: kibana
     image: docker.elastic.co/kibana/kibana:7.11.1
     ports:
       - "5601:5601"
-    deploy:
-      mode: replicated
-      replicas: 1
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
 
 configs:
   logstash_pipeline:
     file: ./elk/logstash/pipeline/logstash.conf
+
+networks:
+  elk:
+    driver: bridge
