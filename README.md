@@ -116,3 +116,7 @@ docker-compose -f elkstack.yml up -d
 - Type in "logstash-\*" and click next step.
 - Use filter "@timestamp" and click create index pattern.
 - Go to discover tab
+
+### CI / CD
+
+- Working on Jenkins integration (in development)
