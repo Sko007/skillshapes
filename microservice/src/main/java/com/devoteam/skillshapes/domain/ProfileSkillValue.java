@@ -1,6 +1,7 @@
 package com.devoteam.skillshapes.domain;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import javax.json.bind.annotation.JsonbTransient;
+import javax.json.bind.annotation.JsonbProperty;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.swagger.annotations.ApiModel;
@@ -59,6 +60,11 @@ public class ProfileSkillValue extends PanacheEntityBase implements Serializable
         return id != null && id.equals(((ProfileSkillValue) o).id);
     }
 
+    @JsonbProperty("skill")
+    public String getSkillName(){
+        return (skill != null) ? skill.name : "No skill associated";
+    }
+
     @Override
     public int hashCode() {
         return 31;
@@ -69,6 +75,7 @@ public class ProfileSkillValue extends PanacheEntityBase implements Serializable
         return "ProfileSkillValue{" +
             "id=" + id +
             ", value=" + value +
+            ", name=" + skill.name +
             "}";
     }
 

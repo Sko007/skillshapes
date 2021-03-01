@@ -150,7 +150,7 @@ export const SkillShapeUpdate = (props: ISkillShapeUpdateProps) => {
                   {userProfiles
                     ? userProfiles.map(otherEntity => (
                         <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
+                          {otherEntity.firstName} {otherEntity.lastName}
                         </option>
                       ))
                     : null}
