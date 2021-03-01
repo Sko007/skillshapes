@@ -6,6 +6,10 @@ import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.swagger.annotations.ApiModel;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import javax.persistence.*;
 
@@ -21,6 +25,7 @@ import java.util.Set;
 @Table(name = "user_profile")
 @Cacheable
 @RegisterForReflection
+@Indexed
 public class UserProfile extends PanacheEntityBase implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,12 +35,17 @@ public class UserProfile extends PanacheEntityBase implements Serializable {
     public Long id;
 
     @Column(name = "first_name")
+    @FullTextField(analyzer = "name")
+    @KeywordField(name = "firstName_sort", sortable = Sortable.YES, normalizer = "sort")
     public String firstName;
 
     @Column(name = "last_name")
+    @FullTextField(analyzer = "name")
+    @KeywordField(name = "lastName_sort", sortable = Sortable.YES, normalizer = "sort")
     public String lastName;
 
     @Column(name = "email")
+    @FullTextField(analyzer = "name")
     public String email;
 
     @Column(name = "general_knowledge")

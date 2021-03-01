@@ -7,17 +7,24 @@ import com.devoteam.skillshapes.web.rest.errors.BadRequestAlertException;
 import com.devoteam.skillshapes.web.util.HeaderUtil;
 import com.devoteam.skillshapes.web.util.ResponseUtil;
 
+import io.quarkus.runtime.StartupEvent;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.hibernate.search.mapper.orm.session.SearchSession;
+import org.jboss.resteasy.annotations.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
 import java.util.List;
 import java.util.Optional;
+
+import org.jboss.resteasy.annotations.jaxrs.QueryParam;
 
 /**
  * REST controller for managing {@link com.devoteam.skillshapes.domain.UserProfile}.
@@ -35,8 +42,35 @@ public class UserProfileResource {
     @ConfigProperty(name = "application.name")
     String applicationName;
 
+    @Inject
+    SearchSession searchSession;
 
-    
+    @Transactional
+    void onStart(@Observes StartupEvent ev) throws InterruptedException {
+        // only reindex if we imported some content
+        if(UserProfile.count() > 0){
+            searchSession.massIndexer().startAndWait();
+        }
+    }
+
+    @GET
+    @Path("search")
+    @Transactional
+    public List<UserProfile> searchUserProfiles(@QueryParam String pattern,
+                                                @QueryParam Optional<Integer> size){
+
+        return searchSession.search(UserProfile.class)
+            .where(f ->
+                pattern == null || pattern.trim().isEmpty() ?
+                    f.matchAll() :
+                    f.simpleQueryString().fields("firstName","lastName","email").matching(pattern)
+            )
+            .sort( f-> f.field("lastName_sort").then().field("firstName_sort"))
+            .fetchHits(size.orElse(10));
+    }
+
+
+
     /**
      * {@code POST  /user-profiles} : Create a new userProfile.
      *
