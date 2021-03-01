@@ -4,10 +4,8 @@
  */
  entity UserProfile{
   firstName String,
-    lastName String,
-    email String,
-    generalKnowledge String,
-//    picture String,
+  lastName String,
+  email String,
  }
 
 /**
@@ -36,13 +34,6 @@ entity Skill{
 }
 
 /**
- * Skill (*) <-----> (*) UserProfile
- */
-relationship ManyToMany{
-  Skill{owner} to UserProfile{skill}
-}
-
-/**
  * SkillShape (*) <-----> (*) ProfileSkillValue
  * SkillShape (*) <-----> (*) UserProfile
  */
@@ -57,3 +48,7 @@ relationship ManyToMany{
 relationship ManyToOne {
   ProfileSkillValue{skill} to Skill
 }
+
+service * with serviceClass
+dto * with mapstruct
+filter *
