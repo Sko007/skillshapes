@@ -103,6 +103,15 @@ docker-compose up -d
 - skillshapes (Quarkus microservice application)
 - skillshapes's mariadb database
 
-### Additional Services:
+### Logging with ELK Stack:
 
-- ELK Stack (in development)
+Start elastic search, logstash and kibana
+
+```
+docker-compose -f elkstack.yml up -d
+```
+
+- Go to [Kibana Dashboard](http://localhost:5601).
+- Click on Kibana (visualize & analyze) and add index (bottom).
+- Type in "logstash-" and click next.
+- Use @timestamp and click next.
