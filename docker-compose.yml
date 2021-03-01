@@ -5,10 +5,9 @@ services:
     image: gateway:latest
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
-      - SPRING_PROFILES_ACTIVE=prod,swagger
-      - MANAGEMENT_METRICS_EXPORT_PROMETHEUS_ENABLED=true
-      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/eureka
-      - SPRING_CLOUD_CONFIG_URI=http://admin:$${jhipster.registry.password}@jhipster-registry:8761/config
+      - SPRING_PROFILES_ACTIVE=prod,swagger,api-docs,gateway
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:admin@jhipster-registry:8761/eureka
+      - SPRING_CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
@@ -19,20 +18,23 @@ services:
     depends_on:
       - jhipster-registry
       - keycloak
+      - microservice
   microservice:
     container_name: microservice
     image: skillshapes/microservice:latest
     environment:
       - _JAVA_OPTIONS=-Xmx1g -Xms256m
-      - SPRING_PROFILES_ACTIVE=dev,swagger,api-docs,gateway"
+      - SPRING_PROFILES_ACTIVE=prod,swagger,api-docs,gateway"
       - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:admin@jhipster-registry:8761/eureka
       - CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config/master
       - DATASOURCE_URL=jdbc:mariadb://microservice-mariadb:3306/skillshapes
       - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
       - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_LOGOUT_URL=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/logout
       - JHIPSTER_SLEEP=120
+    expose:
+      - "8081"
     ports:
-      - 8081:8080
+      - 8081:8081
     restart: on-failure
     depends_on:
       - microservice-mariadb
@@ -55,6 +57,18 @@ services:
     extends:
       file: keycloak.yml
       service: keycloak
+
+  #phpmyadmin:
+  #  container_name: microservice-phpmyadmin
+  #  image: phpmyadmin/phpmyadmin
+  #  environment:
+  #    - PMA_HOST=microservice-mariadb
+  #    - PMA_USER=root
+  #  ports:
+  #    - 9090:80
+  #  depends_on:
+  #    - microservice-mariadb
+
 networks:
   default:
     external:

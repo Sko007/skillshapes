@@ -120,3 +120,4 @@ docker-compose -f elkstack.yml up -d
 ### CI / CD
 
 - Working on Jenkins integration (in development)
+- Working on Zipkin / Jaeger integration

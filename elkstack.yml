@@ -48,6 +48,14 @@ services:
     networks:
       - elk
 
+  #jaegertracing:
+  #  container_name: jaeger
+  #  image: jaegertracing/all-in-one:1.22
+  #  ports:
+  #    - "16686:16686"
+  #  networks:
+  #    - elk
+
 configs:
   logstash_pipeline:
     file: ./elk/logstash/pipeline/logstash.conf
