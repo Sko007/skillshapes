@@ -1,3 +1,5 @@
 .idea
-**/keycloak-db/*.db
-/keycloak-db/
+keycloak-db/
+keycloak-db/keycloak.trace.db
+keycloak-db/keycloak.mv.db
+keycloak-db/keycloak.lock.db
