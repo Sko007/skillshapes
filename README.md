@@ -112,6 +112,7 @@ docker-compose -f elkstack.yml up -d
 ```
 
 - Go to [Kibana Dashboard](http://localhost:5601).
-- Click on Kibana (visualize & analyze) and add index (bottom).
-- Type in "logstash-" and click next.
-- Use @timestamp and click next.
+- Click on Kibana (visualize & analyze) and select _create index pattern_ (bottom).
+- Type in "logstash-\*" and click next step.
+- Use filter "@timestamp" and click create index pattern.
+- Go to discover tab
