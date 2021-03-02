@@ -184,6 +184,9 @@ jhipster:
       audience:
         - account
         - api://default
+  gateway:
+    authorized-microservices-endpoints: # Access Control Policy, if left empty for a route, all endpoints will be accessible
+      microservice: /api,/v2/api-docs # recommended dev configuration
 # ===================================================================
 # Application specific properties
 # Add your own application properties here, see the ApplicationProperties class
