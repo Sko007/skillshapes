@@ -103,19 +103,26 @@ docker-compose up -d
 - skillshapes (Quarkus microservice application)
 - skillshapes's mariadb database
 
-## Logging with ELK Stack:
+## Logging with ELK Stack & Tracing with Jaeger:
 
-Start elastic search, logstash and kibana
+Start elastic search, logstash, kibana and jaegertracing
 
 ```
 docker-compose -f elkstack.yml up -d
 ```
 
-- Go to [Kibana Dashboard](http://localhost:5601).
+### Kibana
+
+- Go to [Kibana Dashboard](http://localhost:5601)
 - Click on Kibana (visualize & analyze) and select _create index pattern_ (bottom).
 - Type in "logstash-\*" and click next step.
 - Use filter "@timestamp" and click create index pattern.
 - Go to discover tab.
+
+### Jaeger
+
+- Go to [Jaeger Dashboard](http://localhost:16686)
+- Make requests to the microservice
 
 ## CI / CD
 
