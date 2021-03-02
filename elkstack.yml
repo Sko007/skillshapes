@@ -51,6 +51,12 @@ services:
   jaegertracing:
     container_name: jaeger
     image: jaegertracing/all-in-one:latest
+    environment:
+      - ES_TAGS_AS_FIELDS_ALL=true
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - ES_SERVER_URLS=http://elasticsearch:9200
+    links:
+      - elasticsearch
     ports:
       - "16686:16686"
       - "5778:5778"

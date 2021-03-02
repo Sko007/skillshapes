@@ -98,7 +98,7 @@ public class UserProfileResource {
      */
     @GET
     public List<UserProfileDTO> getAllUserProfiles() {
-        log.debug("REST request to get all UserProfiles");
+        log.info("REST request to get all UserProfiles");
         return userProfileService.findAll();
     }
 
