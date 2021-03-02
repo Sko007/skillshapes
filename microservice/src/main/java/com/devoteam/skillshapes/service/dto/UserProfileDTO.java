@@ -1,10 +1,10 @@
 package com.devoteam.skillshapes.service.dto;
 
 
-import com.devoteam.skillshapes.domain.SkillShape;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -23,7 +23,7 @@ public class UserProfileDTO implements Serializable {
 
     public String email;
 
-    public Set<SkillShapeDTO> skillshapes;
+    public Set<SkillShapeDTO> skillshapes = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -49,6 +49,7 @@ public class UserProfileDTO implements Serializable {
             ", firstName='" + firstName + "'" +
             ", lastName='" + lastName + "'" +
             ", email='" + email + "'" +
+            ", skillshapes='" + skillshapes + "'" +
             "}";
     }
 }
