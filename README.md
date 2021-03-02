@@ -90,7 +90,7 @@ Start all applications
 docker-compose up -d
 ```
 
-### Applications:
+## Applications:
 
 - [Gateway](localhost:8080)
 - [Microservice](http://localhost:8081/q/swagger-ui/)
@@ -103,7 +103,7 @@ docker-compose up -d
 - skillshapes (Quarkus microservice application)
 - skillshapes's mariadb database
 
-### Logging with ELK Stack:
+## Logging with ELK Stack:
 
 Start elastic search, logstash and kibana
 
@@ -115,9 +115,19 @@ docker-compose -f elkstack.yml up -d
 - Click on Kibana (visualize & analyze) and select _create index pattern_ (bottom).
 - Type in "logstash-\*" and click next step.
 - Use filter "@timestamp" and click create index pattern.
-- Go to discover tab
+- Go to discover tab.
 
-### CI / CD
+## CI / CD
 
 - Working on Jenkins integration (in development)
-- Working on Zipkin / Jaeger integration
+- Jaeger working (constant logging not working yet)
+
+## What we have now
+
+Working application setup with gateway, microservice, registry, authentication, logging, tracing
+
+- Generated gateway
+- Generated microservice
+- Entity generation
+- JDL import
+- ELK Stack running
