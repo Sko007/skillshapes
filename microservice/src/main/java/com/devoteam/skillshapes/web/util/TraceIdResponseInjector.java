@@ -1,8 +1,7 @@
 package com.devoteam.skillshapes.web.util;
 
 import io.jaegertracing.internal.JaegerSpanContext;
-import io.opentracing.SpanContext;
-import io.opentracing.Tracer;
+import io.opentracing.*;
 
 import javax.inject.Inject;
 import javax.ws.rs.container.ContainerRequestContext;
@@ -10,6 +9,7 @@ import javax.ws.rs.container.ContainerResponseContext;
 import javax.ws.rs.container.ContainerResponseFilter;
 import javax.ws.rs.ext.Provider;
 import java.io.IOException;
+import java.util.Optional;
 
 /**
  * @Author Devoteam
@@ -25,9 +25,12 @@ public class TraceIdResponseInjector implements ContainerResponseFilter {
 
     @Override
     public void filter(final ContainerRequestContext requestContext, final ContainerResponseContext responseContext) throws IOException {
-        final SpanContext spanContext = tracer.scopeManager().active().span().context();
-        if (spanContext instanceof JaegerSpanContext) {
-            responseContext.getHeaders().add(TRACE_ID, ((JaegerSpanContext) spanContext).getTraceId());
-        }
+        Optional.ofNullable(tracer)
+            .map(Tracer::scopeManager)
+            .map(ScopeManager::active)
+            .map(Scope::span)
+            .map(Span::context)
+            .filter(spanContext -> spanContext instanceof JaegerSpanContext)
+            .ifPresent(spanContext -> responseContext.getHeaders().add(TRACE_ID, ((JaegerSpanContext) spanContext).getTraceId()));
     }
 }
