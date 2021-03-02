@@ -51,4 +51,3 @@ relationship ManyToOne {
 
 service * with serviceClass
 dto * with mapstruct
-filter *

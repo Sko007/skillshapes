@@ -3,7 +3,6 @@ import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import javax.json.bind.annotation.JsonbTransient;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.runtime.annotations.RegisterForReflection;
-import io.swagger.annotations.ApiModel;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -18,7 +17,6 @@ import java.util.Optional;
 /**
  * The SkillShape class that represents the job and the skills related to it\n@author Devoteam
  */
-@ApiModel(description = "The SkillShape class that represents the job and the skills related to it\n@author Devoteam")
 @Entity
 @Table(name = "skill_shape")
 @Cacheable

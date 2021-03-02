@@ -28,17 +28,6 @@
 
     <changeSet id="20210226145738-1-relations" author="jhipster">
 
-        <createTable tableName="skill_owner">
-            <column name="owner_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-            <column name="skill_id" type="bigint">
-                <constraints nullable="false"/>
-            </column>
-        </createTable>
-
-        <addPrimaryKey columnNames="skill_id, owner_id" tableName="skill_owner"/>
-        
     </changeSet>
     <!-- jhipster-needle-liquibase-add-changeset - JHipster will add changesets here -->
 

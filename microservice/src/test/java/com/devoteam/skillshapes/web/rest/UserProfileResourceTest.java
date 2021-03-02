@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import com.devoteam.skillshapes.TestUtil;
-import com.devoteam.skillshapes.domain.UserProfile;
+import com.devoteam.skillshapes.service.dto.UserProfileDTO;
 import io.quarkus.liquibase.LiquibaseFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
@@ -23,10 +23,10 @@ import javax.inject.Inject;
 @QuarkusTest
 public class UserProfileResourceTest {
 
-    private static final TypeRef<UserProfile> ENTITY_TYPE = new TypeRef<>() {
+    private static final TypeRef<UserProfileDTO> ENTITY_TYPE = new TypeRef<>() {
     };
 
-    private static final TypeRef<List<UserProfile>> LIST_OF_ENTITY_TYPE = new TypeRef<>() {
+    private static final TypeRef<List<UserProfileDTO>> LIST_OF_ENTITY_TYPE = new TypeRef<>() {
     };
 
     private static final String DEFAULT_FIRST_NAME = "AAAAAAAAAA";
@@ -38,14 +38,11 @@ public class UserProfileResourceTest {
     private static final String DEFAULT_EMAIL = "AAAAAAAAAA";
     private static final String UPDATED_EMAIL = "BBBBBBBBBB";
 
-    private static final String DEFAULT_GENERAL_KNOWLEDGE = "AAAAAAAAAA";
-    private static final String UPDATED_GENERAL_KNOWLEDGE = "BBBBBBBBBB";
-
 
 
     String adminToken;
 
-    UserProfile userProfile;
+    UserProfileDTO userProfileDTO;
 
     @Inject
     LiquibaseFactory liquibaseFactory;
@@ -80,18 +77,17 @@ public class UserProfileResourceTest {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static UserProfile createEntity() {
-        var userProfile = new UserProfile();
-        userProfile.firstName = DEFAULT_FIRST_NAME;
-        userProfile.lastName = DEFAULT_LAST_NAME;
-        userProfile.email = DEFAULT_EMAIL;
-        userProfile.generalKnowledge = DEFAULT_GENERAL_KNOWLEDGE;
-        return userProfile;
+    public static UserProfileDTO createEntity() {
+        var userProfileDTO = new UserProfileDTO();
+        userProfileDTO.firstName = DEFAULT_FIRST_NAME;
+        userProfileDTO.lastName = DEFAULT_LAST_NAME;
+        userProfileDTO.email = DEFAULT_EMAIL;
+        return userProfileDTO;
     }
 
     @BeforeEach
     public void initTest() {
-        userProfile = createEntity();
+        userProfileDTO = createEntity();
     }
 
     @Test
@@ -110,13 +106,13 @@ public class UserProfileResourceTest {
             .size();
 
         // Create the UserProfile
-        userProfile = given()
+        userProfileDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(userProfile)
+            .body(userProfileDTO)
             .when()
             .post("/api/user-profiles")
             .then()
@@ -124,7 +120,7 @@ public class UserProfileResourceTest {
             .extract().as(ENTITY_TYPE);
 
         // Validate the UserProfile in the database
-        var userProfileList = given()
+        var userProfileDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -136,12 +132,11 @@ public class UserProfileResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(userProfileList).hasSize(databaseSizeBeforeCreate + 1);
-        var testUserProfile = userProfileList.stream().filter(it -> userProfile.id.equals(it.id)).findFirst().get();
-        assertThat(testUserProfile.firstName).isEqualTo(DEFAULT_FIRST_NAME);
-        assertThat(testUserProfile.lastName).isEqualTo(DEFAULT_LAST_NAME);
-        assertThat(testUserProfile.email).isEqualTo(DEFAULT_EMAIL);
-        assertThat(testUserProfile.generalKnowledge).isEqualTo(DEFAULT_GENERAL_KNOWLEDGE);
+        assertThat(userProfileDTOList).hasSize(databaseSizeBeforeCreate + 1);
+        var testUserProfileDTO = userProfileDTOList.stream().filter(it -> userProfileDTO.id.equals(it.id)).findFirst().get();
+        assertThat(testUserProfileDTO.firstName).isEqualTo(DEFAULT_FIRST_NAME);
+        assertThat(testUserProfileDTO.lastName).isEqualTo(DEFAULT_LAST_NAME);
+        assertThat(testUserProfileDTO.email).isEqualTo(DEFAULT_EMAIL);
     }
 
     @Test
@@ -160,7 +155,7 @@ public class UserProfileResourceTest {
             .size();
 
         // Create the UserProfile with an existing ID
-        userProfile.id = 1L;
+        userProfileDTO.id = 1L;
 
         // An entity with an existing ID cannot be created, so this API call must fail
         given()
@@ -169,14 +164,14 @@ public class UserProfileResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(userProfile)
+            .body(userProfileDTO)
             .when()
             .post("/api/user-profiles")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
         // Validate the UserProfile in the database
-        var userProfileList = given()
+        var userProfileDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -188,20 +183,20 @@ public class UserProfileResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(userProfileList).hasSize(databaseSizeBeforeCreate);
+        assertThat(userProfileDTOList).hasSize(databaseSizeBeforeCreate);
     }
 
 
     @Test
     public void updateUserProfile() {
         // Initialize the database
-        userProfile = given()
+        userProfileDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(userProfile)
+            .body(userProfileDTO)
             .when()
             .post("/api/user-profiles")
             .then()
@@ -222,23 +217,22 @@ public class UserProfileResourceTest {
             .size();
 
         // Get the userProfile
-        var updatedUserProfile = given()
+        var updatedUserProfileDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .accept(APPLICATION_JSON)
             .when()
-            .get("/api/user-profiles/{id}", userProfile.id)
+            .get("/api/user-profiles/{id}", userProfileDTO.id)
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
             .extract().body().as(ENTITY_TYPE);
 
         // Update the userProfile
-        updatedUserProfile.firstName = UPDATED_FIRST_NAME;
-        updatedUserProfile.lastName = UPDATED_LAST_NAME;
-        updatedUserProfile.email = UPDATED_EMAIL;
-        updatedUserProfile.generalKnowledge = UPDATED_GENERAL_KNOWLEDGE;
+        updatedUserProfileDTO.firstName = UPDATED_FIRST_NAME;
+        updatedUserProfileDTO.lastName = UPDATED_LAST_NAME;
+        updatedUserProfileDTO.email = UPDATED_EMAIL;
 
         given()
             .auth()
@@ -246,14 +240,14 @@ public class UserProfileResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(updatedUserProfile)
+            .body(updatedUserProfileDTO)
             .when()
             .put("/api/user-profiles")
             .then()
             .statusCode(OK.getStatusCode());
 
         // Validate the UserProfile in the database
-        var userProfileList = given()
+        var userProfileDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -265,12 +259,11 @@ public class UserProfileResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(userProfileList).hasSize(databaseSizeBeforeUpdate);
-        var testUserProfile = userProfileList.stream().filter(it -> updatedUserProfile.id.equals(it.id)).findFirst().get();
-        assertThat(testUserProfile.firstName).isEqualTo(UPDATED_FIRST_NAME);
-        assertThat(testUserProfile.lastName).isEqualTo(UPDATED_LAST_NAME);
-        assertThat(testUserProfile.email).isEqualTo(UPDATED_EMAIL);
-        assertThat(testUserProfile.generalKnowledge).isEqualTo(UPDATED_GENERAL_KNOWLEDGE);
+        assertThat(userProfileDTOList).hasSize(databaseSizeBeforeUpdate);
+        var testUserProfileDTO = userProfileDTOList.stream().filter(it -> updatedUserProfileDTO.id.equals(it.id)).findFirst().get();
+        assertThat(testUserProfileDTO.firstName).isEqualTo(UPDATED_FIRST_NAME);
+        assertThat(testUserProfileDTO.lastName).isEqualTo(UPDATED_LAST_NAME);
+        assertThat(testUserProfileDTO.email).isEqualTo(UPDATED_EMAIL);
     }
 
     @Test
@@ -295,14 +288,14 @@ public class UserProfileResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(userProfile)
+            .body(userProfileDTO)
             .when()
             .put("/api/user-profiles")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
         // Validate the UserProfile in the database
-        var userProfileList = given()
+        var userProfileDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -314,19 +307,19 @@ public class UserProfileResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(userProfileList).hasSize(databaseSizeBeforeUpdate);
+        assertThat(userProfileDTOList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
     public void deleteUserProfile() {
         // Initialize the database
-        userProfile = given()
+        userProfileDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(userProfile)
+            .body(userProfileDTO)
             .when()
             .post("/api/user-profiles")
             .then()
@@ -353,12 +346,12 @@ public class UserProfileResourceTest {
             .oauth2(adminToken)
             .accept(APPLICATION_JSON)
             .when()
-            .delete("/api/user-profiles/{id}", userProfile.id)
+            .delete("/api/user-profiles/{id}", userProfileDTO.id)
             .then()
             .statusCode(NO_CONTENT.getStatusCode());
 
         // Validate the database contains one less item
-        var userProfileList = given()
+        var userProfileDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -370,19 +363,19 @@ public class UserProfileResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(userProfileList).hasSize(databaseSizeBeforeDelete - 1);
+        assertThat(userProfileDTOList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test
     public void getAllUserProfiles() {
         // Initialize the database
-        userProfile = given()
+        userProfileDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(userProfile)
+            .body(userProfileDTO)
             .when()
             .post("/api/user-profiles")
             .then()
@@ -400,20 +393,20 @@ public class UserProfileResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .body("id", hasItem(userProfile.id.intValue()))
-            .body("firstName", hasItem(DEFAULT_FIRST_NAME))            .body("lastName", hasItem(DEFAULT_LAST_NAME))            .body("email", hasItem(DEFAULT_EMAIL))            .body("generalKnowledge", hasItem(DEFAULT_GENERAL_KNOWLEDGE));
+            .body("id", hasItem(userProfileDTO.id.intValue()))
+            .body("firstName", hasItem(DEFAULT_FIRST_NAME))            .body("lastName", hasItem(DEFAULT_LAST_NAME))            .body("email", hasItem(DEFAULT_EMAIL));
     }
 
     @Test
     public void getUserProfile() {
         // Initialize the database
-        userProfile = given()
+        userProfileDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(userProfile)
+            .body(userProfileDTO)
             .when()
             .post("/api/user-profiles")
             .then()
@@ -427,7 +420,7 @@ public class UserProfileResourceTest {
                 .oauth2(adminToken)
                 .accept(APPLICATION_JSON)
                 .when()
-                .get("/api/user-profiles/{id}", userProfile.id)
+                .get("/api/user-profiles/{id}", userProfileDTO.id)
                 .then()
                 .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -440,16 +433,15 @@ public class UserProfileResourceTest {
             .oauth2(adminToken)
             .accept(APPLICATION_JSON)
             .when()
-            .get("/api/user-profiles/{id}", userProfile.id)
+            .get("/api/user-profiles/{id}", userProfileDTO.id)
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .body("id", is(userProfile.id.intValue()))
+            .body("id", is(userProfileDTO.id.intValue()))
             
                 .body("firstName", is(DEFAULT_FIRST_NAME))
                 .body("lastName", is(DEFAULT_LAST_NAME))
-                .body("email", is(DEFAULT_EMAIL))
-                .body("generalKnowledge", is(DEFAULT_GENERAL_KNOWLEDGE));
+                .body("email", is(DEFAULT_EMAIL));
     }
 
     @Test

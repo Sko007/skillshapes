@@ -2,18 +2,18 @@ package com.devoteam.skillshapes.web.rest;
 
 import static javax.ws.rs.core.UriBuilder.fromPath;
 
-import com.devoteam.skillshapes.domain.SkillShape;
+import com.devoteam.skillshapes.service.SkillShapeService;
 import com.devoteam.skillshapes.web.rest.errors.BadRequestAlertException;
 import com.devoteam.skillshapes.web.util.HeaderUtil;
 import com.devoteam.skillshapes.web.util.ResponseUtil;
+import com.devoteam.skillshapes.service.dto.SkillShapeDTO;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
-
-import javax.transaction.Transactional;
+import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -37,21 +37,21 @@ public class SkillShapeResource {
     String applicationName;
 
 
-    
+    @Inject
+    SkillShapeService skillShapeService;
     /**
      * {@code POST  /skill-shapes} : Create a new skillShape.
      *
-     * @param skillShape the skillShape to create.
-     * @return the {@link Response} with status {@code 201 (Created)} and with body the new skillShape, or with status {@code 400 (Bad Request)} if the skillShape has already an ID.
+     * @param skillShapeDTO the skillShapeDTO to create.
+     * @return the {@link Response} with status {@code 201 (Created)} and with body the new skillShapeDTO, or with status {@code 400 (Bad Request)} if the skillShape has already an ID.
      */
     @POST
-    @Transactional
-    public Response createSkillShape(@Valid SkillShape skillShape, @Context UriInfo uriInfo) {
-        log.debug("REST request to save SkillShape : {}", skillShape);
-        if (skillShape.id != null) {
+    public Response createSkillShape(@Valid SkillShapeDTO skillShapeDTO, @Context UriInfo uriInfo) {
+        log.debug("REST request to save SkillShape : {}", skillShapeDTO);
+        if (skillShapeDTO.id != null) {
             throw new BadRequestAlertException("A new skillShape cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        var result = SkillShape.persistOrUpdate(skillShape);
+        var result = skillShapeService.persistOrUpdate(skillShapeDTO);
         var response = Response.created(fromPath(uriInfo.getPath()).path(result.id.toString()).build()).entity(result);
         HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.id.toString()).forEach(response::header);
         return response.build();
@@ -60,38 +60,34 @@ public class SkillShapeResource {
     /**
      * {@code PUT  /skill-shapes} : Updates an existing skillShape.
      *
-     * @param skillShape the skillShape to update.
-     * @return the {@link Response} with status {@code 200 (OK)} and with body the updated skillShape,
-     * or with status {@code 400 (Bad Request)} if the skillShape is not valid,
-     * or with status {@code 500 (Internal Server Error)} if the skillShape couldn't be updated.
+     * @param skillShapeDTO the skillShapeDTO to update.
+     * @return the {@link Response} with status {@code 200 (OK)} and with body the updated skillShapeDTO,
+     * or with status {@code 400 (Bad Request)} if the skillShapeDTO is not valid,
+     * or with status {@code 500 (Internal Server Error)} if the skillShapeDTO couldn't be updated.
      */
     @PUT
-    @Transactional
-    public Response updateSkillShape(@Valid SkillShape skillShape) {
-        log.debug("REST request to update SkillShape : {}", skillShape);
-        if (skillShape.id == null) {
+    public Response updateSkillShape(@Valid SkillShapeDTO skillShapeDTO) {
+        log.debug("REST request to update SkillShape : {}", skillShapeDTO);
+        if (skillShapeDTO.id == null) {
             throw new BadRequestAlertException("Invalid id", ENTITY_NAME, "idnull");
         }
-        var result = SkillShape.persistOrUpdate(skillShape);
+        var result = skillShapeService.persistOrUpdate(skillShapeDTO);
         var response = Response.ok().entity(result);
-        HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, skillShape.id.toString()).forEach(response::header);
+        HeaderUtil.createEntityUpdateAlert(applicationName, true, ENTITY_NAME, skillShapeDTO.id.toString()).forEach(response::header);
         return response.build();
     }
 
     /**
      * {@code DELETE  /skill-shapes/:id} : delete the "id" skillShape.
      *
-     * @param id the id of the skillShape to delete.
+     * @param id the id of the skillShapeDTO to delete.
      * @return the {@link Response} with status {@code 204 (NO_CONTENT)}.
      */
     @DELETE
     @Path("/{id}")
-    @Transactional
     public Response deleteSkillShape(@PathParam("id") Long id) {
         log.debug("REST request to delete SkillShape : {}", id);
-        SkillShape.findByIdOptional(id).ifPresent(skillShape -> {
-            skillShape.delete();
-        });
+        skillShapeService.delete(id);
         var response = Response.noContent();
         HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()).forEach(response::header);
         return response.build();
@@ -103,25 +99,24 @@ public class SkillShapeResource {
      * @return the {@link Response} with status {@code 200 (OK)} and the list of skillShapes in body.
      */
     @GET
-    @Transactional
-    public List<SkillShape> getAllSkillShapes(@QueryParam(value = "eagerload") boolean eagerload) {
+    public List<SkillShapeDTO> getAllSkillShapes(@QueryParam(value = "eagerload") boolean eagerload) {
         log.debug("REST request to get all SkillShapes");
-        return SkillShape.findAllWithEagerRelationships().list();
+        return skillShapeService.findAll();
     }
 
 
     /**
      * {@code GET  /skill-shapes/:id} : get the "id" skillShape.
      *
-     * @param id the id of the skillShape to retrieve.
-     * @return the {@link Response} with status {@code 200 (OK)} and with body the skillShape, or with status {@code 404 (Not Found)}.
+     * @param id the id of the skillShapeDTO to retrieve.
+     * @return the {@link Response} with status {@code 200 (OK)} and with body the skillShapeDTO, or with status {@code 404 (Not Found)}.
      */
     @GET
     @Path("/{id}")
 
     public Response getSkillShape(@PathParam("id") Long id) {
         log.debug("REST request to get SkillShape : {}", id);
-        Optional<SkillShape> skillShape = SkillShape.findOneWithEagerRelationships(id);
-        return ResponseUtil.wrapOrNotFound(skillShape);
+        Optional<SkillShapeDTO> skillShapeDTO = skillShapeService.findOne(id);
+        return ResponseUtil.wrapOrNotFound(skillShapeDTO);
     }
 }

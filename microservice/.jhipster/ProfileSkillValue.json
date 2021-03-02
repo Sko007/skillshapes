@@ -4,11 +4,7 @@
     {
       "fieldName": "value",
       "fieldType": "Integer",
-      "fieldValidateRules": [
-        "required",
-        "min",
-        "max"
-      ],
+      "fieldValidateRules": ["required", "min", "max"],
       "fieldValidateRulesMin": "1",
       "fieldValidateRulesMax": "4"
     }
@@ -33,9 +29,9 @@
   "changelogDate": "20210226145638",
   "javadoc": "The ProfileSkill represents the rating of the skill for each user\\n@author Devoteam",
   "entityTableName": "profile_skill_value",
-  "dto": "no",
+  "dto": "mapstruct",
   "pagination": "no",
-  "service": "no",
+  "service": "serviceClass",
   "jpaMetamodelFiltering": false,
   "fluentMethods": true,
   "readOnly": false,

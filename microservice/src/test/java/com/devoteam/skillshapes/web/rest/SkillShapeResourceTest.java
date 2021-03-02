@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import com.devoteam.skillshapes.TestUtil;
-import com.devoteam.skillshapes.domain.SkillShape;
+import com.devoteam.skillshapes.service.dto.SkillShapeDTO;
 import io.quarkus.liquibase.LiquibaseFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
@@ -24,10 +24,10 @@ import java.util.List;
 @QuarkusTest
 public class SkillShapeResourceTest {
 
-    private static final TypeRef<SkillShape> ENTITY_TYPE = new TypeRef<>() {
+    private static final TypeRef<SkillShapeDTO> ENTITY_TYPE = new TypeRef<>() {
     };
 
-    private static final TypeRef<List<SkillShape>> LIST_OF_ENTITY_TYPE = new TypeRef<>() {
+    private static final TypeRef<List<SkillShapeDTO>> LIST_OF_ENTITY_TYPE = new TypeRef<>() {
     };
 
     private static final String DEFAULT_TITLE = "AAAAAAAAAA";
@@ -40,7 +40,7 @@ public class SkillShapeResourceTest {
 
     String adminToken;
 
-    SkillShape skillShape;
+    SkillShapeDTO skillShapeDTO;
 
     @Inject
     LiquibaseFactory liquibaseFactory;
@@ -75,16 +75,16 @@ public class SkillShapeResourceTest {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static SkillShape createEntity() {
-        var skillShape = new SkillShape();
-        skillShape.title = DEFAULT_TITLE;
-        skillShape.category = DEFAULT_CATEGORY;
-        return skillShape;
+    public static SkillShapeDTO createEntity() {
+        var skillShapeDTO = new SkillShapeDTO();
+        skillShapeDTO.title = DEFAULT_TITLE;
+        skillShapeDTO.category = DEFAULT_CATEGORY;
+        return skillShapeDTO;
     }
 
     @BeforeEach
     public void initTest() {
-        skillShape = createEntity();
+        skillShapeDTO = createEntity();
     }
 
     @Test
@@ -103,13 +103,13 @@ public class SkillShapeResourceTest {
             .size();
 
         // Create the SkillShape
-        skillShape = given()
+        skillShapeDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skillShape)
+            .body(skillShapeDTO)
             .when()
             .post("/api/skill-shapes")
             .then()
@@ -117,7 +117,7 @@ public class SkillShapeResourceTest {
             .extract().as(ENTITY_TYPE);
 
         // Validate the SkillShape in the database
-        var skillShapeList = given()
+        var skillShapeDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -129,10 +129,10 @@ public class SkillShapeResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillShapeList).hasSize(databaseSizeBeforeCreate + 1);
-        var testSkillShape = skillShapeList.stream().filter(it -> skillShape.id.equals(it.id)).findFirst().get();
-        assertThat(testSkillShape.title).isEqualTo(DEFAULT_TITLE);
-        assertThat(testSkillShape.category).isEqualTo(DEFAULT_CATEGORY);
+        assertThat(skillShapeDTOList).hasSize(databaseSizeBeforeCreate + 1);
+        var testSkillShapeDTO = skillShapeDTOList.stream().filter(it -> skillShapeDTO.id.equals(it.id)).findFirst().get();
+        assertThat(testSkillShapeDTO.title).isEqualTo(DEFAULT_TITLE);
+        assertThat(testSkillShapeDTO.category).isEqualTo(DEFAULT_CATEGORY);
     }
 
     @Test
@@ -151,7 +151,7 @@ public class SkillShapeResourceTest {
             .size();
 
         // Create the SkillShape with an existing ID
-        skillShape.id = 1L;
+        skillShapeDTO.id = 1L;
 
         // An entity with an existing ID cannot be created, so this API call must fail
         given()
@@ -160,14 +160,14 @@ public class SkillShapeResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skillShape)
+            .body(skillShapeDTO)
             .when()
             .post("/api/skill-shapes")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
         // Validate the SkillShape in the database
-        var skillShapeList = given()
+        var skillShapeDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -179,7 +179,7 @@ public class SkillShapeResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillShapeList).hasSize(databaseSizeBeforeCreate);
+        assertThat(skillShapeDTOList).hasSize(databaseSizeBeforeCreate);
     }
 
     @Test
@@ -198,7 +198,7 @@ public class SkillShapeResourceTest {
             .size();
 
         // set the field null
-        skillShape.title = null;
+        skillShapeDTO.title = null;
 
         // Create the SkillShape, which fails.
         given()
@@ -207,14 +207,14 @@ public class SkillShapeResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skillShape)
+            .body(skillShapeDTO)
             .when()
             .post("/api/skill-shapes")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
         // Validate the SkillShape in the database
-        var skillShapeList = given()
+        var skillShapeDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -226,7 +226,7 @@ public class SkillShapeResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillShapeList).hasSize(databaseSizeBeforeTest);
+        assertThat(skillShapeDTOList).hasSize(databaseSizeBeforeTest);
     }
     @Test
     public void checkCategoryIsRequired() throws Exception {
@@ -244,7 +244,7 @@ public class SkillShapeResourceTest {
             .size();
 
         // set the field null
-        skillShape.category = null;
+        skillShapeDTO.category = null;
 
         // Create the SkillShape, which fails.
         given()
@@ -253,14 +253,14 @@ public class SkillShapeResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skillShape)
+            .body(skillShapeDTO)
             .when()
             .post("/api/skill-shapes")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
         // Validate the SkillShape in the database
-        var skillShapeList = given()
+        var skillShapeDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -272,19 +272,19 @@ public class SkillShapeResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillShapeList).hasSize(databaseSizeBeforeTest);
+        assertThat(skillShapeDTOList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
     public void updateSkillShape() {
         // Initialize the database
-        skillShape = given()
+        skillShapeDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skillShape)
+            .body(skillShapeDTO)
             .when()
             .post("/api/skill-shapes")
             .then()
@@ -305,21 +305,21 @@ public class SkillShapeResourceTest {
             .size();
 
         // Get the skillShape
-        var updatedSkillShape = given()
+        var updatedSkillShapeDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .accept(APPLICATION_JSON)
             .when()
-            .get("/api/skill-shapes/{id}", skillShape.id)
+            .get("/api/skill-shapes/{id}", skillShapeDTO.id)
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
             .extract().body().as(ENTITY_TYPE);
 
         // Update the skillShape
-        updatedSkillShape.title = UPDATED_TITLE;
-        updatedSkillShape.category = UPDATED_CATEGORY;
+        updatedSkillShapeDTO.title = UPDATED_TITLE;
+        updatedSkillShapeDTO.category = UPDATED_CATEGORY;
 
         given()
             .auth()
@@ -327,14 +327,14 @@ public class SkillShapeResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(updatedSkillShape)
+            .body(updatedSkillShapeDTO)
             .when()
             .put("/api/skill-shapes")
             .then()
             .statusCode(OK.getStatusCode());
 
         // Validate the SkillShape in the database
-        var skillShapeList = given()
+        var skillShapeDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -346,10 +346,10 @@ public class SkillShapeResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillShapeList).hasSize(databaseSizeBeforeUpdate);
-        var testSkillShape = skillShapeList.stream().filter(it -> updatedSkillShape.id.equals(it.id)).findFirst().get();
-        assertThat(testSkillShape.title).isEqualTo(UPDATED_TITLE);
-        assertThat(testSkillShape.category).isEqualTo(UPDATED_CATEGORY);
+        assertThat(skillShapeDTOList).hasSize(databaseSizeBeforeUpdate);
+        var testSkillShapeDTO = skillShapeDTOList.stream().filter(it -> updatedSkillShapeDTO.id.equals(it.id)).findFirst().get();
+        assertThat(testSkillShapeDTO.title).isEqualTo(UPDATED_TITLE);
+        assertThat(testSkillShapeDTO.category).isEqualTo(UPDATED_CATEGORY);
     }
 
     @Test
@@ -374,14 +374,14 @@ public class SkillShapeResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skillShape)
+            .body(skillShapeDTO)
             .when()
             .put("/api/skill-shapes")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
         // Validate the SkillShape in the database
-        var skillShapeList = given()
+        var skillShapeDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -393,19 +393,19 @@ public class SkillShapeResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillShapeList).hasSize(databaseSizeBeforeUpdate);
+        assertThat(skillShapeDTOList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
     public void deleteSkillShape() {
         // Initialize the database
-        skillShape = given()
+        skillShapeDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skillShape)
+            .body(skillShapeDTO)
             .when()
             .post("/api/skill-shapes")
             .then()
@@ -432,12 +432,12 @@ public class SkillShapeResourceTest {
             .oauth2(adminToken)
             .accept(APPLICATION_JSON)
             .when()
-            .delete("/api/skill-shapes/{id}", skillShape.id)
+            .delete("/api/skill-shapes/{id}", skillShapeDTO.id)
             .then()
             .statusCode(NO_CONTENT.getStatusCode());
 
         // Validate the database contains one less item
-        var skillShapeList = given()
+        var skillShapeDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -449,19 +449,19 @@ public class SkillShapeResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillShapeList).hasSize(databaseSizeBeforeDelete - 1);
+        assertThat(skillShapeDTOList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test
     public void getAllSkillShapes() {
         // Initialize the database
-        skillShape = given()
+        skillShapeDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skillShape)
+            .body(skillShapeDTO)
             .when()
             .post("/api/skill-shapes")
             .then()
@@ -479,20 +479,20 @@ public class SkillShapeResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .body("id", hasItem(skillShape.id.intValue()))
+            .body("id", hasItem(skillShapeDTO.id.intValue()))
             .body("title", hasItem(DEFAULT_TITLE))            .body("category", hasItem(DEFAULT_CATEGORY));
     }
 
     @Test
     public void getSkillShape() {
         // Initialize the database
-        skillShape = given()
+        skillShapeDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skillShape)
+            .body(skillShapeDTO)
             .when()
             .post("/api/skill-shapes")
             .then()
@@ -506,7 +506,7 @@ public class SkillShapeResourceTest {
                 .oauth2(adminToken)
                 .accept(APPLICATION_JSON)
                 .when()
-                .get("/api/skill-shapes/{id}", skillShape.id)
+                .get("/api/skill-shapes/{id}", skillShapeDTO.id)
                 .then()
                 .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -519,11 +519,11 @@ public class SkillShapeResourceTest {
             .oauth2(adminToken)
             .accept(APPLICATION_JSON)
             .when()
-            .get("/api/skill-shapes/{id}", skillShape.id)
+            .get("/api/skill-shapes/{id}", skillShapeDTO.id)
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .body("id", is(skillShape.id.intValue()))
+            .body("id", is(skillShapeDTO.id.intValue()))
             
                 .body("title", is(DEFAULT_TITLE))
                 .body("category", is(DEFAULT_CATEGORY));

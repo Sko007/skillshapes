@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.*;
 
 import com.devoteam.skillshapes.TestUtil;
-import com.devoteam.skillshapes.domain.Skill;
+import com.devoteam.skillshapes.service.dto.SkillDTO;
 import io.quarkus.liquibase.LiquibaseFactory;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.RestAssured;
@@ -18,16 +18,15 @@ import org.junit.jupiter.api.*;
 
 import javax.inject.Inject;
 
-    import java.util.ArrayList;
-import java.util.List;
+    import java.util.List;
 
 @QuarkusTest
 public class SkillResourceTest {
 
-    private static final TypeRef<Skill> ENTITY_TYPE = new TypeRef<>() {
+    private static final TypeRef<SkillDTO> ENTITY_TYPE = new TypeRef<>() {
     };
 
-    private static final TypeRef<List<Skill>> LIST_OF_ENTITY_TYPE = new TypeRef<>() {
+    private static final TypeRef<List<SkillDTO>> LIST_OF_ENTITY_TYPE = new TypeRef<>() {
     };
 
     private static final String DEFAULT_NAME = "AAAAAAAAAA";
@@ -40,7 +39,7 @@ public class SkillResourceTest {
 
     String adminToken;
 
-    Skill skill;
+    SkillDTO skillDTO;
 
     @Inject
     LiquibaseFactory liquibaseFactory;
@@ -75,16 +74,16 @@ public class SkillResourceTest {
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
-    public static Skill createEntity() {
-        var skill = new Skill();
-        skill.name = DEFAULT_NAME;
-        skill.categoryName = DEFAULT_CATEGORY_NAME;
-        return skill;
+    public static SkillDTO createEntity() {
+        var skillDTO = new SkillDTO();
+        skillDTO.name = DEFAULT_NAME;
+        skillDTO.categoryName = DEFAULT_CATEGORY_NAME;
+        return skillDTO;
     }
 
     @BeforeEach
     public void initTest() {
-        skill = createEntity();
+        skillDTO = createEntity();
     }
 
     @Test
@@ -103,13 +102,13 @@ public class SkillResourceTest {
             .size();
 
         // Create the Skill
-        skill = given()
+        skillDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skill)
+            .body(skillDTO)
             .when()
             .post("/api/skills")
             .then()
@@ -117,7 +116,7 @@ public class SkillResourceTest {
             .extract().as(ENTITY_TYPE);
 
         // Validate the Skill in the database
-        var skillList = given()
+        var skillDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -129,10 +128,10 @@ public class SkillResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillList).hasSize(databaseSizeBeforeCreate + 1);
-        var testSkill = skillList.stream().filter(it -> skill.id.equals(it.id)).findFirst().get();
-        assertThat(testSkill.name).isEqualTo(DEFAULT_NAME);
-        assertThat(testSkill.categoryName).isEqualTo(DEFAULT_CATEGORY_NAME);
+        assertThat(skillDTOList).hasSize(databaseSizeBeforeCreate + 1);
+        var testSkillDTO = skillDTOList.stream().filter(it -> skillDTO.id.equals(it.id)).findFirst().get();
+        assertThat(testSkillDTO.name).isEqualTo(DEFAULT_NAME);
+        assertThat(testSkillDTO.categoryName).isEqualTo(DEFAULT_CATEGORY_NAME);
     }
 
     @Test
@@ -151,7 +150,7 @@ public class SkillResourceTest {
             .size();
 
         // Create the Skill with an existing ID
-        skill.id = 1L;
+        skillDTO.id = 1L;
 
         // An entity with an existing ID cannot be created, so this API call must fail
         given()
@@ -160,14 +159,14 @@ public class SkillResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skill)
+            .body(skillDTO)
             .when()
             .post("/api/skills")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
         // Validate the Skill in the database
-        var skillList = given()
+        var skillDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -179,7 +178,7 @@ public class SkillResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillList).hasSize(databaseSizeBeforeCreate);
+        assertThat(skillDTOList).hasSize(databaseSizeBeforeCreate);
     }
 
     @Test
@@ -198,7 +197,7 @@ public class SkillResourceTest {
             .size();
 
         // set the field null
-        skill.name = null;
+        skillDTO.name = null;
 
         // Create the Skill, which fails.
         given()
@@ -207,14 +206,14 @@ public class SkillResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skill)
+            .body(skillDTO)
             .when()
             .post("/api/skills")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
         // Validate the Skill in the database
-        var skillList = given()
+        var skillDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -226,7 +225,7 @@ public class SkillResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillList).hasSize(databaseSizeBeforeTest);
+        assertThat(skillDTOList).hasSize(databaseSizeBeforeTest);
     }
     @Test
     public void checkCategoryNameIsRequired() throws Exception {
@@ -244,7 +243,7 @@ public class SkillResourceTest {
             .size();
 
         // set the field null
-        skill.categoryName = null;
+        skillDTO.categoryName = null;
 
         // Create the Skill, which fails.
         given()
@@ -253,14 +252,14 @@ public class SkillResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skill)
+            .body(skillDTO)
             .when()
             .post("/api/skills")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
         // Validate the Skill in the database
-        var skillList = given()
+        var skillDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -272,19 +271,19 @@ public class SkillResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillList).hasSize(databaseSizeBeforeTest);
+        assertThat(skillDTOList).hasSize(databaseSizeBeforeTest);
     }
 
     @Test
     public void updateSkill() {
         // Initialize the database
-        skill = given()
+        skillDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skill)
+            .body(skillDTO)
             .when()
             .post("/api/skills")
             .then()
@@ -305,21 +304,21 @@ public class SkillResourceTest {
             .size();
 
         // Get the skill
-        var updatedSkill = given()
+        var updatedSkillDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .accept(APPLICATION_JSON)
             .when()
-            .get("/api/skills/{id}", skill.id)
+            .get("/api/skills/{id}", skillDTO.id)
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
             .extract().body().as(ENTITY_TYPE);
 
         // Update the skill
-        updatedSkill.name = UPDATED_NAME;
-        updatedSkill.categoryName = UPDATED_CATEGORY_NAME;
+        updatedSkillDTO.name = UPDATED_NAME;
+        updatedSkillDTO.categoryName = UPDATED_CATEGORY_NAME;
 
         given()
             .auth()
@@ -327,14 +326,14 @@ public class SkillResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(updatedSkill)
+            .body(updatedSkillDTO)
             .when()
             .put("/api/skills")
             .then()
             .statusCode(OK.getStatusCode());
 
         // Validate the Skill in the database
-        var skillList = given()
+        var skillDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -346,10 +345,10 @@ public class SkillResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillList).hasSize(databaseSizeBeforeUpdate);
-        var testSkill = skillList.stream().filter(it -> updatedSkill.id.equals(it.id)).findFirst().get();
-        assertThat(testSkill.name).isEqualTo(UPDATED_NAME);
-        assertThat(testSkill.categoryName).isEqualTo(UPDATED_CATEGORY_NAME);
+        assertThat(skillDTOList).hasSize(databaseSizeBeforeUpdate);
+        var testSkillDTO = skillDTOList.stream().filter(it -> updatedSkillDTO.id.equals(it.id)).findFirst().get();
+        assertThat(testSkillDTO.name).isEqualTo(UPDATED_NAME);
+        assertThat(testSkillDTO.categoryName).isEqualTo(UPDATED_CATEGORY_NAME);
     }
 
     @Test
@@ -374,14 +373,14 @@ public class SkillResourceTest {
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skill)
+            .body(skillDTO)
             .when()
             .put("/api/skills")
             .then()
             .statusCode(BAD_REQUEST.getStatusCode());
 
         // Validate the Skill in the database
-        var skillList = given()
+        var skillDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -393,19 +392,19 @@ public class SkillResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillList).hasSize(databaseSizeBeforeUpdate);
+        assertThat(skillDTOList).hasSize(databaseSizeBeforeUpdate);
     }
 
     @Test
     public void deleteSkill() {
         // Initialize the database
-        skill = given()
+        skillDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skill)
+            .body(skillDTO)
             .when()
             .post("/api/skills")
             .then()
@@ -432,12 +431,12 @@ public class SkillResourceTest {
             .oauth2(adminToken)
             .accept(APPLICATION_JSON)
             .when()
-            .delete("/api/skills/{id}", skill.id)
+            .delete("/api/skills/{id}", skillDTO.id)
             .then()
             .statusCode(NO_CONTENT.getStatusCode());
 
         // Validate the database contains one less item
-        var skillList = given()
+        var skillDTOList = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
@@ -449,19 +448,19 @@ public class SkillResourceTest {
             .contentType(APPLICATION_JSON)
             .extract().as(LIST_OF_ENTITY_TYPE);
 
-        assertThat(skillList).hasSize(databaseSizeBeforeDelete - 1);
+        assertThat(skillDTOList).hasSize(databaseSizeBeforeDelete - 1);
     }
 
     @Test
     public void getAllSkills() {
         // Initialize the database
-        skill = given()
+        skillDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skill)
+            .body(skillDTO)
             .when()
             .post("/api/skills")
             .then()
@@ -479,20 +478,20 @@ public class SkillResourceTest {
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .body("id", hasItem(skill.id.intValue()))
+            .body("id", hasItem(skillDTO.id.intValue()))
             .body("name", hasItem(DEFAULT_NAME))            .body("categoryName", hasItem(DEFAULT_CATEGORY_NAME));
     }
 
     @Test
     public void getSkill() {
         // Initialize the database
-        skill = given()
+        skillDTO = given()
             .auth()
             .preemptive()
             .oauth2(adminToken)
             .contentType(APPLICATION_JSON)
             .accept(APPLICATION_JSON)
-            .body(skill)
+            .body(skillDTO)
             .when()
             .post("/api/skills")
             .then()
@@ -506,7 +505,7 @@ public class SkillResourceTest {
                 .oauth2(adminToken)
                 .accept(APPLICATION_JSON)
                 .when()
-                .get("/api/skills/{id}", skill.id)
+                .get("/api/skills/{id}", skillDTO.id)
                 .then()
                 .statusCode(OK.getStatusCode())
                 .contentType(APPLICATION_JSON)
@@ -519,11 +518,11 @@ public class SkillResourceTest {
             .oauth2(adminToken)
             .accept(APPLICATION_JSON)
             .when()
-            .get("/api/skills/{id}", skill.id)
+            .get("/api/skills/{id}", skillDTO.id)
             .then()
             .statusCode(OK.getStatusCode())
             .contentType(APPLICATION_JSON)
-            .body("id", is(skill.id.intValue()))
+            .body("id", is(skillDTO.id.intValue()))
             
                 .body("name", is(DEFAULT_NAME))
                 .body("categoryName", is(DEFAULT_CATEGORY_NAME));
