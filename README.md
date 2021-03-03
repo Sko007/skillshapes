@@ -15,7 +15,7 @@ https://confluence.devoteam.de/display/SKIL/Microservice+Architecture
 - [Chrome](https://www.google.com/chrome/)
 - [mvn](https://maven.apache.org/guides/getting-started/windows-prerequisites.html)
 
-## Installation
+## Git Repository
 
 Use [git](https://git-scm.com/downloads) to clone the repository - branch master.
 
@@ -34,6 +34,18 @@ git clone https://gitlab.devoteam.de/AB05105/skillshapes.git
 > ```
 >
 > If the problem still persists please contact the team.
+
+## Java
+
+Please make sure you have [Java 15](https://www.oracle.com/java/technologies/javase/jdk15-archive-downloads.html) installed.
+
+```sh
+java --version
+
+java 15.0.2 2021-01-19
+Java(TM) SE Runtime Environment (build 15.0.2+7-27)
+Java HotSpot(TM) 64-Bit Server VM (build 15.0.2+7-27, mixed mode, sharing)
+```
 
 ## Local Development Configuration
 
@@ -171,6 +183,11 @@ Working application setup with gateway, microservice, registry, authentication, 
 ### Docker Push Execution Error on Build
 
 If there is an error 'Execution of docker push' skip it and make sure the image exists in your docker environment. It should be there.
+
+```sh
+ Failed to execute goal io.quarkus:quarkus-maven-plugin:1.11.3.Final:build (default) on project skillshapes: Failed to build quarkus application: io.quarkus.builder.BuildException: Build failure: Build failed due to errors
+[ERROR]         [error]: Build step io.quarkus.container.image.docker.deployment.DockerProcessor#dockerBuildFromJar threw an exception: java.lang.RuntimeException: Execution of 'docker push skillshapes/microservice:latest' failed. See docker output for more details
+```
 
 ### Docker cannot start service
 
