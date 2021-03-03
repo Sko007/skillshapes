@@ -2,6 +2,8 @@
 
 Implementing a MS application that displays the Skill-Shapes of company employees using their CV data.
 
+https://confluence.devoteam.de/display/SKIL/Microservice+Architecture
+
 ![alt text](skillshape.png "SkillShape")
 
 ## Tools (Windows 10)
@@ -15,11 +17,10 @@ Implementing a MS application that displays the Skill-Shapes of company employee
 
 ## Installation
 
-Use [git](https://git-scm.com/downloads) to clone the repository.
+Use [git](https://git-scm.com/downloads) to clone the repository - branch master.
 
 ```
 git clone https://gitlab.devoteam.de/AB05105/skillshapes.git
-git clone -b <branchname> <remote-repo-url>
 ```
 
 ## Configuration
@@ -28,7 +29,9 @@ Open your text editor as administrator (writing rights).
 
 Make sure you select all data types when opening the folder.
 
-`C:\Windows\System32\drivers\etc\hosts`
+```
+C:\Windows\System32\drivers\etc\hosts
+```
 
 Add the following to map all jhipster services to local.
 
@@ -46,26 +49,31 @@ Start keycloak, jhipster-registry and database
 docker-compose -f local-development.yml up -d
 ```
 
+```
+docker-compose -f elkstack.yml up -d
+```
+
 First start microservice application
 
 ```
 cd microservice
 UPDATE src/main/resources/application.properties : quarkus.http.port=8081
-.\mvnw compile quarkus:dev -Ddebug=5006
-
-Service listens on - localhost:8081/q/dev
+```
 
 ```
+.\mvnw compile quarkus:dev -Ddebug=5006
+```
+
+_Service is available at - localhost:8081/q/dev_
 
 Then start gateway application
 
 ```
 cd gateway
 mvn
-
-Service listens on - localhost:8080
-
 ```
+
+_Service is available at - localhost:8080_
 
 ## Configure Docker service
 
@@ -73,9 +81,17 @@ Build docker images for gateway and microservice
 
 ```
 cd microservice
-./mvnw -Pprod clean package -DskipTests
+```
 
+```
+./mvnw -Pprod clean package -DskipTests
+```
+
+```
 cd gateway
+```
+
+```
 ./mvnw package -Pprod verify jib:dockerBuild
 ```
 
@@ -138,3 +154,16 @@ Working application setup with gateway, microservice, registry, authentication, 
 - JDL import
 - ELK Stack running
 - Jaeger Open Tracing running
+
+## Troubleshooting
+
+### Docker Push Execution Error on Build
+
+If there is an error 'Execution of docker push' skip it and make sure the image exists in your docker environment. It should be there.
+
+### Contacts
+
+- Andreas Brust (Competence Lead / Product Owner) - andreas.brust@devoteam.com
+- Can Saner (Backend Development) - ahmet.can.saner@devoteam.com
+- David Minkovski (Development & Microservice Orchestration) - david.minkovski@devoteam.com
+- Severin Koch (Frontend Development) - severin.koch@devoteam.com
