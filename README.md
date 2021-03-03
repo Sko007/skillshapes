@@ -129,13 +129,7 @@ Connect to [http://localhost:8080](http://localhost:8080)
 - [Kibana Dashboard](http://localhost:5601)
 - [Jaeger Dashboard](http://localhost:16686)
 
-### Applications and dependencies:
-
-- gateway (SpringBoot gateway application)
-- skillshapes (Quarkus microservice application)
-- skillshapes's mariadb database
-
-## Only logging with ELK Stack & Tracing with Jaeger:
+## Logging with ELK Stack & Tracing with Jaeger:
 
 Start elastic search, logstash, kibana and jaegertracing
 
@@ -185,8 +179,6 @@ ERROR: for keycloak Cannot start service keycloak: error while creating mount so
 
 ERROR: for jhipster-registry Cannot start service jhipster-registry: error while creating mount source path '/run/desktop/mnt/host/c/Users/HL05475/Documents/Projekte/Cloud-Testing/skillshapes/central-server-config': mkdir /run/desktop/mnt/host/c: file exists
 ```
-
-**Solution**
 
 Delete failed images / containers, kill all docker processes and restart docker entirely.
 
