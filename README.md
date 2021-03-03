@@ -4,9 +4,11 @@ Implementing a MS application that displays the Skill-Shapes of company employee
 
 https://confluence.devoteam.de/display/SKIL/Microservice+Architecture
 
-![alt text](skillshape.png "SkillShape")
+![alt text](skillshape.png "SkillShape"){: .shadow}
 
 ## Tools (Windows 10)
+
+{: .gitlab-orange}
 
 - [Visual Studio Code](https://code.visualstudio.com/docs/?dv=win)
 - [IntelliJ ](https://www.jetbrains.com/idea/download/#section=windows)
@@ -15,7 +17,20 @@ https://confluence.devoteam.de/display/SKIL/Microservice+Architecture
 - [Chrome](https://www.google.com/chrome/)
 - [mvn](https://maven.apache.org/guides/getting-started/windows-prerequisites.html)
 
+---
+
+## On this page
+
+{:.no_toc}
+
+- TOC
+  {:toc}
+
+---
+
 ## Installation
+
+{: .gitlab-orange}
 
 Use [git](https://git-scm.com/downloads) to clone the repository - branch master.
 
@@ -24,6 +39,8 @@ git clone https://gitlab.devoteam.de/AB05105/skillshapes.git
 ```
 
 ## Configuration
+
+{: .gitlab-orange}
 
 Open your text editor as administrator (writing rights).
 
@@ -42,6 +59,8 @@ Add the following to map all jhipster services to local.
 ```
 
 ## Usage for Local Development
+
+{: .gitlab-orange}
 
 Start keycloak, jhipster-registry and database
 
@@ -77,6 +96,8 @@ _Service is available at - localhost:8080_
 
 ## Configure Docker service
 
+{: .gitlab-orange}
+
 Build docker images for gateway and microservice
 
 ```
@@ -99,6 +120,8 @@ This should have created 2 images gateway and skillshapes/microservice in docker
 
 ## Usage for Dockerized Deployment
 
+{: .gitlab-orange}
+
 Start all applications
 
 ```
@@ -107,6 +130,8 @@ docker-compose up -d
 
 ## Applications:
 
+{: .gitlab-purple}
+
 - [Gateway](localhost:8080)
 - [Microservice](http://localhost:8081/q/swagger-ui/)
 - [JHipster Registry](http://localhost:8761)
@@ -114,11 +139,15 @@ docker-compose up -d
 
 ### Applications and dependencies:
 
+{: .gitlab-purple}
+
 - gateway (SpringBoot gateway application)
 - skillshapes (Quarkus microservice application)
 - skillshapes's mariadb database
 
 ## Logging with ELK Stack & Tracing with Jaeger:
+
+{: .gitlab-orange}
 
 Start elastic search, logstash, kibana and jaegertracing
 
@@ -148,14 +177,16 @@ docker-compose -f elkstack.yml up -d
 
 Working application setup with gateway, microservice, registry, authentication, logging, tracing
 
-- Generated gateway
-- Generated microservice
-- Entity generation
-- JDL import
-- ELK Stack running
-- Jaeger Open Tracing running
+- <i class="fas fa-check" aria-hidden="true"></i> Generated gateway
+- <i class="fas fa-check" aria-hidden="true"></i> Generated microservice
+- <i class="fas fa-check" aria-hidden="true"></i> Entity generation
+- <i class="fas fa-check" aria-hidden="true"></i> JDL import
+- <i class="fas fa-check" aria-hidden="true"></i> ELK Stack running
+- <i class="fas fa-check" aria-hidden="true"></i> Jaeger Open Tracing running
 
 ## Troubleshooting
+
+{: .alert .alert-danger}
 
 ### Docker Push Execution Error on Build
 
