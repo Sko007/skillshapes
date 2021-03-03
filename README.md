@@ -154,3 +154,16 @@ Working application setup with gateway, microservice, registry, authentication, 
 - JDL import
 - ELK Stack running
 - Jaeger Open Tracing running
+
+## Troubleshooting
+
+### Docker Push Execution Error on Build
+
+If there is an error 'Execution of docker push' skip it and make sure the image exists in your docker environment. It should be there.
+
+### Contacts
+
+- Andreas Brust (Competence Lead / Product Owner) - andreas.brust@devoteam.com
+- Can Saner (Backend Development) - ahmet.can.saner@devoteam.com
+- David Minkovski (Development & Microservice Orchestration) - david.minkovski@devoteam.com
+- Severin Koch (Frontend Development) - severin.koch@devoteam.com
