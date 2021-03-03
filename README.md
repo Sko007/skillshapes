@@ -122,12 +122,12 @@ docker-compose -f elkstack.yml up -d
 ### Jaeger
 
 - Go to [Jaeger Dashboard](http://localhost:16686)
-- Make requests to the microservice
+- Make requests to the microservice and see the Trace-ID in Response Headers
+- Use Trace-ID in Jaeger or Kibana after creating Jaeger Index
 
 ## CI / CD
 
 - Working on Jenkins integration (in development)
-- Jaeger working (constant logging not working yet)
 
 ## What we have now
 
@@ -138,3 +138,4 @@ Working application setup with gateway, microservice, registry, authentication, 
 - Entity generation
 - JDL import
 - ELK Stack running
+- Jaeger Open Tracing running
