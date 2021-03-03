@@ -15,12 +15,9 @@ Implementing a MS application that displays the Skill-Shapes of company employee
 
 ## Installation
 
-Use [git](https://git-scm.com/downloads) to clone the repository.
+Use [git](https://git-scm.com/downloads) to clone the repository - branch master.
 
-```
-git clone https://gitlab.devoteam.de/AB05105/skillshapes.git
-git clone -b <branchname> <remote-repo-url>
-```
+`git clone https://gitlab.devoteam.de/AB05105/skillshapes.git`
 
 ## Configuration
 
@@ -42,30 +39,25 @@ Add the following to map all jhipster services to local.
 
 Start keycloak, jhipster-registry and database
 
-```
-docker-compose -f local-development.yml up -d
-```
+`docker-compose -f local-development.yml up -d`
 
 First start microservice application
 
 ```
 cd microservice
 UPDATE src/main/resources/application.properties : quarkus.http.port=8081
-.\mvnw compile quarkus:dev -Ddebug=5006
-
-Service listens on - localhost:8081/q/dev
-
 ```
+
+`.\mvnw compile quarkus:dev -Ddebug=5006`
+
+_Service is available at - localhost:8081/q/dev_
 
 Then start gateway application
 
-```
-cd gateway
-mvn
+`cd gateway`
+`mvn`
 
-Service listens on - localhost:8080
-
-```
+_Service is available at - localhost:8080_
 
 ## Configure Docker service
 
@@ -74,11 +66,15 @@ Build docker images for gateway and microservice
 ```
 cd microservice
 UPDATE src/main/resources/application.properties : quarkus.http.port=8080
-./mvnw -Pprod clean package -DskipTests
-
-cd gateway
-./mvnw package -Pprod verify jib:dockerBuild
 ```
+
+`./mvnw -Pprod clean package -DskipTests`
+
+```
+cd gateway
+```
+
+`./mvnw package -Pprod verify jib:dockerBuild`
 
 This should have created 2 images gateway and skillshapes/microservice in docker.
 
@@ -86,9 +82,7 @@ This should have created 2 images gateway and skillshapes/microservice in docker
 
 Start all applications
 
-```
-docker-compose up -d
-```
+`docker-compose up -d`
 
 ## Applications:
 
@@ -107,9 +101,7 @@ docker-compose up -d
 
 Start elastic search, logstash, kibana and jaegertracing
 
-```
-docker-compose -f elkstack.yml up -d
-```
+`docker-compose -f elkstack.yml up -d`
 
 ### Kibana
 
