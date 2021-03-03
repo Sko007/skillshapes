@@ -4,11 +4,9 @@ Implementing a MS application that displays the Skill-Shapes of company employee
 
 https://confluence.devoteam.de/display/SKIL/Microservice+Architecture
 
-![alt text](skillshape.png "SkillShape"){: .shadow}
+![alt text](skillshape.png "SkillShape")
 
 ## Tools (Windows 10)
-
-{: .gitlab-orange}
 
 - [Visual Studio Code](https://code.visualstudio.com/docs/?dv=win)
 - [IntelliJ ](https://www.jetbrains.com/idea/download/#section=windows)
@@ -17,30 +15,27 @@ https://confluence.devoteam.de/display/SKIL/Microservice+Architecture
 - [Chrome](https://www.google.com/chrome/)
 - [mvn](https://maven.apache.org/guides/getting-started/windows-prerequisites.html)
 
----
-
-## On this page
-
-{:.no_toc}
-
-- TOC
-  {:toc}
-
----
-
 ## Installation
-
-{: .gitlab-orange}
 
 Use [git](https://git-scm.com/downloads) to clone the repository - branch master.
 
-```
+```sh
 git clone https://gitlab.devoteam.de/AB05105/skillshapes.git
 ```
 
-## Configuration
+> **Note**: If your git clone is not working make sure you are in the VPN. <br>
+> If you continue to have problems add the following to your hosts file.
 
-{: .gitlab-orange}
+> C:\Windows\System32\drivers\etc
+>
+> ```sh
+> # Gitlab
+> 10.99.70.40 gitlab.devoteam.de
+> ```
+>
+> If the problem still persists please contact the team.
+
+## Configuration
 
 Open your text editor as administrator (writing rights).
 
@@ -52,102 +47,88 @@ C:\Windows\System32\drivers\etc\hosts
 
 Add the following to map all jhipster services to local.
 
-```
+```sh
 127.0.0.1 keycloak
 127.0.0.1 jhipster-registry
 127.0.0.1 skillshapes-mariadb
 ```
 
-## Usage for Local Development
+# Local Development Instructions
 
-{: .gitlab-orange}
+> **Note**: Please make sure you have [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows/) installed.
+> Check out the tools section if you have not prepared your environment..
 
-Start keycloak, jhipster-registry and database
+1. ### Start keycloak, jhipster-registry and database
+   ```sh
+   docker-compose -f local-development.yml up -d
+   ```
+2. ### Start ELK Stack, Elastic Search, Logstash, Kibana and Jaeger Tracing
+   ```
+   docker-compose -f elkstack.yml up -d
+   ```
 
-```
-docker-compose -f local-development.yml up -d
-```
+## Start microservice application
 
-```
-docker-compose -f elkstack.yml up -d
-```
+> **Note**: The gateway uses port 8080. Thus we update the microservice properties to use 8081. <br>
+> This step is not needed in a dockerized setup.
 
-First start microservice application
-
-```
+```sh
 cd microservice
-UPDATE src/main/resources/application.properties : quarkus.http.port=8081
-```
-
-```
+src/main/resources/application.properties -> quarkus.http.port=8081
 .\mvnw compile quarkus:dev -Ddebug=5006
 ```
 
-_Service is available at - localhost:8081/q/dev_
+Connect to [http://localhost:8081/q/dev](http://localhost:8081/q/dev)
 
-Then start gateway application
+## Start gateway application
 
-```
+```sh
 cd gateway
 mvn
 ```
 
-_Service is available at - localhost:8080_
+Connect to [http://localhost:8080](http://localhost:8080)
 
-## Configure Docker service
+# Dockerized Local Deployment
 
-{: .gitlab-orange}
+1. Build docker image for microservice
 
-Build docker images for gateway and microservice
+   ```sh
+   cd microservice
+   ./mvnw -Pprod clean package -DskipTests
+   ```
 
-```
-cd microservice
-```
+2. Build docker image for gateway
 
-```
-./mvnw -Pprod clean package -DskipTests
-```
+   ```sh
+   cd gateway
+   ./mvnw package -Pprod verify jib:dockerBuild
+   ```
 
-```
-cd gateway
-```
+3. Check docker for created images.
 
-```
-./mvnw package -Pprod verify jib:dockerBuild
-```
+4. Start all applications
 
-This should have created 2 images gateway and skillshapes/microservice in docker.
+   ```sh
+   docker-compose up -d
+   ```
 
-## Usage for Dockerized Deployment
-
-{: .gitlab-orange}
-
-Start all applications
-
-```
-docker-compose up -d
-```
-
-## Applications:
-
-{: .gitlab-purple}
+## Applications running:
 
 - [Gateway](localhost:8080)
 - [Microservice](http://localhost:8081/q/swagger-ui/)
 - [JHipster Registry](http://localhost:8761)
 - [Keycloak](http://localhost:9080/)
+- [Kibana Dashboard](http://localhost:5601)
+- [Jaeger Dashboard](http://localhost:16686)
 
 ### Applications and dependencies:
-
-{: .gitlab-purple}
 
 - gateway (SpringBoot gateway application)
 - skillshapes (Quarkus microservice application)
 - skillshapes's mariadb database
 
 ## Logging with ELK Stack & Tracing with Jaeger:
-
-{: .gitlab-orange}
 
 Start elastic search, logstash, kibana and jaegertracing
 
@@ -177,20 +158,28 @@ docker-compose -f elkstack.yml up -d
 
 Working application setup with gateway, microservice, registry, authentication, logging, tracing
 
-- <i class="fas fa-check" aria-hidden="true"></i> Generated gateway
-- <i class="fas fa-check" aria-hidden="true"></i> Generated microservice
-- <i class="fas fa-check" aria-hidden="true"></i> Entity generation
-- <i class="fas fa-check" aria-hidden="true"></i> JDL import
-- <i class="fas fa-check" aria-hidden="true"></i> ELK Stack running
-- <i class="fas fa-check" aria-hidden="true"></i> Jaeger Open Tracing running
+- Generated gateway
+- Generated microservice
+- Entity generation
+- JDL import
+- ELK Stack running
+- Jaeger Open Tracing running
 
 ## Troubleshooting
-
-{: .alert .alert-danger}
 
 ### Docker Push Execution Error on Build
 
 If there is an error 'Execution of docker push' skip it and make sure the image exists in your docker environment. It should be there.
+
+### Docker cannot start service
+
+ERROR: for keycloak Cannot start service keycloak: error while creating mount source path '/run/desktop/mnt/host/c/Users/HL05475/Documents/Projekte/Cloud-Testing/skillshapes/keycloak-db': mkdir /run/desktop/mnt/host/c: file exists
+
+ERROR: for jhipster-registry Cannot start service jhipster-registry: error while creating mount source path '/run/desktop/mnt/host/c/Users/HL05475/Documents/Projekte/Cloud-Testing/skillshapes/central-server-config': mkdir /run/desktop/mnt/host/c: file exists
+
+**Solution**
+
+Delete failed images / containers, kill all docker processes and restart docker entirely.
 
 ### Contacts
 
