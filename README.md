@@ -73,7 +73,6 @@ Build docker images for gateway and microservice
 
 ```
 cd microservice
-UPDATE src/main/resources/application.properties : quarkus.http.port=8080
 ./mvnw -Pprod clean package -DskipTests
 
 cd gateway
