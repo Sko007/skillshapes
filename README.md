@@ -17,7 +17,9 @@ Implementing a MS application that displays the Skill-Shapes of company employee
 
 Use [git](https://git-scm.com/downloads) to clone the repository - branch master.
 
-`git clone https://gitlab.devoteam.de/AB05105/skillshapes.git`
+```
+git clone https://gitlab.devoteam.de/AB05105/skillshapes.git
+```
 
 ## Configuration
 
@@ -25,7 +27,9 @@ Open your text editor as administrator (writing rights).
 
 Make sure you select all data types when opening the folder.
 
-`C:\Windows\System32\drivers\etc\hosts`
+```
+C:\Windows\System32\drivers\etc\hosts
+```
 
 Add the following to map all jhipster services to local.
 
@@ -39,7 +43,9 @@ Add the following to map all jhipster services to local.
 
 Start keycloak, jhipster-registry and database
 
-`docker-compose -f local-development.yml up -d`
+```
+docker-compose -f local-development.yml up -d
+```
 
 First start microservice application
 
@@ -48,14 +54,18 @@ cd microservice
 UPDATE src/main/resources/application.properties : quarkus.http.port=8081
 ```
 
-`.\mvnw compile quarkus:dev -Ddebug=5006`
+```
+.\mvnw compile quarkus:dev -Ddebug=5006
+```
 
 _Service is available at - localhost:8081/q/dev_
 
 Then start gateway application
 
-`cd gateway`
-`mvn`
+```
+cd gateway
+mvn
+```
 
 _Service is available at - localhost:8080_
 
@@ -68,13 +78,17 @@ cd microservice
 UPDATE src/main/resources/application.properties : quarkus.http.port=8080
 ```
 
-`./mvnw -Pprod clean package -DskipTests`
+```
+./mvnw -Pprod clean package -DskipTests
+```
 
 ```
 cd gateway
 ```
 
-`./mvnw package -Pprod verify jib:dockerBuild`
+```
+./mvnw package -Pprod verify jib:dockerBuild
+```
 
 This should have created 2 images gateway and skillshapes/microservice in docker.
 
@@ -82,7 +96,9 @@ This should have created 2 images gateway and skillshapes/microservice in docker
 
 Start all applications
 
-`docker-compose up -d`
+```
+docker-compose up -d
+```
 
 ## Applications:
 
@@ -101,7 +117,9 @@ Start all applications
 
 Start elastic search, logstash, kibana and jaegertracing
 
-`docker-compose -f elkstack.yml up -d`
+```
+docker-compose -f elkstack.yml up -d
+```
 
 ### Kibana
 
@@ -131,3 +149,7 @@ Working application setup with gateway, microservice, registry, authentication, 
 - JDL import
 - ELK Stack running
 - Jaeger Open Tracing running
+
+```
+
+```
