@@ -26,7 +26,7 @@ git clone https://gitlab.devoteam.de/AB05105/skillshapes.git
 > **Note**: If your git clone is not working make sure you are in the VPN. <br>
 > If you continue to have problems add the following to your hosts file.
 
-> C:\Windows\System32\drivers\etc
+> C:\Windows\System32\drivers\etc\hosts
 >
 > ```sh
 > # Gitlab
@@ -35,7 +35,7 @@ git clone https://gitlab.devoteam.de/AB05105/skillshapes.git
 >
 > If the problem still persists please contact the team.
 
-## Configuration
+## Local Development Configuration
 
 Open your text editor as administrator (writing rights).
 
@@ -58,23 +58,30 @@ Add the following to map all jhipster services to local.
 > **Note**: Please make sure you have [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows/) installed.
 > Check out the tools section if you have not prepared your environment..
 
-1. ### Start keycloak, jhipster-registry and database
+1. #### Start keycloak, jhipster-registry and database
    ```sh
    docker-compose -f local-development.yml up -d
    ```
-2. ### Start ELK Stack, Elastic Search, Logstash, Kibana and Jaeger Tracing
+2. #### Start ELK Stack, Elastic Search, Logstash, Kibana and Jaeger Tracing
    ```
    docker-compose -f elkstack.yml up -d
    ```
 
 ## Start microservice application
 
-> **Note**: The gateway uses port 8080. Thus we update the microservice properties to use 8081. <br>
+> **Note**: The gateway uses port 8080. Thus we manually update the microservice properties to use 8081. <br>
 > This step is not needed in a dockerized setup.
+
+Update the following in: microservice/src/main/resources/application.properties
+
+```sh
+quarkus.http.port=8081
+```
+
+Then navigate to the microservice and run it.
 
 ```sh
 cd microservice
-src/main/resources/application.properties -> quarkus.http.port=8081
 .\mvnw compile quarkus:dev -Ddebug=5006
 ```
 
@@ -105,7 +112,7 @@ Connect to [http://localhost:8080](http://localhost:8080)
    ./mvnw package -Pprod verify jib:dockerBuild
    ```
 
-3. Check docker for created images.
+3. Check docker for created images: **gateway** and **skillshapes/microservice**
 
 4. Start all applications
 
@@ -113,7 +120,7 @@ Connect to [http://localhost:8080](http://localhost:8080)
    docker-compose up -d
    ```
 
-## Applications running:
+## Applications when running:
 
 - [Gateway](localhost:8080)
 - [Microservice](http://localhost:8081/q/swagger-ui/)
@@ -128,11 +135,11 @@ Connect to [http://localhost:8080](http://localhost:8080)
 - skillshapes (Quarkus microservice application)
 - skillshapes's mariadb database
 
-## Logging with ELK Stack & Tracing with Jaeger:
+## Only logging with ELK Stack & Tracing with Jaeger:
 
 Start elastic search, logstash, kibana and jaegertracing
 
-```
+```sh
 docker-compose -f elkstack.yml up -d
 ```
 
@@ -173,15 +180,17 @@ If there is an error 'Execution of docker push' skip it and make sure the image 
 
 ### Docker cannot start service
 
+```sh
 ERROR: for keycloak Cannot start service keycloak: error while creating mount source path '/run/desktop/mnt/host/c/Users/HL05475/Documents/Projekte/Cloud-Testing/skillshapes/keycloak-db': mkdir /run/desktop/mnt/host/c: file exists
 
 ERROR: for jhipster-registry Cannot start service jhipster-registry: error while creating mount source path '/run/desktop/mnt/host/c/Users/HL05475/Documents/Projekte/Cloud-Testing/skillshapes/central-server-config': mkdir /run/desktop/mnt/host/c: file exists
+```
 
 **Solution**
 
 Delete failed images / containers, kill all docker processes and restart docker entirely.
 
-### Contacts
+### Project Contacts
 
 - Andreas Brust (Competence Lead / Product Owner) - andreas.brust@devoteam.com
 - Can Saner (Backend Development) - ahmet.can.saner@devoteam.com
