@@ -49,6 +49,10 @@ Start keycloak, jhipster-registry and database
 docker-compose -f local-development.yml up -d
 ```
 
+```
+docker-compose -f elkstack.yml up -d
+```
+
 First start microservice application
 
 ```
@@ -77,7 +81,6 @@ Build docker images for gateway and microservice
 
 ```
 cd microservice
-UPDATE src/main/resources/application.properties : quarkus.http.port=8080
 ```
 
 ```
