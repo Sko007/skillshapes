@@ -2,6 +2,8 @@
 
 Implementing a MS application that displays the Skill-Shapes of company employees using their CV data.
 
+https://confluence.devoteam.de/display/SKIL/Microservice+Architecture
+
 ![alt text](skillshape.png "SkillShape")
 
 ## Tools (Windows 10)
@@ -149,7 +151,3 @@ Working application setup with gateway, microservice, registry, authentication, 
 - JDL import
 - ELK Stack running
 - Jaeger Open Tracing running
-
-```
-
-```
