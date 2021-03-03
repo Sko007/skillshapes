@@ -24,8 +24,7 @@ public class SkillShapeDTO implements Serializable {
     @NotNull
     public String category;
 
-    public Set<ProfileSkillValueDTO> skills;
-    public Set<UserProfileDTO> owners = new HashSet<>();
+    public Set<ProfileSkillValueDTO> skills = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
@@ -51,7 +50,6 @@ public class SkillShapeDTO implements Serializable {
             ", title='" + title + "'" +
             ", category='" + category + "'" +
             ", skills='" + skills + "'" +
-            ", owners='" + owners + "'" +
             "}";
     }
 }

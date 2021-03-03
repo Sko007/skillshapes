@@ -13,7 +13,7 @@ import java.util.Objects;
 @ApiModel(description = "The ProfileSkill represents the rating of the skill for each user\n@author Devoteam")
 @RegisterForReflection
 public class ProfileSkillValueDTO implements Serializable {
-    
+
     public Long id;
 
     @NotNull
@@ -22,6 +22,8 @@ public class ProfileSkillValueDTO implements Serializable {
     public Integer value;
 
     public Long skillId;
+
+    public String name;
 
     @Override
     public boolean equals(Object o) {

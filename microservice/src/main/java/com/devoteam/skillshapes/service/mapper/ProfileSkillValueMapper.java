@@ -12,6 +12,7 @@ import org.mapstruct.*;
 @Mapper(componentModel = "cdi", uses = {SkillMapper.class})
 public interface ProfileSkillValueMapper extends EntityMapper<ProfileSkillValueDTO, ProfileSkillValue> {
 
+    @Mapping(source = "skill.name", target = "name")
     @Mapping(source = "skill.id", target = "skillId")
     ProfileSkillValueDTO toDto(ProfileSkillValue profileSkillValue);
 
