@@ -79,6 +79,7 @@ Add the following to map all jhipster services to local.
 
 1. #### Start keycloak, jhipster-registry and database
    ```sh
+   docker network create skillshapes-network
    docker-compose -f local-development.yml up -d
    ```
 2. #### Start ELK Stack, Elastic Search, Logstash, Kibana and Jaeger Tracing
@@ -159,6 +160,11 @@ Connect to [http://localhost:9000](http://localhost:9000) or [http://localhost:9
 - [Keycloak](http://localhost:9080/)
 - [Kibana Dashboard](http://localhost:5601)
 - [Jaeger Dashboard](http://localhost:16686)
+
+### Credentials
+
+- admin:admin
+- user:user
 
 ## Logging with ELK Stack & Tracing with Jaeger:
 
