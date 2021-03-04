@@ -52,6 +52,8 @@ Java HotSpot(TM) 64-Bit Server VM (build 15.0.2+7-27, mixed mode, sharing)
 Please install the [graalvm](https://www.graalvm.org/downloads/).
 Quarkus tailors your application for GraalVM. Amazingly fast boot time, incredibly low RSS memory (not just heap size!) offering near instant scale up and high density memory utilization in container orchestration platforms like Kubernetes.
 
+[Configure](https://quarkus.io/guides/building-native-image#configuring-graalvm) it accordingly and set JAVA_HOME to the graalvm directory.
+
 ## Local Development Configuration
 
 Open your text editor as administrator (writing rights).

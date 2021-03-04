@@ -11,6 +11,10 @@ node {
                 sh "java -version"
             }
 
+            stage('quality analysis') {
+                withSonarQubeEnv('sonar') {
+                }
+            }
         }
 
         def dockerImage
