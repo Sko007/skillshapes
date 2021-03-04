@@ -134,8 +134,6 @@ Connect to [http://localhost:9000](http://localhost:9000) or [http://localhost:9
    ./mvnw -Pprod clean package -DskipTests
    ```
 
-````
-
 2. Build docker image for gateway
 
    ```sh
@@ -224,4 +222,7 @@ Delete failed images / containers, kill all docker processes and restart docker 
 - Can Saner (Backend Development) - ahmet.can.saner@devoteam.com
 - David Minkovski (Full Stack & Microservice Orchestration) - david.minkovski@devoteam.com
 - Severin Koch (Frontend Development) - severin.koch@devoteam.com
-````
+
+```
+
+```
