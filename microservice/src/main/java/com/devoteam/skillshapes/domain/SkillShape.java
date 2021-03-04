@@ -121,5 +121,4 @@ public class SkillShape extends PanacheEntityBase implements Serializable {
     public static Optional<SkillShape> findOneWithEagerRelationships(Long id) {
         return find("select skillShape from SkillShape skillShape left join fetch skillShape.skills left join fetch skillShape.owners where skillShape.id =?1", id).firstResultOptional();
     }
-
 }
