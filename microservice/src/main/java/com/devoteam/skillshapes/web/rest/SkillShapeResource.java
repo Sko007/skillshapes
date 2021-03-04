@@ -36,7 +36,6 @@ public class SkillShapeResource {
     @ConfigProperty(name = "application.name")
     String applicationName;
 
-
     @Inject
     SkillShapeService skillShapeService;
     /**

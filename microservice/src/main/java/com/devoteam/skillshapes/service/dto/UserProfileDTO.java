@@ -23,8 +23,6 @@ public class UserProfileDTO implements Serializable {
 
     public String email;
 
-    public Set<SkillShapeDTO> skillshapes = new HashSet<>();
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -49,7 +47,6 @@ public class UserProfileDTO implements Serializable {
             ", firstName='" + firstName + "'" +
             ", lastName='" + lastName + "'" +
             ", email='" + email + "'" +
-            ", skillshapes='" + skillshapes + "'" +
             "}";
     }
 }

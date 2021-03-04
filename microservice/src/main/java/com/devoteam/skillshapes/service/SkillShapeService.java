@@ -3,7 +3,6 @@ package com.devoteam.skillshapes.service;
 import com.devoteam.skillshapes.domain.SkillShape;
 import com.devoteam.skillshapes.service.dto.SkillShapeDTO;
 import com.devoteam.skillshapes.service.mapper.SkillShapeMapper;
-import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,7 +65,6 @@ public class SkillShapeService {
         return skillShapeMapper.toDto(skillShapes);
     }
 
-
     /**
      * Get all the skillShapes with eager load of many-to-many relationships.
      * @return the list of entities.
@@ -75,6 +73,4 @@ public class SkillShapeService {
         List<SkillShape> skillShapes = SkillShape.findAllWithEagerRelationships().list();
         return skillShapeMapper.toDto(skillShapes);
     }
-
-
 }
