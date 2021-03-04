@@ -113,6 +113,18 @@ mvn
 
 Connect to [http://localhost:8080](http://localhost:8080)
 
+### Frontend Development
+
+> **Note**: This step is **optional** and only for frontend development.
+> It will start the server for the frontend application and serve it on a different port (9000 or 9002).
+
+```sh
+cd gateway
+npm start
+```
+
+Connect to [http://localhost:9000](http://localhost:9000) or [http://localhost:9002](http://localhost:9002)
+
 # Dockerized Local Deployment
 
 1. Build docker image for microservice
@@ -121,6 +133,8 @@ Connect to [http://localhost:8080](http://localhost:8080)
    cd microservice
    ./mvnw -Pprod clean package -DskipTests
    ```
+
+````
 
 2. Build docker image for gateway
 
@@ -210,3 +224,4 @@ Delete failed images / containers, kill all docker processes and restart docker 
 - Can Saner (Backend Development) - ahmet.can.saner@devoteam.com
 - David Minkovski (Full Stack & Microservice Orchestration) - david.minkovski@devoteam.com
 - Severin Koch (Frontend Development) - severin.koch@devoteam.com
+````
