@@ -35,9 +35,9 @@ git clone https://gitlab.devoteam.de/AB05105/skillshapes.git
 >
 > If the problem still persists please contact the team.
 
-## Java
+## Java!
 
-Please make sure you have [Java 15](https://www.oracle.com/java/technologies/javase/jdk15-archive-downloads.html) installed.
+Please make sure you have [Java 11+](https://www.oracle.com/java/technologies/javase/jdk15-archive-downloads.html) installed.
 
 ```sh
 java --version
@@ -46,6 +46,11 @@ java 15.0.2 2021-01-19
 Java(TM) SE Runtime Environment (build 15.0.2+7-27)
 Java HotSpot(TM) 64-Bit Server VM (build 15.0.2+7-27, mixed mode, sharing)
 ```
+
+## GraalVM!
+
+Please install the [graalvm](https://www.graalvm.org/downloads/).
+Quarkus tailors your application for GraalVM. Amazingly fast boot time, incredibly low RSS memory (not just heap size!) offering near instant scale up and high density memory utilization in container orchestration platforms like Kubernetes.
 
 ## Local Development Configuration
 
@@ -203,5 +208,5 @@ Delete failed images / containers, kill all docker processes and restart docker 
 
 - Andreas Brust (Competence Lead / Product Owner) - andreas.brust@devoteam.com
 - Can Saner (Backend Development) - ahmet.can.saner@devoteam.com
-- David Minkovski (Development & Microservice Orchestration) - david.minkovski@devoteam.com
+- David Minkovski (Full Stack & Microservice Orchestration) - david.minkovski@devoteam.com
 - Severin Koch (Frontend Development) - severin.koch@devoteam.com
