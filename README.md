@@ -116,7 +116,7 @@ mvn
 
 Connect to [http://localhost:8080](http://localhost:8080)
 
-### Frontend Development
+### (Optional) Frontend Development
 
 > **Note**: This step is **optional** and only for frontend development.
 > It will start the server for the frontend application and serve it on a different port (9000 or 9002).
@@ -128,14 +128,12 @@ npm start
 
 Connect to [http://localhost:9000](http://localhost:9000) or [http://localhost:9002](http://localhost:9002)
 
-## Applications when running:
+## Applications when running successfully:
 
 - [Gateway](localhost:8080)
 - [Microservice](http://localhost:8081/q/swagger-ui/)
 - [JHipster Registry](http://localhost:8761)
 - [Keycloak](http://localhost:9080/)
-- [Kibana Dashboard](http://localhost:5601)
-- [Jaeger Dashboard](http://localhost:16686)
 
 ### Credentials
 
@@ -211,7 +209,7 @@ If there is an error 'Execution of docker push' skip it and make sure the image 
 
 ```sh
  Failed to execute goal io.quarkus:quarkus-maven-plugin:1.11.3.Final:build (default) on project skillshapes: Failed to build quarkus application: io.quarkus.builder.BuildException: Build failure: Build failed due to errors
-[ERROR]         [error]: Build step io.quarkus.container.image.docker.deployment.DockerProcessor#dockerBuildFromJar threw an exception: java.lang.RuntimeException: Execution of 'docker push skillshapes/microservice:latest' failed. See docker output for more details
+[ERROR]         [error]: Build step io.quarkus.container.image.docker.deployment.DockerProcessor dockerBuildFromJar threw an exception: java.lang.RuntimeException: Execution of 'docker push skillshapes/microservice:latest' failed. See docker output for more details
 ```
 
 ### Docker cannot start service
@@ -230,7 +228,3 @@ Delete failed images / containers, kill all docker processes and restart docker 
 - Can Saner (Backend Development) - ahmet.can.saner@devoteam.com
 - David Minkovski (Full Stack & Microservice Orchestration) - david.minkovski@devoteam.com
 - Severin Koch (Frontend Development) - severin.koch@devoteam.com
-
-```
-
-```
