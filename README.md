@@ -222,6 +222,15 @@ ERROR: for jhipster-registry Cannot start service jhipster-registry: error while
 
 Delete failed images / containers, kill all docker processes and restart docker entirely.
 
+### Port already in use, can not bind
+
+[https://stackoverflow.com/questions/39632667/how-do-i-kill-the-process-currently-using-a-port-on-localhost-in-windows](https://stackoverflow.com/questions/39632667/how-do-i-kill-the-process-currently-using-a-port-on-localhost-in-windows)
+
+```sh
+netstat -ano | findstr :<PORT> (8080,8081,8761 etc.)
+taskkill /PID <PID> /F
+```
+
 # Project Contacts
 
 - Andreas Brust (Competence Lead / Product Owner) - andreas.brust@devoteam.com
