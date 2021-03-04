@@ -128,30 +128,6 @@ npm start
 
 Connect to [http://localhost:9000](http://localhost:9000) or [http://localhost:9002](http://localhost:9002)
 
-# Dockerized Local Deployment
-
-1. Build docker image for microservice
-
-   ```sh
-   cd microservice
-   ./mvnw -Pprod clean package -DskipTests
-   ```
-
-2. Build docker image for gateway
-
-   ```sh
-   cd gateway
-   ./mvnw package -Pprod verify jib:dockerBuild
-   ```
-
-3. Check docker for created images: **gateway** and **skillshapes/microservice**
-
-4. Start all applications
-
-   ```sh
-   docker-compose up -d
-   ```
-
 ## Applications when running:
 
 - [Gateway](localhost:8080)
@@ -187,6 +163,30 @@ docker-compose -f elkstack.yml up -d
 - Go to [Jaeger Dashboard](http://localhost:16686)
 - Make requests to the microservice and see the Trace-ID in Response Headers
 - Use Trace-ID in Jaeger or Kibana after creating Jaeger Index
+
+# Dockerized Local Deployment
+
+1. Build docker image for microservice
+
+   ```sh
+   cd microservice
+   ./mvnw -Pprod clean package -DskipTests
+   ```
+
+2. Build docker image for gateway
+
+   ```sh
+   cd gateway
+   ./mvnw package -Pprod verify jib:dockerBuild
+   ```
+
+3. Check docker for created images: **gateway** and **skillshapes/microservice**
+
+4. Start all applications
+
+   ```sh
+   docker-compose up -d
+   ```
 
 ## CI / CD
 
@@ -224,7 +224,7 @@ ERROR: for jhipster-registry Cannot start service jhipster-registry: error while
 
 Delete failed images / containers, kill all docker processes and restart docker entirely.
 
-### Project Contacts
+# Project Contacts
 
 - Andreas Brust (Competence Lead / Product Owner) - andreas.brust@devoteam.com
 - Can Saner (Backend Development) - ahmet.can.saner@devoteam.com
