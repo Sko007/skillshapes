@@ -52,6 +52,8 @@ Java HotSpot(TM) 64-Bit Server VM (build 15.0.2+7-27, mixed mode, sharing)
 Please install the [graalvm](https://www.graalvm.org/downloads/).
 Quarkus tailors your application for GraalVM. Amazingly fast boot time, incredibly low RSS memory (not just heap size!) offering near instant scale up and high density memory utilization in container orchestration platforms like Kubernetes.
 
+[Configure](https://quarkus.io/guides/building-native-image#configuring-graalvm) it accordingly and set JAVA_HOME to the graalvm directory.
+
 ## Local Development Configuration
 
 Open your text editor as administrator (writing rights).
@@ -77,6 +79,7 @@ Add the following to map all jhipster services to local.
 
 1. #### Start keycloak, jhipster-registry and database
    ```sh
+   docker network create skillshapes-network
    docker-compose -f local-development.yml up -d
    ```
 2. #### Start ELK Stack, Elastic Search, Logstash, Kibana and Jaeger Tracing
@@ -157,6 +160,11 @@ Connect to [http://localhost:9000](http://localhost:9000) or [http://localhost:9
 - [Keycloak](http://localhost:9080/)
 - [Kibana Dashboard](http://localhost:5601)
 - [Jaeger Dashboard](http://localhost:16686)
+
+### Credentials
+
+- admin:admin
+- user:user
 
 ## Logging with ELK Stack & Tracing with Jaeger:
 

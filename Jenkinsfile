@@ -6,11 +6,13 @@ node {
     }
 
     gitlabCommitStatus('build') {
-        docker.image('jhipster/jhipster:v6.10.5').inside('-u jhipster') {
-            stage('check java') {
-                sh "java -version"
-            }
+        stage('check java') {
+            sh "java -version"
+        }
 
+        stage('quality analysis') {
+            withSonarQubeEnv('sonar') {
+            }
         }
 
         def dockerImage
