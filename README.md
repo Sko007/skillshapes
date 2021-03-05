@@ -17,7 +17,8 @@ Microservices using [JHipster](https://www.jhipster.tech/) with:
 - **Keycloak (Dockerized)** <br>
   Authentication Server using OAuth. Responsible for signing users in and out and managing their auth-sessions.
 - **JHipster Registry (Dockerized)** <br>
-  Registers all services and serves as a load balancer for request routing.
+  Registers all services and serves as a load balancer for request routing. <br>
+  Serves as config provider for the applications - config will get pulled from git.
 - **Microservice (Quarkus JHipster Application)** <br>
   Backend that handles all the business logic and database queries and requests
 - **Elastic Search (Dockerized)** <br>
