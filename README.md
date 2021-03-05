@@ -8,14 +8,18 @@ https://confluence.devoteam.de/display/SKIL/Microservice+Architecture
 
 ## Tools (Windows 10)
 
-- [Visual Studio Code](https://code.visualstudio.com/docs/?dv=win)
-- [IntelliJ ](https://www.jetbrains.com/idea/download/#section=windows)
 - [Windows Terminal](https://www.microsoft.com/de-de/p/windows-terminal/9n0dx20hk701?rtc=1&activetab=pivot:overviewtab)
 - [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows/)
 - [Chrome](https://www.google.com/chrome/)
-- [mvn](https://maven.apache.org/guides/getting-started/windows-prerequisites.html)
 
-## Git Repository
+### Developer Tools (Recommended)
+
+- [Visual Studio Code](https://code.visualstudio.com/docs/?dv=win)
+- [IntelliJ ](https://www.jetbrains.com/idea/download/#section=windows)
+- [mvn](https://maven.apache.org/guides/getting-started/windows-prerequisites.html)
+- [node](https://nodejs.org/en/download/)
+
+## Installation
 
 Use [git](https://git-scm.com/downloads) to clone the repository - branch master.
 
@@ -35,7 +39,7 @@ git clone https://gitlab.devoteam.de/AB05105/skillshapes.git
 >
 > If the problem still persists please contact the team.
 
-## Java!
+Install Java
 
 Please make sure you have [Java 11+](https://www.oracle.com/java/technologies/javase/jdk15-archive-downloads.html) installed.
 
@@ -47,14 +51,14 @@ Java(TM) SE Runtime Environment (build 15.0.2+7-27)
 Java HotSpot(TM) 64-Bit Server VM (build 15.0.2+7-27, mixed mode, sharing)
 ```
 
-## GraalVM!
+Install GraalVM
 
 Please install the [graalvm](https://www.graalvm.org/downloads/).
 Quarkus tailors your application for GraalVM. Amazingly fast boot time, incredibly low RSS memory (not just heap size!) offering near instant scale up and high density memory utilization in container orchestration platforms like Kubernetes.
 
 [Configure](https://quarkus.io/guides/building-native-image#configuring-graalvm) it accordingly and set JAVA_HOME to the graalvm directory.
 
-## Local Development Configuration
+## Configuration
 
 Open your text editor as administrator (writing rights).
 
@@ -72,7 +76,7 @@ Add the following to map all jhipster services to local.
 127.0.0.1 skillshapes-mariadb
 ```
 
-# Local Development Instructions
+## Run the applications
 
 > **Note**: Please make sure you have [Docker Desktop](https://hub.docker.com/editions/community/docker-ce-desktop-windows/) installed.
 > Check out the tools section if you have not prepared your environment..
@@ -87,7 +91,7 @@ Add the following to map all jhipster services to local.
    docker-compose -f elkstack.yml up -d
    ```
 
-## Start microservice application
+### Run microservice application
 
 > **Note**: The gateway uses port 8080. Thus we manually update the microservice properties to use 8081. <br>
 > This step is not needed in a dockerized setup.
@@ -107,7 +111,7 @@ cd microservice
 
 Connect to [http://localhost:8081/q/dev](http://localhost:8081/q/dev)
 
-## Start gateway application
+### Run gateway application
 
 ```sh
 cd gateway
@@ -140,14 +144,6 @@ Connect to [http://localhost:9000](http://localhost:9000) or [http://localhost:9
 - admin:admin
 - user:user
 
-## Logging with ELK Stack & Tracing with Jaeger:
-
-Start elastic search, logstash, kibana and jaegertracing
-
-```sh
-docker-compose -f elkstack.yml up -d
-```
-
 ### Kibana
 
 - Go to [Kibana Dashboard](http://localhost:5601)
@@ -162,7 +158,7 @@ docker-compose -f elkstack.yml up -d
 - Make requests to the microservice and see the Trace-ID in Response Headers
 - Use Trace-ID in Jaeger or Kibana after creating Jaeger Index
 
-# Dockerized Local Deployment
+# Dockerized Deployment
 
 1. Build docker image for microservice
 
