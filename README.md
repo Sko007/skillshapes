@@ -82,7 +82,7 @@ Install GraalVM
 Please install the [graalvm](https://www.graalvm.org/downloads/).
 Quarkus tailors your application for GraalVM. Amazingly fast boot time, incredibly low RSS memory (not just heap size!) offering near instant scale up and high density memory utilization in container orchestration platforms like Kubernetes.
 
-[Configure](https://quarkus.io/guides/building-native-image#configuring-graalvm) it accordingly and set JAVA_HOME to the graalvm directory.
+[Configure](https://quarkus.io/guides/building-native-image#configuring-graalvm) it accordingly and set **JAVA_HOME** to the graalvm directory or add it to your path.
 
 ## Configuration
 
