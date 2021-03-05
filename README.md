@@ -17,7 +17,8 @@ Microservices using [JHipster](https://www.jhipster.tech/) with:
 - **Keycloak (Dockerized)** <br>
   Authentication Server using OAuth. Responsible for signing users in and out and managing their auth-sessions.
 - **JHipster Registry (Dockerized)** <br>
-  Registers all services and serves as a load balancer for request routing.
+  Registers all services and serves as a load balancer for request routing. <br>
+  Serves as config provider for the applications - config will get pulled from git.
 - **Microservice (Quarkus JHipster Application)** <br>
   Backend that handles all the business logic and database queries and requests
 - **Elastic Search (Dockerized)** <br>
@@ -81,7 +82,7 @@ Install GraalVM
 Please install the [graalvm](https://www.graalvm.org/downloads/).
 Quarkus tailors your application for GraalVM. Amazingly fast boot time, incredibly low RSS memory (not just heap size!) offering near instant scale up and high density memory utilization in container orchestration platforms like Kubernetes.
 
-[Configure](https://quarkus.io/guides/building-native-image#configuring-graalvm) it accordingly and set JAVA_HOME to the graalvm directory.
+[Configure](https://quarkus.io/guides/building-native-image#configuring-graalvm) it accordingly and set **JAVA_HOME** to the graalvm directory or add it to your path.
 
 ## Configuration
 
