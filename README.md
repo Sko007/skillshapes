@@ -119,17 +119,6 @@ Add the following to map all jhipster services to local.
 
 ### Run microservice application
 
-> **Note**: The gateway uses port 8080. Thus we manually update the microservice properties to use 8081. <br>
-> This step is not needed in a dockerized setup.
-
-Update the following in: microservice/src/main/resources/application.properties
-
-```sh
-quarkus.http.port=8081
-```
-
-Then navigate to the microservice and run it.
-
 ```sh
 cd microservice
 .\mvnw compile quarkus:dev -Ddebug=5006
@@ -149,7 +138,7 @@ Connect to [http://localhost:8080](http://localhost:8080)
 ### (Optional) Frontend Development
 
 > **Note**: This step is **optional** and only for frontend development.
-> It will start the server for the frontend application and serve it on a different port (9000 or 9002).
+> It will start the server for the frontend application and serve it on a different port (9000 or 900\*).
 
 ```sh
 cd gateway
@@ -157,7 +146,7 @@ npm install
 npm start
 ```
 
-Connect to [http://localhost:9000](http://localhost:9000) or [http://localhost:9002](http://localhost:9002)
+Connect to [http://localhost:9000](http://localhost:9000) or [http://localhost:9002](http://localhost:9002) or other port.
 
 ## Applications when running successfully:
 
