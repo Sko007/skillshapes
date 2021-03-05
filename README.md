@@ -153,6 +153,7 @@ Connect to [http://localhost:8080](http://localhost:8080)
 
 ```sh
 cd gateway
+npm install
 npm start
 ```
 
@@ -183,30 +184,6 @@ Connect to [http://localhost:9000](http://localhost:9000) or [http://localhost:9
 - Go to [Jaeger Dashboard](http://localhost:16686)
 - Make requests to the microservice and see the Trace-ID in Response Headers
 - Use Trace-ID in Jaeger or Kibana after creating Jaeger Index
-
-# Dockerized Deployment
-
-1. Build docker image for microservice
-
-   ```sh
-   cd microservice
-   ./mvnw -Pprod clean package -DskipTests
-   ```
-
-2. Build docker image for gateway
-
-   ```sh
-   cd gateway
-   ./mvnw package -Pprod verify jib:dockerBuild
-   ```
-
-3. Check docker for created images: **gateway** and **skillshapes/microservice**
-
-4. Start all applications
-
-   ```sh
-   docker-compose up -d
-   ```
 
 ## CI / CD
 
