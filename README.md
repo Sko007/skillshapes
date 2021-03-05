@@ -4,7 +4,32 @@ Implementing a MS application that displays the Skill-Shapes of company employee
 
 https://confluence.devoteam.de/display/SKIL/Microservice+Architecture
 
-![alt text](skillshape.png "SkillShape")
+![alt text](img/skillshape.png)
+
+# Architecture
+
+Microservices using [JHipster](https://www.jhipster.tech/) with:
+
+- **API Gateway (SpringBoot JHipster Application + React)** <br>
+  Handles the incoming requests and routing. <br>Communicates with the authentication server keycloak
+  and the registry to find the microservices and handle all requests. <br>
+  Serves the React Application.
+- **Keycloak (Dockerized)** <br>
+  Authentication Server using OAuth. Responsible for signing users in and out and managing their auth-sessions.
+- **JHipster Registry (Dockerized)** <br>
+  Registers all services and serves as a load balancer for request routing.
+- **Microservice (Quarkus JHipster Application)** <br>
+  Backend that handles all the business logic and database queries and requests
+- **Elastic Search (Dockerized)** <br>
+  Serves as search service to the backend and also for log searches
+- **Logstash (Dockerized)** <br>
+  Collects and transforms all log data sent from the backend
+- **Kibana (Dockerized)** <br>
+  Visualization tool for logs
+- **Jaeger (Dockerized)** <br>
+  Visualization tool for backend actions mapped to requests
+
+![alt text](img/architecture.png "Architecture")
 
 ## Tools (Windows 10)
 
