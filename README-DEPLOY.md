@@ -10,7 +10,8 @@
    ```
 
 2. Build docker image for gateway
-   **Note**: Make sure to check the jib-maven-plugin in the pom.xml to image target registry.
+
+   > **Note**: Make sure to check the jib-maven-plugin in the pom.xml to image target registry.
 
    ```sh
    cd gateway
