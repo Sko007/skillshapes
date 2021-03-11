@@ -22,7 +22,6 @@ export const SkillshapeRoot = (props: ISkillshapesProps): any => {
     props.getTechnologies();
   }, []);
 
-  // const { helloWorldList, match, loading } = props;
   const { user, technologies, category, title, level2 } = props;
   // eslint-disable-next-line no-console
   console.log(
