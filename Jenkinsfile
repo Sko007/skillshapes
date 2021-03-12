@@ -68,12 +68,10 @@ pipeline {
           
         }
         stage('Push Docker image to registry') {
-            steps{
-                sh 'docker image ls -a'
-            }
             parallel{
                 stage("microservice"){
                      steps {
+                         sh 'docker image ls -a'
                         sh 'docker push 10.99.70.79:5000/skillshapes/microservice:latest'
                     }
                 }
