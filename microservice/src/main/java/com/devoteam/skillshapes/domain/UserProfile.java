@@ -44,6 +44,7 @@ public class UserProfile extends PanacheEntityBase implements Serializable {
     public String lastName;
 
     @Column(name = "email")
+    @FullTextField(analyzer = "name")
     public String email;
 
     @ManyToMany(mappedBy = "owners")

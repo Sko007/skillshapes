@@ -5,6 +5,8 @@ import com.devoteam.skillshapes.domain.UserProfile;
 import io.quarkus.hibernate.orm.panache.Panache;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.runtime.StartupEvent;
+import org.hibernate.search.engine.search.predicate.dsl.SearchPredicateFactory;
+import org.hibernate.search.engine.search.sort.dsl.FieldSortOptionsStep;
 import org.hibernate.search.mapper.orm.session.SearchSession;
 
 import javax.enterprise.event.Observes;
@@ -17,6 +19,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,58 +27,112 @@ import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextFi
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.jboss.resteasy.annotations.jaxrs.QueryParam;
 
+import org.hibernate.search.engine.search.sort.dsl.SearchSortFactory;
+import org.hibernate.search.engine.search.query.dsl.SearchQueryOptionsStep;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+
 public class SearchResource {
 
     @Inject
     SearchSession searchSession;
+    private List<String> fields;
+    private List<String> sortFields;
+
+    private final Logger log = LoggerFactory.getLogger(UserProfileResource.class);
 
     @Transactional
     void onStart(@Observes StartupEvent ev) throws Exception{
-
         Class entity = getEntityClass();
-        System.out.println(entity);
+
         if(entity != null){
+            initializeLists(entity);
             Method count = entity.getMethod("count");
             if (count != null) {
-                System.out.println("count exists");
                 Object c = count.invoke(entity);
-                System.out.println(c);
                 if((Long)c > 0){
-                    System.out.println("Start Mass Indexer");
+                    log.info("Elastic Search Mass Indexer started  "+entity);
                     searchSession.massIndexer().startAndWait();
                 }
             }
         }
     }
 
+    private boolean initializeLists(Class entity) {
+        try{
+            if (entity != null) {
+                fields = new ArrayList<>(1);
+                sortFields = new ArrayList<>(1);
+
+                for (Field field : entity.getDeclaredFields()) {
+                    if (field.getAnnotationsByType(FullTextField.class).length > 0) {
+                        fields.add(field.getName());
+                    }
+                    if (field.getAnnotationsByType(KeywordField.class).length > 0) {
+                        Annotation annotation = field.getAnnotation(KeywordField.class);
+                        String sortName = ((KeywordField) annotation).name();
+                        sortFields.add(sortName);
+                    }
+                }
+                return true;
+            }
+
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    /**
+     * Search Endpoint for any Resource
+     *
+     * @param pattern
+     * @param size
+     * @return List<?>
+     * @throws Exception
+     */
     @GET
     @Path("/search")
     @Transactional
     public List<?> search(@QueryParam String pattern,
                                @QueryParam Optional<Integer> size) throws Exception{
         Class entity = getEntityClass();
-        List<String> fields = new ArrayList<>(1);
-        List<String> sortFields = new ArrayList<>(1);
-        for(Field field : entity.getFields()) {
-            if (field.getAnnotationsByType(FullTextField.class).length > 0) {
-                fields.add(field.getName());
-            }
-            if (field.getAnnotationsByType(KeywordField.class).length > 0) {
-                Annotation[] annotations = field.getAnnotationsByType(KeywordField.class);
-                String sortName = ((KeywordField) annotations[0]).name();
-                sortFields.add(sortName);
-            }
-        }
+        System.out.println(fields.toString());
 
-        return searchSession.search(getEntityClass())
-            .where(f ->
+        SearchQueryOptionsStep step =  searchSession.search(getEntityClass())
+        .where(f ->
                 pattern == null || pattern.trim().isEmpty() ?
                     f.matchAll() :
                     f.simpleQueryString()
                         .fields(fields.toArray(new String[0])).matching(pattern)
-            )
-            .sort(f -> f.field("lastName_sort").then().field("firstName_sort"))
-            .fetchHits(size.orElse(20));
+            );
+
+        if(sortFields.size() > 0) step = step.sort(f -> { return sortInnerFields((SearchSortFactory)f, sortFields); });
+
+        return step.fetchHits(size.orElse(20));
+    }
+
+    private FieldSortOptionsStep sortInnerFields(SearchSortFactory sf, List<String> sortFields){
+        System.out.println("SortInnerFields");
+        System.out.println(sortFields.toString());
+        try{
+            if(sortFields.size() >= 1){
+                FieldSortOptionsStep step;
+                Collections.reverse(sortFields);
+                for(int i = 0; i <= sortFields.size()-2;i++) {
+                    String fieldName = sortFields.get(i);
+                    System.out.println(fieldName);
+                    sf = sf.field(fieldName).then();
+                }
+                return sf.field(sortFields.get(sortFields.size()-1));
+            }
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**

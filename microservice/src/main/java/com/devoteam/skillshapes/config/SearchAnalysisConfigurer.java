@@ -16,6 +16,10 @@ public class SearchAnalysisConfigurer implements ElasticsearchAnalysisConfigurer
             .tokenizer("standard")
             .tokenFilters("asciifolding","lowercase");
 
+        context.analyzer("english").custom()
+            .tokenizer("standard")
+            .tokenFilters("asciifolding", "lowercase", "porter_stem");
+
         context.normalizer("sort").custom()
             .tokenFilters("asciifolding","lowercase");
     }

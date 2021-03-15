@@ -5,6 +5,9 @@ import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -28,10 +31,14 @@ public class Skill extends PanacheEntityBase implements Serializable {
 
     @NotNull
     @Column(name = "name", nullable = false)
+    @FullTextField(analyzer = "name")
+    @KeywordField(name = "skillName_Sort", sortable = Sortable.YES, normalizer = "sort")
     public String name;
 
     @NotNull
     @Column(name = "category_name", nullable = false)
+    @FullTextField(analyzer = "name")
+    @KeywordField(name = "categoryName_sort", sortable = Sortable.YES, normalizer = "sort")
     public String categoryName;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
