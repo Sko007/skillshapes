@@ -25,3 +25,5 @@
    ```sh
    docker-compose up -d
    ```
+
+   #fh22TKt3yKcrrGhsQFd7

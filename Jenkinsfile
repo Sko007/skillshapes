@@ -17,8 +17,8 @@ pipeline {
         }
         stage('Git Checkout'){
             steps{
-            // git branch: 'master', credentialsId: 'DM', url: 'https://gitlab.devoteam.de/AB05105/skillshapes.git'
-            checkout scm
+            //git branch: 'master', credentialsId: 'DM', url: 'https://gitlab.devoteam.de/AB05105/skillshapes.git'
+            //checkout scm
             sh "chmod -R 777 *"
             }
         }
@@ -26,18 +26,18 @@ pipeline {
             parallel{
                 stage('microservice') {
                     steps{
-                        sh 'cd microservice && ./mvnw -Pprod clean package -DskipTests -Dquarkus.container-image.build=false -Dquarkus.container-image.push=false'
+                        sh 'cd microservice && ./mvnw -Pprod clean package -DskipTests'
                     }
                 }
                 
                 stage('gateway') {
                     steps{
-                         sh 'cd gateway && ./mvnw package -Pprod -DskipTests'     
+                         sh 'cd gateway && ./mvnw package -Pprod verify jib:dockerBuild -DskipTests'     
                     }
                 }
             }
         }
-        stage('Test') {
+        /*stage('Test') {
             parallel{
                 stage('microservice'){
                     steps{
@@ -51,37 +51,7 @@ pipeline {
                 }
             }
                 
-        }
-        stage('Build Docker image') {
-            parallel{
-                stage("microservice"){
-                      steps {
-                        sh 'cd microservice && ./mvnw -Pprod clean package -DskipTests -Dquarkus.container-image.push=false'
-                     }
-                }
-                stage("gateway"){
-                    steps{
-                        sh 'cd gateway && ./mvnw package -Pprod verify jib:dockerBuild -DskipTests'
-                    }
-                }
-            }
-          
-        }
-        stage('Push Docker image to registry') {
-            parallel{
-                stage("microservice"){
-                     steps {
-                         sh 'docker image ls -a'
-                        sh 'docker push 10.99.70.79:5000/skillshapes/microservice:latest'
-                    }
-                }
-                 stage("gateway"){
-                     steps {
-                        sh 'docker push 10.99.70.79:5000/skillshapes/gateway:latest'
-                    }
-                }
-            }
-        }
+        }*/
         stage('Deployment') {
             steps {
                 sh 'echo "To Be Done"'
