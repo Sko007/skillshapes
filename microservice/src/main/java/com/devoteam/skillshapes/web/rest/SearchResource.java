@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 import org.jboss.resteasy.annotations.jaxrs.QueryParam;
 
 public class SearchResource {
@@ -50,36 +51,46 @@ public class SearchResource {
     @GET
     @Path("/search")
     @Transactional
-    public List<Object> search(@QueryParam String pattern,
+    public List<?> search(@QueryParam String pattern,
                                @QueryParam Optional<Integer> size) throws Exception{
         Class entity = getEntityClass();
         List<String> fields = new ArrayList<>(1);
-        for(Field field : entity.getFields()){
-            if(field.getAnnotationsByType(FullTextField.class).length > 0) fields.add(field.getName());
+        List<String> sortFields = new ArrayList<>(1);
+        for(Field field : entity.getFields()) {
+            if (field.getAnnotationsByType(FullTextField.class).length > 0) {
+                fields.add(field.getName());
+            }
+            if (field.getAnnotationsByType(KeywordField.class).length > 0) {
+                Annotation[] annotations = field.getAnnotationsByType(KeywordField.class);
+                String sortName = ((KeywordField) annotations[0]).name();
+                sortFields.add(sortName);
+            }
         }
 
-        /*return searchSession.search(entity)
+        return searchSession.search(getEntityClass())
             .where(f ->
                 pattern == null || pattern.trim().isEmpty() ?
                     f.matchAll() :
                     f.simpleQueryString()
-                        .fields("firstName", "lastName", "books.title").matching(pattern)
+                        .fields(fields.toArray(new String[0])).matching(pattern)
             )
             .sort(f -> f.field("lastName_sort").then().field("firstName_sort"))
-            .fetchHits(size.orElse(20)); */
-        return null;
+            .fetchHits(size.orElse(20));
     }
 
+    /**
+     * Retrieves the Entity to be searched for from the SearchableEntity Annotation
+     * @return Class
+     */
     private Class<?> getEntityClass() {
        try{
         Class<?> resource = this.getClass();
            for(Annotation annotation : resource.getAnnotations()){
             if(annotation instanceof SearchableEntity){
                 SearchableEntity entity = (SearchableEntity) annotation;
-                return   Class.forName(entity.value());
+                return  Class.forName(entity.value());
             }
         }
-
        }
        catch (Exception e){
            e.printStackTrace();
