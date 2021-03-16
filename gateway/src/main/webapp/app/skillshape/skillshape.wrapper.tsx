@@ -1,11 +1,12 @@
 import React, { useRef, createRef, useState, useEffect, useContext } from 'react';
-import D3Chart from './skillshape';
 import { SkillshapeData } from './skillshape.root';
 import * as d3 from 'd3';
 import './skillshapes.scss';
 import Logo from './devoteam-200x200.png';
+import { useHistory } from 'react-router-dom';
 
 const SkillshapeWrapper = () => {
+  const history = useHistory();
   const skillshapeData = useContext(SkillshapeData);
   const [headline, setHeadline] = useState(skillshapeData[1][1].name);
   const [color, setColor] = useState(true);
@@ -19,6 +20,12 @@ const SkillshapeWrapper = () => {
     buttonRef.current[buttonId].style.backgroundColor = '';
     setHeadline(skillshapeData[1][1].name);
     setBars(skillshapeData[2]);
+
+    history.push({
+      pathname: '/',
+      search: 'level1',
+      state: bars,
+    });
   };
   const Level2 = (id: number, skillId: number) => {
     setBars(skillshapeData[3][id]);
@@ -27,6 +34,12 @@ const SkillshapeWrapper = () => {
     setHeadline(skillshapeData[2][id].name);
     setButtonId(id);
     buttonRef.current[id].style.backgroundColor = '#f7485e';
+
+    history.push({
+      pathname: '/',
+      search: 'level2',
+      state: bars,
+    });
   };
 
   const sortForNumbers = () => {
@@ -37,9 +50,21 @@ const SkillshapeWrapper = () => {
     setBars(getValues);
   };
 
+  const sortForAlphabeth = () => {
+    const addKey = bars.map(item => {
+      return { ...item, new: 3 };
+    });
+
+    const getSortedNames = addKey.sort(function (item: any, item2: any) {
+      return item.name.toLowerCase().localeCompare(item2.name.toLowerCase());
+    });
+    setBars(getSortedNames);
+  };
+
   const margin = { top: 30, right: 50, bottom: 0, left: 50 };
   const WIDTH = window.innerWidth - window.innerWidth / 4 - margin.left - margin.right;
   const HEIGHT = 600 - margin.top - margin.bottom;
+
   useEffect(() => {
     const svg = d3.select('#skillshape').attr('width', WIDTH + margin.left + margin.right);
     const y = d3.scaleLinear().domain([5, 0]).range([HEIGHT, 0]).nice();
@@ -47,7 +72,34 @@ const SkillshapeWrapper = () => {
       .scaleBand()
       .domain(bars.map((item: any) => item.name))
       .range([0, WIDTH])
-      .padding(0.4);
+      .paddingInner(0.2)
+      .paddingOuter(0.2);
+
+    //      function wrap(text, width) {
+    //text.each(function (d, i) {
+    //var text = d3.select(this),
+    //words = text.html(d).text().split(/\s+/).reverse(), //reset html to clear any tspans added before
+    //word,
+    //line = [],
+    //lineNumber = 0,
+    //lineHeight = 1.1, // ems
+    //y = text.attr("y"),
+    //dy = parseFloat(text.attr("dy")),
+    //tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em"),
+    ////[edit]add dWidth
+    //dWidth = typeof width === "function" ? width(d, i) : width;
+    //while (word = words.pop()) {
+    //line.push(word);
+    //tspan.text(line.join(" "));
+    //if (tspan.node().getComputedTextLength() > dWidth/*[edit]*/) {
+    //line.pop();
+    //tspan.text(line.join(" "));
+    //line = [word];
+    //tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+    //}
+    //}
+    //});
+    //}
 
     /**
      * JOIN, Data to the g-element and passes it to the g-element
@@ -70,47 +122,42 @@ const SkillshapeWrapper = () => {
       .on('mouseout', function () {
         d3.select(this).attr('opacity', '1');
       })
-      .on('click', (d: any, i: any) => onClick(i.id, d))
+      .on('click', (d: any, i: any) => {
+        onClick(i.id, d);
+      })
       .transition()
       .duration(500)
-      .attr('height', d => y(d.value))
+      .attr('height', (d: any) => y(d.value))
       .attr('y', d => 0);
     /**
      * Enter, Append Text to Data
      */
     groupEnter
       .append('text')
-      .attr('x', function (d) {
-        return x(d.name);
+      .attr('display', 'flex')
+      .attr('justify-content', 'center')
+      .attr('font-weight', 600)
+      .attr('font-family', '-apple-system')
+      .attr('font-size', '20px')
+
+      .attr('text-anchor', 'middle')
+      .attr('x', function (d: any) {
+        return x(d.name) + x.bandwidth() / 2;
       })
 
       .transition()
       .duration(500)
-      .attr('y', function (d) {
-        return y(d.value) - 20;
+      .attr('y', function (d: any) {
+        return y(d.value) / 2;
       })
       .attr('dy', '.75em')
-      .text(function (d) {
+      .text(function (d: any) {
         return d.name;
       });
 
     /**
      * Update, select text element and pass parts which should be updated
      */
-    myGroups
-      .select('text')
-      .transition()
-      .duration(500)
-      .text(function (d: any) {
-        return d.name;
-      })
-      .attr('x', function (d) {
-        return x(d.name);
-      })
-      .attr('y', function (d) {
-        return y(d.value) - 20;
-      })
-      .attr('dy', '.75em');
     /**
      * Update, Rects elements and pass pars which should be updated
      */
@@ -122,26 +169,22 @@ const SkillshapeWrapper = () => {
       .attr('height', (d: any) => y(d.value))
       .attr('x', (d: any) => x(d.name))
       .attr('y', d => 0);
-    /**
-     * Exit old data from Datasource for Text
-     */
+
     myGroups
-      .exit()
+      .select('text')
       .transition()
       .duration(500)
-      // Text
       .text(function (d: any) {
         return d.name;
       })
-      .attr('class', 'label')
+      .attr('text-anchor', 'middle')
       .attr('x', function (d: any) {
-        return x(d.name);
+        return x(d.name) + x.bandwidth() / 2;
       })
       .attr('y', function (d: any) {
-        return y(d.value) - 20;
+        return y(d.value) / 2;
       })
-      .attr('dy', '.75em')
-      .remove();
+      .attr('dy', '.75em');
     /**
      * Exit old data from Datasource for Rects
      */
@@ -155,6 +198,26 @@ const SkillshapeWrapper = () => {
       .duration(500)
       .attr('height', (d: any) => d.value)
       .attr('y', (d: any) => x(d.value))
+      .remove();
+    /**
+     * Exit old data from Datasource for Text
+     */
+    myGroups
+      .exit()
+      .transition()
+      .duration(500)
+      // Text
+      .text(function (d: any) {
+        return d.name;
+      })
+      .attr('y', function (d: any) {
+        return y(d.value) / 2;
+      })
+      .attr('text-anchor', 'middle')
+      .attr('x', function (d: any) {
+        return x(d.name) + x.bandwidth() / 2;
+      })
+      .attr('dy', '.75em')
       .remove();
   });
   return (
@@ -182,10 +245,10 @@ const SkillshapeWrapper = () => {
         }}
       >
         <div style={{ display: 'grid', height: '100%', gridTemplateRows: '20% 60% 20' }}>
-          <div style={{ display: 'flex', flexDirection: 'row', marginTop: '5%' }}>
+          <div style={{ display: 'flex', flexDirection: 'row', marginTop: '3%' }}>
             <img style={{ height: '50px', width: '50px', paddingRight: '5px' }} src={Logo}></img>
 
-            <h3 style={{ paddingTop: '3%' }}>
+            <h3 style={{ paddingTop: '3%', color: 'white' }}>
               {skillshapeData[0].firstName} {skillshapeData[0].lastName}
             </h3>
           </div>
@@ -211,9 +274,14 @@ const SkillshapeWrapper = () => {
             </ul>
           </div>
           <div style={{ display: 'flex', alignItems: 'flex-End' }}>
-            <button style={{ width: '100%' }} onClick={sortForNumbers}>
-              Sortieren
-            </button>
+            <div style={{ display: 'block' }}>
+              <button style={{ width: '100%' }} onClick={sortForNumbers}>
+                Sortieren nach Können
+              </button>
+              <button style={{ width: '100%' }} onClick={sortForAlphabeth}>
+                Sortieren nach Alphabeth
+              </button>
+            </div>
           </div>
         </div>
       </div>
