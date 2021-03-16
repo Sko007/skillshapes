@@ -97,7 +97,7 @@ const apiUrl = 'api/skillshapes';
 export const getUserData: ICrudPutAction<ISkillshapes> = () => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.FETCH_SKILLSHAPES,
-    payload: axios.get<ISkillshapes>('http://localhost:3000/FirstFetch'),
+    payload: axios.get<ISkillshapes>('/services/microservice/'),
   });
   // eslint-disable-next-line no-console
   //console.log(`check the result ${JSON.stringify(result)}`);
@@ -107,7 +107,7 @@ export const getUserData: ICrudPutAction<ISkillshapes> = () => async dispatch =>
 export const getTechnologies: ICrudPutAction<ISkillshapes> = () => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.FETCH_TECHNOLOGIES,
-    payload: axios.get<ISkillshapes>('http://localhost:3000/SecondFetch'),
+    payload: axios.get<ISkillshapes>('/services/microservice/'),
   });
   // eslint-disable-next-line no-console
   // console.log(`check the result for Technologie ${JSON.stringify(result)}`);
