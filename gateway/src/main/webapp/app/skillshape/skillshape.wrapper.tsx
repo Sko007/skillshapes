@@ -1,11 +1,9 @@
-import React, { useRef, createRef, useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { SkillshapeData } from './skillshape.root';
 import * as d3 from 'd3';
 import './skillshapes.scss';
-// eslint-disable-next-line 
-const Logo = require("./devoteam-200x200.png")
+import * as Logo from "./devoteam-200x200.png"
 import { useHistory } from 'react-router-dom';
-
 
 const SkillshapeWrapper = () => {
   const history = useHistory();
@@ -222,7 +220,7 @@ const SkillshapeWrapper = () => {
       >
         <div style={{ display: 'grid', height: '100%', gridTemplateRows: '20% 60% 20' }}>
           <div style={{ display: 'flex', flexDirection: 'row', marginTop: '3%' }}>
-            <img style={{ height: '50px', width: '50px', paddingRight: '5px' }} src={Logo}></img>
+            <img style={{ height: '50px', width: '50px', paddingRight: '5px' }} src={String(Logo)}></img>
 
             <h3 style={{ paddingTop: '3%', color: 'white' }}>
               {skillshapeData[0].firstName} {skillshapeData[0].lastName}
