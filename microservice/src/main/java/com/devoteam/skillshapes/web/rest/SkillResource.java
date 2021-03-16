@@ -2,6 +2,7 @@ package com.devoteam.skillshapes.web.rest;
 
 import static javax.ws.rs.core.UriBuilder.fromPath;
 
+import com.devoteam.skillshapes.annotations.SearchableEntity;
 import com.devoteam.skillshapes.service.SkillService;
 import com.devoteam.skillshapes.web.rest.errors.BadRequestAlertException;
 import com.devoteam.skillshapes.web.util.HeaderUtil;
@@ -23,11 +24,12 @@ import java.util.Optional;
 /**
  * REST controller for managing {@link com.devoteam.skillshapes.domain.Skill}.
  */
+@SearchableEntity("com.devoteam.skillshapes.domain.Skill")
 @Path("/api/skills")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
-public class SkillResource {
+public class SkillResource extends SearchResource {
 
     private final Logger log = LoggerFactory.getLogger(SkillResource.class);
 
