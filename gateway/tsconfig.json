@@ -23,6 +23,6 @@
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true
   },
-  "include": ["src/main/webapp/app", "src/test/javascript/spec"],
+  "include": ["src/main/webapp/app", "src/test/javascript/spec", "src/main/webapp/app/skillshape/typings.d.ts"],
   "exclude": ["node_modules"]
 }

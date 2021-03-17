@@ -1,8 +1,8 @@
-import React, { useRef, createRef, useState, useEffect, useContext } from 'react';
+import React, { useRef, useState, useEffect, useContext } from 'react';
 import { SkillshapeData } from './skillshape.root';
 import * as d3 from 'd3';
 import './skillshapes.scss';
-import Logo from './devoteam-200x200.png';
+import * as Logo from "./devoteam-200x200.png"
 import { useHistory } from 'react-router-dom';
 
 const SkillshapeWrapper = () => {
@@ -74,32 +74,6 @@ const SkillshapeWrapper = () => {
       .range([0, WIDTH])
       .paddingInner(0.2)
       .paddingOuter(0.2);
-
-    //      function wrap(text, width) {
-    //text.each(function (d, i) {
-    //var text = d3.select(this),
-    //words = text.html(d).text().split(/\s+/).reverse(), //reset html to clear any tspans added before
-    //word,
-    //line = [],
-    //lineNumber = 0,
-    //lineHeight = 1.1, // ems
-    //y = text.attr("y"),
-    //dy = parseFloat(text.attr("dy")),
-    //tspan = text.text(null).append("tspan").attr("x", 0).attr("y", y).attr("dy", dy + "em"),
-    ////[edit]add dWidth
-    //dWidth = typeof width === "function" ? width(d, i) : width;
-    //while (word = words.pop()) {
-    //line.push(word);
-    //tspan.text(line.join(" "));
-    //if (tspan.node().getComputedTextLength() > dWidth/*[edit]*/) {
-    //line.pop();
-    //tspan.text(line.join(" "));
-    //line = [word];
-    //tspan = text.append("tspan").attr("x", 0).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-    //}
-    //}
-    //});
-    //}
 
     /**
      * JOIN, Data to the g-element and passes it to the g-element
@@ -246,7 +220,7 @@ const SkillshapeWrapper = () => {
       >
         <div style={{ display: 'grid', height: '100%', gridTemplateRows: '20% 60% 20' }}>
           <div style={{ display: 'flex', flexDirection: 'row', marginTop: '3%' }}>
-            <img style={{ height: '50px', width: '50px', paddingRight: '5px' }} src={Logo}></img>
+            <img style={{ height: '50px', width: '50px', paddingRight: '5px' }} src={String(Logo)}></img>
 
             <h3 style={{ paddingTop: '3%', color: 'white' }}>
               {skillshapeData[0].firstName} {skillshapeData[0].lastName}
