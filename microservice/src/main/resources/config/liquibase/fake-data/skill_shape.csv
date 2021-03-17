@@ -1,11 +1,23 @@
-id;title;category
-1;Assurance;Pants Ball
-2;Direct;Unbranded Markets
-3;Bedfordshire;real-time networks action-items
-4;syndicate Architect;program online
-5;aggregate;action-items
-6;programming;Metal Fresh Coordinator
-7;Innovative North;white schemas
-8;SCSI streamline;Paradigm Tools
-9;Planner Passage JBOD;bypass Ouguiya
-10;Ways payment Metal;Administrator National
+id;category;title
+0102;Agile IT;Project Management, Change and Business Analysis
+0103;Agile IT;Infra Project Manager
+0105;Agile IT;Cloud & Devops Architect
+0108;Agile IT;Engineering & Implementation Cloud
+0109;Agile IT;Engineering & Implementation DevOps Platform
+0110;Agile IT;Cloud/Devops Automation Engineering
+0113;Agile IT;Developer
+0114;Agile IT;Functional Analysis and Technical Design
+0202;Data as a Service;Big data / Platform Architect
+0203;Data as a Service;Big data / Platform Engineer
+0207;Data as a Service;Modern BI Architect
+0208;Data as a Service;Data Analyst
+0210;Data as a Service;Data Scientist
+0213;Data as a Service;Artificial Intelligence Engineer
+0307;Cybersecurity;Security Solutions Architect
+0308;Cybersecurity;Security Engineering & Solutions
+0309;Cybersecurity;Security Operational Analyst
+0505;Business Process Excellence;Change & Release
+0513;Business Process Excellence;Project Management & Change ITSE
+0515;Business Process Excellence;Engineer Technical Solution / Hot Technologies
+0517;Business Process Excellence;Automation Engineer
+0523;Business Process Excellence;Functional Solution Consultant

@@ -1,11 +1,3 @@
 id;first_name;last_name;email
-1;Vance;Treutel;Bettie.Howell3@gmail.com
-2;Trystan;Robel;Nick86@gmail.com
-3;Leta;Schowalter;Cathrine19@yahoo.com
-4;Carmelo;Mitchell;Shayna.Rohan40@hotmail.com
-5;Amie;Borer;Dandre48@hotmail.com
-6;Emanuel;Kuphal;Maya_Schaden89@hotmail.com
-7;Gabriel;Grady;Alaina_Wilderman50@hotmail.com
-8;Santiago;Okuneva;Vance_Collier24@hotmail.com
-9;Raheem;Smitham;Anderson4@yahoo.com
-10;Francis;Lubowitz;Dangelo53@gmail.com
+1;Admin;Admin;admin@localhost
+2;User;User;user@localhost

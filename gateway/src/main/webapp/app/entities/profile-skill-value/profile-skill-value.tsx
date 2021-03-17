@@ -55,7 +55,7 @@ export const ProfileSkillValue = (props: IProfileSkillValueProps) => {
                   </td>
                   <td>{profileSkillValue.value}</td>
                   <td>
-                    {profileSkillValue.skill ? <Link to={`skill/${profileSkillValue.skill.id}`}>{profileSkillValue.skill.id}</Link> : ''}
+                    {profileSkillValue.skillId ? <Link to={`skill/${profileSkillValue.skillId}`}>{profileSkillValue.name}</Link> : ''}
                   </td>
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
