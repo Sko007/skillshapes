@@ -7,8 +7,6 @@ import { Translate, translate, ICrudGetAction, ICrudGetAllAction, ICrudPutAction
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { IRootState } from 'app/shared/reducers';
 
-import { IUserProfile } from 'app/shared/model/user-profile.model';
-import { getEntities as getUserProfiles } from 'app/entities/user-profile/user-profile.reducer';
 import { getEntity, updateEntity, createEntity, reset } from './skill.reducer';
 import { ISkill } from 'app/shared/model/skill.model';
 import { convertDateTimeFromServer, convertDateTimeToServer, displayDefaultDateTime } from 'app/shared/util/date-utils';
@@ -17,10 +15,9 @@ import { mapIdList } from 'app/shared/util/entity-utils';
 export interface ISkillUpdateProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
 export const SkillUpdate = (props: ISkillUpdateProps) => {
-  const [idsowner, setIdsowner] = useState([]);
   const [isNew, setIsNew] = useState(!props.match.params || !props.match.params.id);
 
-  const { skillEntity, userProfiles, loading, updating } = props;
+  const { skillEntity, loading, updating } = props;
 
   const handleClose = () => {
     props.history.push('/skill');
@@ -32,8 +29,6 @@ export const SkillUpdate = (props: ISkillUpdateProps) => {
     } else {
       props.getEntity(props.match.params.id);
     }
-
-    props.getUserProfiles();
   }, []);
 
   useEffect(() => {
@@ -47,7 +42,6 @@ export const SkillUpdate = (props: ISkillUpdateProps) => {
       const entity = {
         ...skillEntity,
         ...values,
-        owners: mapIdList(values.owners),
       };
 
       if (isNew) {
@@ -107,28 +101,6 @@ export const SkillUpdate = (props: ISkillUpdateProps) => {
                   }}
                 />
               </AvGroup>
-              <AvGroup>
-                <Label for="skill-owner">
-                  <Translate contentKey="gatewayApp.skill.owner">Owner</Translate>
-                </Label>
-                <AvInput
-                  id="skill-owner"
-                  type="select"
-                  multiple
-                  className="form-control"
-                  name="owners"
-                  value={skillEntity.owners && skillEntity.owners.map(e => e.id)}
-                >
-                  <option value="" key="0" />
-                  {userProfiles
-                    ? userProfiles.map(otherEntity => (
-                        <option value={otherEntity.id} key={otherEntity.id}>
-                          {otherEntity.id}
-                        </option>
-                      ))
-                    : null}
-                </AvInput>
-              </AvGroup>
               <Button tag={Link} id="cancel-save" to="/skill" replace color="info">
                 <FontAwesomeIcon icon="arrow-left" />
                 &nbsp;
@@ -151,7 +123,6 @@ export const SkillUpdate = (props: ISkillUpdateProps) => {
 };
 
 const mapStateToProps = (storeState: IRootState) => ({
-  userProfiles: storeState.userProfile.entities,
   skillEntity: storeState.skill.entity,
   loading: storeState.skill.loading,
   updating: storeState.skill.updating,
@@ -159,7 +130,6 @@ const mapStateToProps = (storeState: IRootState) => ({
 });
 
 const mapDispatchToProps = {
-  getUserProfiles,
   getEntity,
   updateEntity,
   createEntity,

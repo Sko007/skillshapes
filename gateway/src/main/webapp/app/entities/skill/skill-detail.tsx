@@ -37,19 +37,6 @@ export const SkillDetail = (props: ISkillDetailProps) => {
             </span>
           </dt>
           <dd>{skillEntity.categoryName}</dd>
-          <dt>
-            <Translate contentKey="gatewayApp.skill.owner">Owner</Translate>
-          </dt>
-          <dd>
-            {skillEntity.owners
-              ? skillEntity.owners.map((val, i) => (
-                  <span key={val.id}>
-                    <a>{val.id}</a>
-                    {skillEntity.owners && i === skillEntity.owners.length - 1 ? '' : ', '}
-                  </span>
-                ))
-              : null}
-          </dd>
         </dl>
         <Button tag={Link} to="/skill" replace color="info">
           <FontAwesomeIcon icon="arrow-left" />{' '}
