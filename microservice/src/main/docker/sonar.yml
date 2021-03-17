@@ -1,7 +1,7 @@
 version: '2'
 services:
-  skillshapes-sonar:
+  sonar:
     image: sonarqube:8.3.1-community
     ports:
-      - 9001:9000
+      - 9008:9000
       - 9092:9092
