@@ -8,7 +8,7 @@ const Rating = props => (
   <div className="rating star-rating">
     {props.value &&
       [...Array(4)].map((x, i) => {
-        return <FontAwesomeIcon size="xs" icon={faStar} color={props.value > i ? '#0090FF' : '#a9a9a9'} />;
+        return <FontAwesomeIcon key={i} size="xs" icon={faStar} color={props.value > i ? '#0090FF' : '#a9a9a9'} />;
       })}
   </div>
 );
