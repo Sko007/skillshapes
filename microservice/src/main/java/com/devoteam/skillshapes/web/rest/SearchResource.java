@@ -59,6 +59,11 @@ public class SearchResource {
         }
     }
 
+    /**
+     * Initialize fields and sortFields lists by iterating through the entity annotations
+     * @param entity
+     * @return boolean
+     */
     private boolean initializeLists(Class entity) {
         try{
             if (entity != null) {
@@ -99,8 +104,6 @@ public class SearchResource {
     public List<?> search(@QueryParam String pattern,
                                @QueryParam Optional<Integer> size) throws Exception{
         Class entity = getEntityClass();
-        System.out.println(fields.toString());
-
         SearchQueryOptionsStep step =  searchSession.search(getEntityClass())
         .where(f ->
                 pattern == null || pattern.trim().isEmpty() ?
@@ -114,16 +117,19 @@ public class SearchResource {
         return step.fetchHits(size.orElse(20));
     }
 
+    /**
+     * Prepare sorting for entity fields
+     * @param sf
+     * @param sortFields
+     * @return FieldSortOptionsStep
+     */
     private FieldSortOptionsStep sortInnerFields(SearchSortFactory sf, List<String> sortFields){
-        System.out.println("SortInnerFields");
-        System.out.println(sortFields.toString());
         try{
             if(sortFields.size() >= 1){
                 FieldSortOptionsStep step;
                 Collections.reverse(sortFields);
                 for(int i = 0; i <= sortFields.size()-2;i++) {
                     String fieldName = sortFields.get(i);
-                    System.out.println(fieldName);
                     sf = sf.field(fieldName).then();
                 }
                 return sf.field(sortFields.get(sortFields.size()-1));
