@@ -65,7 +65,7 @@ export const SkillShape = (props: ISkillShapeProps) => {
                     {skillShape.skills
                       ? skillShape.skills.map((val, j) => (
                           <span key={j}>
-                            <Link to={`profile-skill-value/${val.id}`}>{val.id}</Link>
+                            <Link to={`profile-skill-value/${val.id}`}>{val.name}</Link>
                             {j === skillShape.skills.length - 1 ? '' : ', '}
                           </span>
                         ))
