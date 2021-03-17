@@ -9,6 +9,7 @@ import { IRootState } from 'app/shared/reducers';
 import { getEntity } from './profile-skill-value.reducer';
 import { IProfileSkillValue } from 'app/shared/model/profile-skill-value.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
+import Rating from 'app/shared/layout/rating/rating';
 
 export interface IProfileSkillValueDetailProps extends StateProps, DispatchProps, RouteComponentProps<{ id: string }> {}
 
@@ -31,11 +32,13 @@ export const ProfileSkillValueDetail = (props: IProfileSkillValueDetailProps) =>
               <Translate contentKey="gatewayApp.profileSkillValue.value">Value</Translate>
             </span>
           </dt>
-          <dd>{profileSkillValueEntity.value}</dd>
+          <dd>
+            <Rating value={profileSkillValueEntity.value} />
+          </dd>
           <dt>
             <Translate contentKey="gatewayApp.profileSkillValue.skill">Skill</Translate>
           </dt>
-          <dd>{profileSkillValueEntity.skill ? profileSkillValueEntity.skill.id : ''}</dd>
+          <dd>{profileSkillValueEntity.name ? profileSkillValueEntity.name : ''}</dd>
         </dl>
         <Button tag={Link} to="/profile-skill-value" replace color="info">
           <FontAwesomeIcon icon="arrow-left" />{' '}
