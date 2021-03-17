@@ -2,7 +2,7 @@ import React, { useRef, useState, useEffect, useContext } from 'react';
 import { SkillshapeData } from './skillshape.root';
 import * as d3 from 'd3';
 import './skillshapes.scss';
-import * as Logo from "./devoteam-200x200.png"
+import * as Logo from './devoteam-200x200.png';
 import { useHistory } from 'react-router-dom';
 
 const SkillshapeWrapper = () => {
