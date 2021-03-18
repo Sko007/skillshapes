@@ -68,6 +68,20 @@ export default (state: SkillshapesState = initialState, action): SkillshapesStat
         entity: action.payload.data,
       };
     case SUCCESS(ACTION_TYPES.FETCH_TECHNOLOGIES):
+      /* let newState = {
+        ...state,
+        loading: false,
+        technologies: action.payload.data,
+        category: [],
+        title: [],
+        level2: [],
+      };
+      action.payload.data.map((item: Item) => {
+        newState['category'].push({ id: item.id, name: item.category });
+        newState['title'].push({ id: item.id, name: item.title, value: 5 });
+        newState['level2'].push(item.skills);
+      }); */
+
       return {
         ...state,
         loading: false,
