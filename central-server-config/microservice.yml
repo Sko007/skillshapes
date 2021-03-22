@@ -1,0 +1,12 @@
+quarkus:
+  log:
+    handler:
+      gelf:
+        enabled: true
+  jaeger:
+    endpoint: http://jaeger:14268/api/traces
+  hibernate-search-orm:
+    elasticsearch:
+      hosts: elasticsearch:9200
+  eureka:
+    host-name: microservice

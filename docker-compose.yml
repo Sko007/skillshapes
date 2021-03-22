@@ -2,7 +2,7 @@ version: "2"
 services:
   gateway:
     container_name: gateway
-    image: gateway:latest
+    image: 10.99.70.79:5000/skillshapes/gateway:latest
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,swagger,api-docs,gateway
@@ -11,17 +11,21 @@ services:
       - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_ID=web_app
       - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_OIDC_CLIENT_SECRET=web_app
-      - JHIPSTER_SLEEP=120
+      - JHIPSTER_SLEEP=30
     ports:
       - 8080:8080
     restart: on-failure
     depends_on:
       - jhipster-registry
       - keycloak
+    links:
+      - jhipster-registry
+      - keycloak
       - microservice
+
   microservice:
     container_name: microservice
-    image: skillshapes/microservice:latest
+    image: 10.99.70.79:5000/skillshapes/microservice:latest
     environment:
       - _JAVA_OPTIONS=-Xmx1g -Xms256m
       - SPRING_PROFILES_ACTIVE=prod,swagger,api-docs,gateway"
@@ -30,7 +34,9 @@ services:
       - DATASOURCE_URL=jdbc:mariadb://microservice-mariadb:3306/skillshapes
       - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
       - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_LOGOUT_URL=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/logout
-      - JHIPSTER_SLEEP=120
+      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - ELASTICSEARCH_HOSTS=elasticsearch:9200
+      - JHIPSTER_SLEEP=40
     expose:
       - "8081"
     ports:
@@ -40,18 +46,27 @@ services:
       - microservice-mariadb
       - jhipster-registry
       - keycloak
+    links:
+      - jhipster-registry
+      - keycloak
+      - microservice-mariadb
+
   microservice-mariadb:
     container_name: microservice-db
     extends:
       file: microservice/src/main/docker/mariadb.yml
       service: skillshapes-mariadb
   jhipster-registry:
+    restart: on-failure
     container_name: jhipster-registry
+    depends_on:
+      - keycloak
     extends:
       file: jhipster-registry.yml
       service: jhipster-registry
   keycloak:
     container_name: keycloak
+    restart: on-failure
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
     extends:

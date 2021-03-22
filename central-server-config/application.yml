@@ -12,8 +12,3 @@ eureka:
   client:
     service-url:
       defaultZone: http://admin:admin@jhipster-registry:8761/eureka/
-quarkus:
-  log:
-    handler:
-      gelf:
-        enabled: true
