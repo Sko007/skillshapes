@@ -12,3 +12,6 @@ spring:
         provider:
           oidc:
             issuer-uri: http://keycloak:9080/auth/realms/jhipster
+eureka:
+  instance:
+    appname: gateway
