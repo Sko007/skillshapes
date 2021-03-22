@@ -4,8 +4,7 @@ import { Switch } from 'react-router-dom';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import Skillshapes from './skillshape.root';
 import PrivateRoute from 'app/shared/auth/private-route';
-// test for upload to gitlab
-// change again
+
 import { AUTHORITIES } from 'app/config/constants';
 const Routes = ({ match }) => (
   <>
