@@ -1,0 +1,175 @@
+.list {
+  font-style: bold;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  font-weight: bold;
+}
+
+.list-item {
+  display: block;
+  list-style: none;
+}
+
+.fixed-div {
+  position: fixed;
+  padding: 0;
+  margin: 0;
+  top: 70px;
+  left: 0;
+  width: 95%;
+}
+
+/**
+* Fonts for Overlay and Image
+*/
+.headline {
+  z-index: 30;
+  color: white;
+  width: 30vw;
+  height: 6vh;
+  position: absolute;
+  z-index: 20;
+  top: 20%;
+  left: 10vw;
+  font-size: 70px;
+}
+
+.headline1 {
+  z-index: 30;
+  color: white;
+  width: 30vw;
+  height: 6vh;
+  position: absolute;
+  z-index: 20;
+  top: 27%;
+  left: 10vw;
+  font-size: 60px;
+}
+
+.fonts {
+  z-index: 30;
+  color: white;
+  width: 30vw;
+  height: 6vh;
+  position: absolute;
+  z-index: 20;
+  top: 42%;
+  left: 10vw;
+}
+.fonts1 {
+  z-index: 30;
+  color: white;
+  width: 30vw;
+  height: 6vh;
+  position: absolute;
+  z-index: 20;
+  top: 50%;
+  left: 10vw;
+}
+.fonts2 {
+  z-index: 30;
+  color: white;
+  width: 30vw;
+  height: 6vh;
+  position: absolute;
+  z-index: 20;
+  top: 58%;
+  left: 10vw;
+}
+
+.image {
+  z-index: 30;
+  color: white;
+  width: 30vw;
+  height: 50vh;
+  position: absolute;
+  z-index: 20;
+  top: 25%;
+  left: 10vw;
+  border-radius: 100%;
+  border: 5px solid black;
+  object-fit: cover;
+}
+
+.image-small {
+  width: 50%;
+  height: 50%;
+  border-radius: 100%;
+  border: 5px solid black;
+  object-fit: cover;
+}
+.wrapper {
+  position: absolute;
+
+  width: 100vw;
+  height: 100vh;
+}
+.overlay {
+  background: grey;
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  z-index: 10;
+  top: 0;
+  left: 0;
+  right: 50%;
+  bottom: 0;
+}
+.overlay-1 {
+  position: absolute;
+  background: black;
+  width: 50%;
+  height: 100%;
+  z-index: 10;
+  top: 0;
+  right: 0;
+  left: 50%;
+  bottom: 0;
+}
+
+.overlay-button {
+  width: 20vw;
+  height: 10vh;
+  position: absolute;
+  z-index: 20;
+  top: 70%;
+  left: 40vw;
+  color: black;
+  font-size: 30px;
+  font-weight: 600;
+  background: #f7485e;
+}
+
+.open {
+  animation-name: right;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-direction: normal;
+  animation-timing-function: linear;
+}
+
+.open1 {
+  animation-name: left;
+  animation-duration: 0.5s;
+  animation-fill-mode: forwards;
+  animation-direction: reverse;
+  animation-timing-function: linear;
+}
+
+@keyframes right {
+  0% {
+    transform: translateX(0vw);
+  }
+  100% {
+    transform: translateX(50vw);
+  }
+}
+@keyframes left {
+  0% {
+    transform: translateX(-50vw);
+  }
+  100% {
+    transform: translateX(0vw);
+  }
+}

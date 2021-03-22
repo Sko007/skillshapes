@@ -105,7 +105,7 @@ export const ProfileSkillValueUpdate = (props: IProfileSkillValueUpdateProps) =>
                 <Label for="profile-skill-value-skill">
                   <Translate contentKey="gatewayApp.profileSkillValue.skill">Skill</Translate>
                 </Label>
-                <AvInput id="profile-skill-value-skill" type="select" className="form-control" name="skill.id">
+                <AvInput id="profile-skill-value-skill" type="select" className="form-control" name="skillId">
                   <option value="" key="0" />
                   {skills
                     ? skills.map(otherEntity => (

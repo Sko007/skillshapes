@@ -2,6 +2,7 @@ package com.devoteam.skillshapes.web.rest;
 
 import static javax.ws.rs.core.UriBuilder.fromPath;
 
+import com.devoteam.skillshapes.annotations.SearchableEntity;
 import com.devoteam.skillshapes.service.UserProfileService;
 import com.devoteam.skillshapes.web.rest.errors.BadRequestAlertException;
 import com.devoteam.skillshapes.web.util.HeaderUtil;
@@ -22,11 +23,12 @@ import java.util.Optional;
 /**
  * REST controller for managing {@link com.devoteam.skillshapes.domain.UserProfile}.
  */
+@SearchableEntity("com.devoteam.skillshapes.domain.UserProfile")
 @Path("/api/user-profiles")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
-public class UserProfileResource {
+public class UserProfileResource extends SearchResource{
 
     private final Logger log = LoggerFactory.getLogger(UserProfileResource.class);
 

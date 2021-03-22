@@ -17,3 +17,13 @@ services:
     extends:
       file: keycloak.yml
       service: keycloak
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "8082:80"
+    environment:
+      PMA_HOST: microservice-db
+      MYSQL_USER: root
+      MYSQL_PASSWORD:

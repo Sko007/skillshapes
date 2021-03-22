@@ -4,7 +4,6 @@ export interface ISkill {
   id?: number;
   name?: string;
   categoryName?: string;
-  owners?: IUserProfile[];
 }
 
 export const defaultValue: Readonly<ISkill> = {};

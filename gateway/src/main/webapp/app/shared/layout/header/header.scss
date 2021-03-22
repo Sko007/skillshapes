@@ -38,8 +38,9 @@ Developement Ribbon
 Navbar styles
 ========================================================================== */
 .jh-navbar {
-  background-color: #353d47;
+  background-color: #313131;
   padding: 0.2em 1em;
+  height: 80px;
   .profile-image {
     margin: -10px 0px;
     height: 40px;
@@ -98,6 +99,7 @@ Navbar styles
 .brand-title {
   font-size: 24px;
   color: $header-color;
+  padding-left: 4%;
   &:hover {
     color: $header-color-hover;
     text-decoration: none;

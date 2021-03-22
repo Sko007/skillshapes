@@ -5,6 +5,10 @@ import io.quarkus.hibernate.orm.panache.PanacheQuery;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.search.engine.backend.types.Sortable;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.FullTextField;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.Indexed;
+import org.hibernate.search.mapper.pojo.mapping.definition.annotation.KeywordField;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -21,6 +25,7 @@ import java.util.Optional;
 @Table(name = "skill_shape")
 @Cacheable
 @RegisterForReflection
+@Indexed
 public class SkillShape extends PanacheEntityBase implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -31,10 +36,14 @@ public class SkillShape extends PanacheEntityBase implements Serializable {
 
     @NotNull
     @Column(name = "title", nullable = false)
+    @FullTextField(analyzer = "name")
+    @KeywordField(name = "title_sort", sortable = Sortable.YES, normalizer = "sort")
     public String title;
 
     @NotNull
     @Column(name = "category", nullable = false)
+    @FullTextField(analyzer = "name")
+    @KeywordField(name = "category_sort", sortable = Sortable.YES, normalizer = "sort")
     public String category;
 
     @ManyToMany

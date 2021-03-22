@@ -23,6 +23,7 @@ import profileSkillValue, {
 import skill, {
   SkillState
 } from 'app/entities/skill/skill.reducer';
+import skillshapes, { SkillshapesState } from 'app/skillshape/skillshape.reducer';
 /* jhipster-needle-add-reducer-import - JHipster will add reducer here */
 
 export interface IRootState {
@@ -35,6 +36,7 @@ export interface IRootState {
   readonly skillShape: SkillShapeState;
   readonly profileSkillValue: ProfileSkillValueState;
   readonly skill: SkillState;
+  readonly skillshapes: SkillshapesState;
   /* jhipster-needle-add-reducer-type - JHipster will add reducer type here */
   readonly loadingBar: any;
 }
@@ -49,6 +51,7 @@ const rootReducer = combineReducers<IRootState>({
   skillShape,
   profileSkillValue,
   skill,
+  skillshapes,
   /* jhipster-needle-add-reducer-combine - JHipster will add reducer here */
   loadingBar,
 });

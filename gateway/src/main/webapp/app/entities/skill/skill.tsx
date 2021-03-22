@@ -42,9 +42,6 @@ export const Skill = (props: ISkillProps) => {
                 <th>
                   <Translate contentKey="gatewayApp.skill.categoryName">Category Name</Translate>
                 </th>
-                <th>
-                  <Translate contentKey="gatewayApp.skill.owner">Owner</Translate>
-                </th>
                 <th />
               </tr>
             </thead>
@@ -58,16 +55,7 @@ export const Skill = (props: ISkillProps) => {
                   </td>
                   <td>{skill.name}</td>
                   <td>{skill.categoryName}</td>
-                  <td>
-                    {skill.owners
-                      ? skill.owners.map((val, j) => (
-                          <span key={j}>
-                            <Link to={`user-profile/${val.id}`}>{val.id}</Link>
-                            {j === skill.owners.length - 1 ? '' : ', '}
-                          </span>
-                        ))
-                      : null}
-                  </td>
+
                   <td className="text-right">
                     <div className="btn-group flex-btn-group-container">
                       <Button tag={Link} to={`${match.url}/${skill.id}`} color="info" size="sm">

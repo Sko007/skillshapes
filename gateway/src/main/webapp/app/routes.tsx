@@ -9,7 +9,7 @@ import PrivateRoute from 'app/shared/auth/private-route';
 import ErrorBoundaryRoute from 'app/shared/error/error-boundary-route';
 import PageNotFound from 'app/shared/error/page-not-found';
 import { AUTHORITIES } from 'app/config/constants';
-
+import IndexSkillshapes from './skillshape/index';
 const Admin = Loadable({
   loader: () => import(/* webpackChunkName: "administration" */ 'app/modules/administration'),
   loading: () => <div>loading ...</div>,
@@ -20,7 +20,7 @@ const Routes = () => (
     <Switch>
       <ErrorBoundaryRoute path="/logout" component={Logout} />
       <PrivateRoute path="/admin" component={Admin} hasAnyAuthorities={[AUTHORITIES.ADMIN]} />
-      <ErrorBoundaryRoute path="/" exact component={Home} />
+      <ErrorBoundaryRoute path="/" exact component={IndexSkillshapes} />
       <PrivateRoute path="/" component={Entities} hasAnyAuthorities={[AUTHORITIES.USER]} />
       <ErrorBoundaryRoute component={PageNotFound} />
     </Switch>

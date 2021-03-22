@@ -1,0 +1,14 @@
+quarkus:
+  jaeger:
+    endpoint: http://jaeger:14268/api/traces
+    hibernate-search-orm:
+      elasticsearch:
+        hosts: elasticsearch:9200
+  oidc:
+    auth-server-url: http://keycloak:9080/auth/realms/jhipster/
+  eureka:
+    service-url:
+      default: http://admin:admin@jhipster-registry:8761/eureka/
+jhipster:
+  oidc:
+    logout-url: http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/logout

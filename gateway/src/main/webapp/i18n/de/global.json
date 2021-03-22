@@ -1,6 +1,6 @@
 {
   "global": {
-    "title": "Gateway",
+    "title": "Skillshapes",
     "browsehappy": "Sie benutzen einen <strong>veralteten</strong> Browser. Bitte <a href=\"http://browsehappy.com/?locale=de/\">aktualisieren Sie Ihren Browser</a>, um die Benutzerfreundlichkeit zu erhöhen.",
     "menu": {
       "home": "Startseite",
@@ -24,7 +24,7 @@
       },
       "admin": {
         "main": "Administration",
-        "gateway": "Gateway",
+        "gateway": "gateway",
         "userManagement": "Benutzerverwaltung",
         "tracker": "Benutzer Aktivitäten",
         "metrics": "Metriken",

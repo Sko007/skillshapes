@@ -5,6 +5,8 @@ export interface IProfileSkillValue {
   id?: number;
   value?: number;
   skill?: ISkill;
+  name?: string;
+  skillId?: number;
   skillshapes?: ISkillShape[];
 }
 

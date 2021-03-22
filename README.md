@@ -100,6 +100,10 @@ Add the following to map all jhipster services to local.
 127.0.0.1 keycloak
 127.0.0.1 jhipster-registry
 127.0.0.1 skillshapes-mariadb
+127.0.0.1 elasticsearch
+127.0.0.1 jaeger
+127.0.0.1 microservice
+127.0.0.1 logstash
 ```
 
 ## Run the applications
