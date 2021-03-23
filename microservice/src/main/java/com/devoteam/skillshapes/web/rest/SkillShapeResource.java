@@ -51,9 +51,6 @@ public class SkillShapeResource extends SearchResource{
     @Inject
     UserProfileService userProfileService;
 
-    @Inject
-    JsonWebToken accessToken;
-
 
 
     /**
