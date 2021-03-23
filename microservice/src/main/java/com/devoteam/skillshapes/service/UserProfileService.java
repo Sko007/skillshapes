@@ -4,6 +4,7 @@ import com.devoteam.skillshapes.domain.UserProfile;
 import com.devoteam.skillshapes.service.dto.UserProfileDTO;
 import com.devoteam.skillshapes.service.mapper.UserProfileMapper;
 import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import org.h2.engine.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +54,7 @@ public class UserProfileService {
     public Optional<UserProfileDTO> findOne(Long id) {
         log.debug("Request to get UserProfile : {}", id);
         return UserProfile.findByIdOptional(id)
-            .map(userProfile -> userProfileMapper.toDto((UserProfile) userProfile)); 
+            .map(userProfile -> userProfileMapper.toDto((UserProfile) userProfile));
     }
 
     /**
@@ -66,6 +67,10 @@ public class UserProfileService {
         return userProfileMapper.toDto(userProfiles);
     }
 
+    public Optional<UserProfileDTO> findOneByEmail(String email){
+        log.debug("Request to get UserProfile : {}", email);
+        return UserProfile.findOneByEmail(email).map(userProfile -> userProfileMapper.toDto((UserProfile) userProfile));
+    }
 
 
 }

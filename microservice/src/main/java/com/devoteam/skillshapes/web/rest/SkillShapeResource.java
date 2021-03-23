@@ -3,18 +3,29 @@ package com.devoteam.skillshapes.web.rest;
 import static javax.ws.rs.core.UriBuilder.fromPath;
 
 import com.devoteam.skillshapes.annotations.SearchableEntity;
+import com.devoteam.skillshapes.domain.UserProfile;
+import com.devoteam.skillshapes.service.AccountService;
 import com.devoteam.skillshapes.service.SkillShapeService;
+import com.devoteam.skillshapes.service.UserProfileService;
+import com.devoteam.skillshapes.service.dto.UserProfileDTO;
 import com.devoteam.skillshapes.web.rest.errors.BadRequestAlertException;
+import com.devoteam.skillshapes.web.rest.vm.UserVM;
 import com.devoteam.skillshapes.web.util.HeaderUtil;
+import com.devoteam.skillshapes.web.util.RequestInterceptor;
 import com.devoteam.skillshapes.web.util.ResponseUtil;
 import com.devoteam.skillshapes.service.dto.SkillShapeDTO;
 
+import io.quarkus.security.Authenticated;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptors;
+import javax.interceptor.InvocationContext;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -29,6 +40,8 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
+@Authenticated
+//@Interceptors(RequestInterceptor.class)
 public class SkillShapeResource extends SearchResource{
 
     private final Logger log = LoggerFactory.getLogger(SkillShapeResource.class);
@@ -40,6 +53,15 @@ public class SkillShapeResource extends SearchResource{
 
     @Inject
     SkillShapeService skillShapeService;
+
+    @Inject
+    UserProfileService userProfileService;
+
+    @Inject
+    JsonWebToken accessToken;
+
+
+
     /**
      * {@code POST  /skill-shapes} : Create a new skillShape.
      *
@@ -102,7 +124,14 @@ public class SkillShapeResource extends SearchResource{
     @GET
     public List<SkillShapeDTO> getAllSkillShapes(@QueryParam(value = "eagerload") boolean eagerload) {
         log.debug("REST request to get all SkillShapes");
-        return skillShapeService.findAll();
+        UserVM user = AccountService.getAccount(accessToken);
+        Optional<UserProfileDTO> optionalUser = userProfileService.findOneByEmail(user.email);
+        if(optionalUser.isPresent()) {
+            UserProfileDTO userProfile = optionalUser.get();
+            if(userProfile.email.contains("admin@localhost")) return skillShapeService.findAll();
+            return skillShapeService.findAllByUserID(userProfile.id);
+        }
+        else throw new BadRequestAlertException("Invalid user", ENTITY_NAME, "idnull");
     }
 
 
