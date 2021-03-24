@@ -9,6 +9,7 @@ import com.devoteam.skillshapes.web.util.HeaderUtil;
 import com.devoteam.skillshapes.web.util.ResponseUtil;
 import com.devoteam.skillshapes.service.dto.UserProfileDTO;
 
+import io.quarkus.security.Authenticated;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.h2.engine.User;
 import org.slf4j.Logger;
@@ -32,6 +33,7 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
+@Authenticated
 public class UserProfileResource extends SearchResource{
 
     private final Logger log = LoggerFactory.getLogger(UserProfileResource.class);

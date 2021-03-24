@@ -45,7 +45,7 @@ public class RequestFilter implements ContainerRequestFilter {
             userProfileService.userProfileDTO = userProfile;
         } else {
             userProfileService.userProfileDTO = null;
-            throw new BadRequestAlertException("Invalid user email","User",user.email);
+            //throw new BadRequestAlertException("Invalid user email","User",user.email);
         }
     }
 }
