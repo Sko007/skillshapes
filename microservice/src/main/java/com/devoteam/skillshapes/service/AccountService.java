@@ -1,20 +1,25 @@
 package com.devoteam.skillshapes.service;
 
 import com.devoteam.skillshapes.config.Constants;
-import com.devoteam.skillshapes.web.rest.AccountResource;
+import com.devoteam.skillshapes.service.dto.UserProfileDTO;
 import com.devoteam.skillshapes.web.rest.vm.UserVM;
 import org.eclipse.microprofile.jwt.JsonWebToken;
 
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
+import javax.transaction.Transactional;
+import java.util.Optional;
+
+@ApplicationScoped
+@Transactional
 public class AccountService {
+    @Inject
+    UserProfileService userProfileService;
 
-    private static class AccountServiceException extends RuntimeException {
+    @Inject
+    JsonWebToken requestAccessToken;
 
-        private AccountServiceException(String message) {
-            super(message);
-        }
-    }
-
-    public static UserVM getAccount(JsonWebToken accessToken){
+    public static UserVM getAccount(JsonWebToken accessToken) {
         if (accessToken == null) {
             throw new AccountService.AccountServiceException("User could not be found");
         }
@@ -47,7 +52,7 @@ public class AccountService {
             user.email = accessToken.getClaim("sub");
         }
         if (accessToken.getClaim("langKey") != null) {
-            user.langKey = (String) accessToken.getClaim("langKey");
+            user.langKey = accessToken.getClaim("langKey");
         } else if (accessToken.getClaim("locale") != null) {
             // trim off country code if it exists
             String locale = accessToken.getClaim("locale");
@@ -67,5 +72,18 @@ public class AccountService {
         user.activated = true;
         user.authorities = accessToken.getClaim("groups");
         return user;
+    }
+
+    public Optional<UserProfileDTO> getAccountUserProfile() {
+        return Optional.ofNullable(getAccount(requestAccessToken))
+            .map(user -> userProfileService.findOneByEmail(user.email))
+            .map(Optional::get);
+    }
+
+    private static class AccountServiceException extends RuntimeException {
+
+        private AccountServiceException(String message) {
+            super(message);
+        }
     }
 }

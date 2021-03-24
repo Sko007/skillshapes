@@ -1,10 +1,11 @@
 package com.devoteam.skillshapes.web.rest;
 
+import com.devoteam.skillshapes.service.AccountService;
 import com.devoteam.skillshapes.service.SkillShapeCustomService;
 import com.devoteam.skillshapes.service.UserProfileService;
 import com.devoteam.skillshapes.service.dto.SkillShapeCustomDTO;
-import com.devoteam.skillshapes.service.dto.UserProfileDTO;
 import io.quarkus.security.Authenticated;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +31,12 @@ public class SkillShapeCustomResource {
     @Inject
     UserProfileService userProfileService;
 
+    @Inject
+    AccountService accountService;
+
+    @Inject
+    JsonWebToken accessToken;
+
     /**
      * {@code GET  /skill-shapes/profile/:id} : get all skillShapes of the "ownerId".
      *
@@ -51,9 +58,8 @@ public class SkillShapeCustomResource {
     @GET
     @Path("profile")
     public List<SkillShapeCustomDTO> getSkillShapeByProfile() {
-        UserProfileDTO user = userProfileService.userProfileDTO;
-        if (user != null) return skillShapeService.findAllWithEagerRelationshipsByUserProfileId(user.id);
-        else throw new BadRequestException("User not found");
-
+        return accountService.getAccountUserProfile()
+            .map(user -> skillShapeService.findAllWithEagerRelationshipsByUserProfileId(user.id))
+            .orElseThrow(() -> new BadRequestException("User not found"));
     }
 }

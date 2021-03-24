@@ -3,15 +3,12 @@ package com.devoteam.skillshapes.service;
 import com.devoteam.skillshapes.domain.UserProfile;
 import com.devoteam.skillshapes.service.dto.UserProfileDTO;
 import com.devoteam.skillshapes.service.mapper.UserProfileMapper;
-import io.quarkus.hibernate.orm.panache.PanacheQuery;
-import org.h2.engine.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +17,6 @@ import java.util.Optional;
 public class UserProfileService {
 
     private final Logger log = LoggerFactory.getLogger(UserProfileService.class);
-
-    public UserProfileDTO userProfileDTO;
 
     @Inject
     UserProfileMapper userProfileMapper;
@@ -61,18 +56,17 @@ public class UserProfileService {
 
     /**
      * Get all the userProfiles.
+     *
      * @return the list of entities.
      */
-    public  List<UserProfileDTO> findAll() {
+    public List<UserProfileDTO> findAll() {
         log.debug("Request to get all UserProfiles");
         List<UserProfile> userProfiles = UserProfile.findAll().list();
         return userProfileMapper.toDto(userProfiles);
     }
 
-    public Optional<UserProfileDTO> findOneByEmail(String email){
+    public Optional<UserProfileDTO> findOneByEmail(String email) {
         log.debug("Request to get UserProfile : {}", email);
-        return UserProfile.findOneByEmail(email).map(userProfile -> userProfileMapper.toDto((UserProfile) userProfile));
+        return UserProfile.findOneByEmail(email).map(userProfile -> userProfileMapper.toDto(userProfile));
     }
-
-
 }

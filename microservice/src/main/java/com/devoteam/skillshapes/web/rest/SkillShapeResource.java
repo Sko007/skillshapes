@@ -1,21 +1,14 @@
 package com.devoteam.skillshapes.web.rest;
 
-import static javax.ws.rs.core.UriBuilder.fromPath;
-
 import com.devoteam.skillshapes.annotations.SearchableEntity;
 import com.devoteam.skillshapes.service.AccountService;
 import com.devoteam.skillshapes.service.SkillShapeService;
-import com.devoteam.skillshapes.service.UserProfileService;
-import com.devoteam.skillshapes.service.dto.UserProfileDTO;
+import com.devoteam.skillshapes.service.dto.SkillShapeDTO;
 import com.devoteam.skillshapes.web.rest.errors.BadRequestAlertException;
-import com.devoteam.skillshapes.web.rest.vm.UserVM;
 import com.devoteam.skillshapes.web.util.HeaderUtil;
 import com.devoteam.skillshapes.web.util.ResponseUtil;
-import com.devoteam.skillshapes.service.dto.SkillShapeDTO;
-
 import io.quarkus.security.Authenticated;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,9 +16,14 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.validation.Valid;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.util.List;
 import java.util.Optional;
+
+import static javax.ws.rs.core.UriBuilder.fromPath;
 
 /**
  * REST controller for managing {@link com.devoteam.skillshapes.domain.SkillShape}.
@@ -36,12 +34,10 @@ import java.util.Optional;
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
 @Authenticated
-public class SkillShapeResource extends SearchResource{
-
-    private final Logger log = LoggerFactory.getLogger(SkillShapeResource.class);
+public class SkillShapeResource extends SearchResource {
 
     private static final String ENTITY_NAME = "skillshapesSkillShape";
-
+    private final Logger log = LoggerFactory.getLogger(SkillShapeResource.class);
     @ConfigProperty(name = "application.name")
     String applicationName;
 
@@ -49,9 +45,7 @@ public class SkillShapeResource extends SearchResource{
     SkillShapeService skillShapeService;
 
     @Inject
-    UserProfileService userProfileService;
-
-
+    AccountService accountService;
 
     /**
      * {@code POST  /skill-shapes} : Create a new skillShape.
@@ -109,15 +103,19 @@ public class SkillShapeResource extends SearchResource{
 
     /**
      * {@code GET  /skill-shapes} : get all the skillShapes.
-     *     * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     * * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
+     *
      * @return the {@link Response} with status {@code 200 (OK)} and the list of skillShapes in body.
      */
     @GET
     public List<SkillShapeDTO> getAllSkillShapes(@QueryParam(value = "eagerload") boolean eagerload) {
         log.debug("REST request to get all SkillShapes");
-        UserProfileDTO userProfile = userProfileService.userProfileDTO;
-        if(userProfile != null && userProfile.isAdmin()) return skillShapeService.findAll();
-        return skillShapeService.findAllByUserID(userProfile.id);
+
+        return accountService.getAccountUserProfile()
+            .map(dto -> dto.isAdmin()
+                ? skillShapeService.findAll()
+                : skillShapeService.findAllByUserID(dto.id))
+            .orElseThrow(() -> new BadRequestAlertException("Invalid user", ENTITY_NAME, "idnull"));
     }
 
     /**
