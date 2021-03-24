@@ -116,7 +116,7 @@ public class SkillShapeResource extends SearchResource{
     public List<SkillShapeDTO> getAllSkillShapes(@QueryParam(value = "eagerload") boolean eagerload) {
         log.debug("REST request to get all SkillShapes");
         UserProfileDTO userProfile = userProfileService.userProfileDTO;
-        if(userProfile.email.contains("admin@localhost")) return skillShapeService.findAll();
+        if(userProfile != null && userProfile.isAdmin()) return skillShapeService.findAll();
         return skillShapeService.findAllByUserID(userProfile.id);
     }
 

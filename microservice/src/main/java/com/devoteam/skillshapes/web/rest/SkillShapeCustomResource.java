@@ -54,7 +54,8 @@ public class SkillShapeCustomResource {
     @Path("profile")
     public List<SkillShapeDTO> getSkillShapeByProfile() {
         UserProfileDTO user = userProfileService.userProfileDTO;
-        if(user == null) throw new BadRequestException("User not found");
-        return skillShapeService.findAllWithEagerRelationshipsByUserProfileId(user.id);
+        if(user != null)  return skillShapeService.findAllWithEagerRelationshipsByUserProfileId(user.id);
+        else throw new BadRequestException("User not found");
+
     }
 }
