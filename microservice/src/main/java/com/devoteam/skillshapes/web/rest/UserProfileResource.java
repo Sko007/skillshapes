@@ -9,7 +9,9 @@ import com.devoteam.skillshapes.web.util.HeaderUtil;
 import com.devoteam.skillshapes.web.util.ResponseUtil;
 import com.devoteam.skillshapes.service.dto.UserProfileDTO;
 
+import io.quarkus.security.Authenticated;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.h2.engine.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +19,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -28,6 +33,7 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
+@Authenticated
 public class UserProfileResource extends SearchResource{
 
     private final Logger log = LoggerFactory.getLogger(UserProfileResource.class);
@@ -101,7 +107,19 @@ public class UserProfileResource extends SearchResource{
     @GET
     public List<UserProfileDTO> getAllUserProfiles() {
         log.info("REST request to get all UserProfiles");
-        return userProfileService.findAll();
+
+        UserProfileDTO user = userProfileService.userProfileDTO;
+        if(user.isAdmin())  return userProfileService.findAll();
+        else{
+            Optional<UserProfileDTO> resultUser = userProfileService.findOne(user.id);
+            if(resultUser.isPresent()){
+                List<UserProfileDTO> result = Arrays.asList(new UserProfileDTO[]{
+                    resultUser.get()
+                });
+                return result;
+            }
+            else throw new BadRequestException("User not found");
+        }
     }
 
 
@@ -116,7 +134,13 @@ public class UserProfileResource extends SearchResource{
 
     public Response getUserProfile(@PathParam("id") Long id) {
         log.debug("REST request to get UserProfile : {}", id);
-        Optional<UserProfileDTO> userProfileDTO = userProfileService.findOne(id);
+
+        UserProfileDTO user = userProfileService.userProfileDTO;
+        Long checkId = user.id;
+        if(user != null && user.isAdmin()) checkId = id;
+        else if(user == null) throw new BadRequestException("User not found");
+
+        Optional<UserProfileDTO> userProfileDTO = userProfileService.findOne(checkId);
         return ResponseUtil.wrapOrNotFound(userProfileDTO);
     }
 }

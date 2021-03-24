@@ -49,4 +49,8 @@ public class UserProfileDTO implements Serializable {
             ", email='" + email + "'" +
             "}";
     }
+
+    public boolean isAdmin(){
+        return email != null && email.contains("admin@localhost");
+    }
 }

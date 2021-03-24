@@ -21,7 +21,6 @@ services:
     links:
       - jhipster-registry
       - keycloak
-      - microservice
 
   microservice:
     container_name: microservice
@@ -46,10 +45,15 @@ services:
       - microservice-mariadb
       - jhipster-registry
       - keycloak
+      - gateway
     links:
       - jhipster-registry
       - keycloak
       - microservice-mariadb
+      - gateway
+    extra_hosts:
+      - "microservice:127.0.0.1"
+      - "microservice:0.0.0.0"
 
   microservice-mariadb:
     container_name: microservice-db

@@ -3,7 +3,6 @@ package com.devoteam.skillshapes.web.rest;
 import static javax.ws.rs.core.UriBuilder.fromPath;
 
 import com.devoteam.skillshapes.annotations.SearchableEntity;
-import com.devoteam.skillshapes.domain.UserProfile;
 import com.devoteam.skillshapes.service.AccountService;
 import com.devoteam.skillshapes.service.SkillShapeService;
 import com.devoteam.skillshapes.service.UserProfileService;
@@ -11,7 +10,6 @@ import com.devoteam.skillshapes.service.dto.UserProfileDTO;
 import com.devoteam.skillshapes.web.rest.errors.BadRequestAlertException;
 import com.devoteam.skillshapes.web.rest.vm.UserVM;
 import com.devoteam.skillshapes.web.util.HeaderUtil;
-import com.devoteam.skillshapes.web.util.RequestInterceptor;
 import com.devoteam.skillshapes.web.util.ResponseUtil;
 import com.devoteam.skillshapes.service.dto.SkillShapeDTO;
 
@@ -23,9 +21,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.interceptor.AroundInvoke;
-import javax.interceptor.Interceptors;
-import javax.interceptor.InvocationContext;
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
@@ -41,7 +36,6 @@ import java.util.Optional;
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
 @Authenticated
-//@Interceptors(RequestInterceptor.class)
 public class SkillShapeResource extends SearchResource{
 
     private final Logger log = LoggerFactory.getLogger(SkillShapeResource.class);
@@ -56,9 +50,6 @@ public class SkillShapeResource extends SearchResource{
 
     @Inject
     UserProfileService userProfileService;
-
-    @Inject
-    JsonWebToken accessToken;
 
 
 
@@ -124,14 +115,9 @@ public class SkillShapeResource extends SearchResource{
     @GET
     public List<SkillShapeDTO> getAllSkillShapes(@QueryParam(value = "eagerload") boolean eagerload) {
         log.debug("REST request to get all SkillShapes");
-        UserVM user = AccountService.getAccount(accessToken);
-        Optional<UserProfileDTO> optionalUser = userProfileService.findOneByEmail(user.email);
-        if(optionalUser.isPresent()) {
-            UserProfileDTO userProfile = optionalUser.get();
-            if(userProfile.email.contains("admin@localhost")) return skillShapeService.findAll();
-            return skillShapeService.findAllByUserID(userProfile.id);
-        }
-        else throw new BadRequestAlertException("Invalid user", ENTITY_NAME, "idnull");
+        UserProfileDTO userProfile = userProfileService.userProfileDTO;
+        if(userProfile != null && userProfile.isAdmin()) return skillShapeService.findAll();
+        return skillShapeService.findAllByUserID(userProfile.id);
     }
 
     /**
@@ -142,7 +128,6 @@ public class SkillShapeResource extends SearchResource{
      */
     @GET
     @Path("/{id}")
-
     public Response getSkillShape(@PathParam("id") Long id) {
         log.debug("REST request to get SkillShape : {}", id);
         Optional<SkillShapeDTO> skillShapeDTO = skillShapeService.findOne(id);

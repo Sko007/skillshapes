@@ -21,6 +21,8 @@ public class UserProfileService {
 
     private final Logger log = LoggerFactory.getLogger(UserProfileService.class);
 
+    public UserProfileDTO userProfileDTO;
+
     @Inject
     UserProfileMapper userProfileMapper;
 
