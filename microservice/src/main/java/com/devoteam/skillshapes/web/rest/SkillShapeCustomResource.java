@@ -2,6 +2,7 @@ package com.devoteam.skillshapes.web.rest;
 
 import com.devoteam.skillshapes.service.SkillShapeCustomService;
 import com.devoteam.skillshapes.service.SkillShapeService;
+import com.devoteam.skillshapes.service.dto.SkillShapeCustomDTO;
 import com.devoteam.skillshapes.service.dto.SkillShapeDTO;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
@@ -34,7 +35,7 @@ public class SkillShapeCustomResource {
     @GET
     @Path("profile/{id}")
 
-    public List<SkillShapeDTO> getSkillShapeByProfileId(@PathParam("id") Long ownerId) {
+    public List<SkillShapeCustomDTO> getSkillShapeByProfileId(@PathParam("id") Long ownerId) {
         log.debug("REST request to get SkillShape of Profile : {}", ownerId);
         return skillShapeService.findAllWithEagerRelationshipsByUserProfileId(ownerId);
     }

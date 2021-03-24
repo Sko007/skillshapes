@@ -134,7 +134,6 @@ public class SkillShapeResource extends SearchResource{
         else throw new BadRequestAlertException("Invalid user", ENTITY_NAME, "idnull");
     }
 
-
     /**
      * {@code GET  /skill-shapes/:id} : get the "id" skillShape.
      *
