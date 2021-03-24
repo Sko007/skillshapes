@@ -9,10 +9,13 @@ import { IRootState } from 'app/shared/reducers';
 import { getEntities } from 'app/entities/skill-shape/skill-shape.reducer';
 import { ISkillShape } from 'app/shared/model/skill-shape.model';
 import { APP_DATE_FORMAT, APP_LOCAL_DATE_FORMAT } from 'app/config/constants';
-import { ISkillShapeProps } from 'app/entities/skill-shape/skill-shape';
 import { AdminContext } from 'app/app';
 
-export const SkillShapeDashboard = (props: ISkillShapeProps) => {
+interface ISkillShapeDashboardProps extends StateProps, DispatchProps, RouteComponentProps<{ url: string }> {
+  isAuthenticated: boolean;
+}
+
+export const SkillShapeDashboard = (props: ISkillShapeDashboardProps) => {
   useEffect(() => {
     props.getEntities();
   }, []);

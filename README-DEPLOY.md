@@ -22,7 +22,21 @@ Add the following to map all jhipster services to local.
 127.0.0.1 logstash
 ```
 
-## Docker Image building
+## Docker compose
+
+Start all applications
+
+```sh
+docker-compose up -d
+```
+
+## Troubleshooting
+
+### Microservice not reachable in Registry - Health check error
+
+Restart the microservice
+
+## Docker Image building for registry
 
 1. Build docker image for microservice
 
@@ -42,18 +56,4 @@ Add the following to map all jhipster services to local.
    ./mvnw package -Pprod verify jib:dockerBuild -DskipTests
    ```
 
-3. Check docker for created images: **gateway** and **microservice**
-
-## Docker compose
-
-Start all applications
-
-```sh
-docker-compose up -d
-```
-
-## Troubleshooting
-
-### Microservice not reachable in Registry - Health check error
-
-Restart the microservice
+3. Check docker registry for created images: **gateway** and **microservice**
