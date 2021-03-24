@@ -10,6 +10,7 @@ import com.devoteam.skillshapes.web.util.ResponseUtil;
 import com.devoteam.skillshapes.service.dto.UserProfileDTO;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.h2.engine.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +18,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.*;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -101,7 +105,19 @@ public class UserProfileResource extends SearchResource{
     @GET
     public List<UserProfileDTO> getAllUserProfiles() {
         log.info("REST request to get all UserProfiles");
-        return userProfileService.findAll();
+
+        UserProfileDTO user = userProfileService.userProfileDTO;
+        if(user.isAdmin())  return userProfileService.findAll();
+        else{
+            Optional<UserProfileDTO> resultUser = userProfileService.findOne(user.id);
+            if(resultUser.isPresent()){
+                List<UserProfileDTO> result = Arrays.asList(new UserProfileDTO[]{
+                    resultUser.get()
+                });
+                return result;
+            }
+            else throw new BadRequestException("User not found");
+        }
     }
 
 
@@ -116,7 +132,18 @@ public class UserProfileResource extends SearchResource{
 
     public Response getUserProfile(@PathParam("id") Long id) {
         log.debug("REST request to get UserProfile : {}", id);
-        Optional<UserProfileDTO> userProfileDTO = userProfileService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(userProfileDTO);
+
+        UserProfileDTO user = userProfileService.userProfileDTO;
+        if(user != null && user.isAdmin()) {
+            Optional<UserProfileDTO> userProfileDTO = userProfileService.findOne(id);
+            return ResponseUtil.wrapOrNotFound(userProfileDTO);
+        }
+        else {
+            if(user != null && user.id != null){
+                Optional<UserProfileDTO> userProfileDTO = userProfileService.findOne(user.id);
+                return ResponseUtil.wrapOrNotFound(userProfileDTO);
+            }
+            else throw new BadRequestException("User not found");
+        }
     }
 }
