@@ -8,14 +8,14 @@ services:
   jhipster-registry:
     container_name: jhipster-registry
     extends:
-      file: jhipster-registry.yml
+      file: docker-compose/jhipster-registry.yml
       service: jhipster-registry
   keycloak:
     container_name: keycloak
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
     extends:
-      file: keycloak.yml
+      file: docker-compose/keycloak.yml
       service: keycloak
   phpmyadmin:
     container_name: phpmyadmin
@@ -27,3 +27,73 @@ services:
       PMA_HOST: microservice-db
       MYSQL_USER: root
       MYSQL_PASSWORD:
+  elasticsearch:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx256m -Xms256m"
+      ELASTIC_PASSWORD: changeme
+      # Use single node discovery in order to disable production mode and avoid bootstrap checks.
+      # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
+      discovery.type: single-node
+    networks:
+      - elk
+
+  logstash:
+    container_name: logstash
+    image: docker.elastic.co/logstash/logstash:7.11.1
+    volumes:
+      - source: ./docker-compose/elk/logstash/pipeline/gelf.conf
+        target: /usr/share/logstash/pipeline/gelf.conf
+        type: bind
+    ports:
+      - "12201:12201/udp"
+      - "5044:5044"
+      - "5000:5000"
+      - "9600:9600"
+    configs:
+      - source: logstash_pipeline
+        target: /usr/share/logstash/pipeline/logstash.conf
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
+
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.11.1
+    ports:
+      - "5601:5601"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
+
+  jaegertracing:
+    container_name: jaeger
+    image: jaegertracing/all-in-one:latest
+    environment:
+      - ES_TAGS_AS_FIELDS_ALL=true
+      - SPAN_STORAGE_TYPE=elasticsearch
+      - ES_SERVER_URLS=http://elasticsearch:9200
+    links:
+      - elasticsearch
+    ports:
+      - "16686:16686"
+      - "5778:5778"
+      - "14268:14268"
+    networks:
+      - elk
+
+configs:
+  logstash_pipeline:
+    file: ./elk/logstash/pipeline/logstash.conf
+
+networks:
+  elk:
+    driver: bridge
