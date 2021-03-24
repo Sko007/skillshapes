@@ -1,14 +1,14 @@
 package com.devoteam.skillshapes.web.rest;
 
-import static javax.ws.rs.core.UriBuilder.fromPath;
-
 import com.devoteam.skillshapes.annotations.SearchableEntity;
+import com.devoteam.skillshapes.service.AccountService;
 import com.devoteam.skillshapes.service.UserProfileService;
+import com.devoteam.skillshapes.service.dto.UserProfileDTO;
 import com.devoteam.skillshapes.web.rest.errors.BadRequestAlertException;
 import com.devoteam.skillshapes.web.util.HeaderUtil;
 import com.devoteam.skillshapes.web.util.ResponseUtil;
-import com.devoteam.skillshapes.service.dto.UserProfileDTO;
-
+import io.quarkus.security.Authenticated;
+import io.quarkus.security.ForbiddenException;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,9 +16,14 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.*;
-import javax.ws.rs.core.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
+
+import static javax.ws.rs.core.UriBuilder.fromPath;
 
 /**
  * REST controller for managing {@link com.devoteam.skillshapes.domain.UserProfile}.
@@ -28,18 +33,20 @@ import java.util.Optional;
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 @ApplicationScoped
-public class UserProfileResource extends SearchResource{
-
-    private final Logger log = LoggerFactory.getLogger(UserProfileResource.class);
+@Authenticated
+public class UserProfileResource extends SearchResource {
 
     private static final String ENTITY_NAME = "skillshapesUserProfile";
-
+    private final Logger log = LoggerFactory.getLogger(UserProfileResource.class);
     @ConfigProperty(name = "application.name")
     String applicationName;
 
-
     @Inject
     UserProfileService userProfileService;
+
+    @Inject
+    AccountService accountService;
+
     /**
      * {@code POST  /user-profiles} : Create a new userProfile.
      *
@@ -96,14 +103,16 @@ public class UserProfileResource extends SearchResource{
 
     /**
      * {@code GET  /user-profiles} : get all the userProfiles.
-     *     * @return the {@link Response} with status {@code 200 (OK)} and the list of userProfiles in body.
+     * * @return the {@link Response} with status {@code 200 (OK)} and the list of userProfiles in body.
      */
     @GET
     public List<UserProfileDTO> getAllUserProfiles() {
         log.info("REST request to get all UserProfiles");
-        return userProfileService.findAll();
-    }
 
+        return accountService.getAccountUserProfile()
+            .map(user -> user.isAdmin() ? userProfileService.findAll() : Collections.singletonList(user))
+            .orElseThrow(() -> new ForbiddenException("Not authorized"));
+    }
 
     /**
      * {@code GET  /user-profiles/:id} : get the "id" userProfile.
@@ -113,10 +122,12 @@ public class UserProfileResource extends SearchResource{
      */
     @GET
     @Path("/{id}")
-
     public Response getUserProfile(@PathParam("id") Long id) {
         log.debug("REST request to get UserProfile : {}", id);
-        Optional<UserProfileDTO> userProfileDTO = userProfileService.findOne(id);
-        return ResponseUtil.wrapOrNotFound(userProfileDTO);
+
+        return ResponseUtil.wrapOrNotFound(accountService.getAccountUserProfile()
+            .filter(user -> user.isAdmin() || Long.compare(user.id, id) == 0)
+            .map(ignore -> userProfileService.findOne(id))
+            .orElseThrow(() -> new ForbiddenException("Not authorized")));
     }
 }

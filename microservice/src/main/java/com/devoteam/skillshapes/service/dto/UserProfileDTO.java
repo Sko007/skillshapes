@@ -1,12 +1,11 @@
 package com.devoteam.skillshapes.service.dto;
 
 
+import com.devoteam.skillshapes.config.Constants;
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.swagger.annotations.ApiModel;
+
 import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
 
 /**
  * A DTO for the {@link com.devoteam.skillshapes.domain.UserProfile} entity.
@@ -48,5 +47,9 @@ public class UserProfileDTO implements Serializable {
             ", lastName='" + lastName + "'" +
             ", email='" + email + "'" +
             "}";
+    }
+
+    public boolean isAdmin() {
+        return email != null && email.contains(Constants.ADMIN_EMAIL);
     }
 }

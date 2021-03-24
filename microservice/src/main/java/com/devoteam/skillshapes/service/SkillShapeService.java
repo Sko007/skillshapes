@@ -1,5 +1,6 @@
 package com.devoteam.skillshapes.service;
 
+import com.devoteam.skillshapes.domain.Skill;
 import com.devoteam.skillshapes.domain.SkillShape;
 import com.devoteam.skillshapes.service.dto.SkillShapeDTO;
 import com.devoteam.skillshapes.service.mapper.SkillShapeMapper;
@@ -71,6 +72,16 @@ public class SkillShapeService {
      */
     public  List<SkillShapeDTO> findAllWithEagerRelationships() {
         List<SkillShape> skillShapes = SkillShape.findAllWithEagerRelationships().list();
+        return skillShapeMapper.toDto(skillShapes);
+    }
+
+    /**
+     * Get aöö tje skillShapes that belong to one User.
+     * @param id User id
+     * @return the list of entities
+     */
+    public List<SkillShapeDTO> findAllByUserID(Long id){
+        List<SkillShape> skillShapes = SkillShape.findAllByUserId(id).list();
         return skillShapeMapper.toDto(skillShapes);
     }
 }

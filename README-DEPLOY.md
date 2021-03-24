@@ -39,7 +39,7 @@ Add the following to map all jhipster services to local.
 
    ```sh
    cd gateway
-   ./mvnw package -Pprod verify jib:dockerBuild
+   ./mvnw package -Pprod verify jib:dockerBuild -DskipTests
    ```
 
 3. Check docker for created images: **gateway** and **microservice**
