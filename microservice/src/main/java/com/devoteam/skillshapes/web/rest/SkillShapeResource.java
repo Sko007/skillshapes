@@ -120,7 +120,6 @@ public class SkillShapeResource extends SearchResource{
         return skillShapeService.findAllByUserID(userProfile.id);
     }
 
-
     /**
      * {@code GET  /skill-shapes/:id} : get the "id" skillShape.
      *

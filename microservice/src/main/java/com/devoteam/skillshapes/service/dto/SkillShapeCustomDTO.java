@@ -3,18 +3,18 @@ package com.devoteam.skillshapes.service.dto;
 
 import io.quarkus.runtime.annotations.RegisterForReflection;
 import io.swagger.annotations.ApiModel;
-import javax.validation.constraints.*;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.Objects;
 
 /**
  * A DTO for the {@link com.devoteam.skillshapes.domain.SkillShape} entity.
  */
 @ApiModel(description = "The SkillShape class that represents the job and the skills related to it\n@author Devoteam")
 @RegisterForReflection
-public class SkillShapeDTO implements Serializable {
+public class SkillShapeCustomDTO implements Serializable {
 
     public Long id;
 
@@ -26,18 +26,16 @@ public class SkillShapeDTO implements Serializable {
 
     public Set<ProfileSkillValueDTO> skills = new HashSet<>();
 
-    public Set<UserProfileDTO> owners = new HashSet<>();
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof SkillShapeDTO)) {
+        if (!(o instanceof SkillShapeCustomDTO)) {
             return false;
         }
 
-        return id != null && id.equals(((SkillShapeDTO) o).id);
+        return id != null && id.equals(((SkillShapeCustomDTO) o).id);
     }
 
     @Override
@@ -52,7 +50,6 @@ public class SkillShapeDTO implements Serializable {
             ", title='" + title + "'" +
             ", category='" + category + "'" +
             ", skills='" + skills + "'" +
-            ", owners='" + owners + "'" +
             "}";
     }
 }

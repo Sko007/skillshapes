@@ -1,12 +1,10 @@
 package com.devoteam.skillshapes.web.rest;
 
 import com.devoteam.skillshapes.service.SkillShapeCustomService;
-import com.devoteam.skillshapes.service.SkillShapeService;
 import com.devoteam.skillshapes.service.UserProfileService;
-import com.devoteam.skillshapes.service.dto.SkillShapeDTO;
+import com.devoteam.skillshapes.service.dto.SkillShapeCustomDTO;
 import com.devoteam.skillshapes.service.dto.UserProfileDTO;
 import io.quarkus.security.Authenticated;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +38,7 @@ public class SkillShapeCustomResource {
      */
     @GET
     @Path("profile/{id}")
-    public List<SkillShapeDTO> getSkillShapeByProfileId(@PathParam("id") Long ownerId) {
+    public List<SkillShapeCustomDTO> getSkillShapeByProfileId(@PathParam("id") Long ownerId) {
         log.debug("REST request to get SkillShape of Profile : {}", ownerId);
         return skillShapeService.findAllWithEagerRelationshipsByUserProfileId(ownerId);
     }
@@ -52,9 +50,9 @@ public class SkillShapeCustomResource {
      */
     @GET
     @Path("profile")
-    public List<SkillShapeDTO> getSkillShapeByProfile() {
+    public List<SkillShapeCustomDTO> getSkillShapeByProfile() {
         UserProfileDTO user = userProfileService.userProfileDTO;
-        if(user != null)  return skillShapeService.findAllWithEagerRelationshipsByUserProfileId(user.id);
+        if (user != null) return skillShapeService.findAllWithEagerRelationshipsByUserProfileId(user.id);
         else throw new BadRequestException("User not found");
 
     }
