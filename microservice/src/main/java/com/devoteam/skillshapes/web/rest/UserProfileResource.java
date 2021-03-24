@@ -136,16 +136,11 @@ public class UserProfileResource extends SearchResource{
         log.debug("REST request to get UserProfile : {}", id);
 
         UserProfileDTO user = userProfileService.userProfileDTO;
-        if(user != null && user.isAdmin()) {
-            Optional<UserProfileDTO> userProfileDTO = userProfileService.findOne(id);
-            return ResponseUtil.wrapOrNotFound(userProfileDTO);
-        }
-        else {
-            if(user != null && user.id != null){
-                Optional<UserProfileDTO> userProfileDTO = userProfileService.findOne(user.id);
-                return ResponseUtil.wrapOrNotFound(userProfileDTO);
-            }
-            else throw new BadRequestException("User not found");
-        }
+        Long checkId = user.id;
+        if(user != null && user.isAdmin()) checkId = id;
+        else if(user == null) throw new BadRequestException("User not found");
+
+        Optional<UserProfileDTO> userProfileDTO = userProfileService.findOne(checkId);
+        return ResponseUtil.wrapOrNotFound(userProfileDTO);
     }
 }
