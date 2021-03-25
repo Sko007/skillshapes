@@ -124,7 +124,7 @@ const SkillshapeWrapper = () => {
       const categoryArray = skillshapeData[1];
       let category = 'No headline';
       if (validArray(categoryArray, 1)) {
-        let categoryName = {};
+        let categoryName;
         if (categoryArray.length >= 2) {
           categoryName = categoryArray[1];
         } else {
