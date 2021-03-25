@@ -13,9 +13,6 @@ services:
     extends:
       file: docker-compose/jhipster-registry.yml
       service: jhipster-registry
-    links:
-      - microservice
-      - gateway
   keycloak:
     container_name: keycloak
     restart: on-failure
