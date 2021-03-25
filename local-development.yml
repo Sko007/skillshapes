@@ -6,27 +6,36 @@ services:
       file: microservice/src/main/docker/mariadb.yml
       service: skillshapes-mariadb
   jhipster-registry:
+    restart: on-failure
     container_name: jhipster-registry
+    depends_on:
+      - keycloak
     extends:
       file: docker-compose/jhipster-registry.yml
       service: jhipster-registry
+    links:
+      - microservice
+      - gateway
   keycloak:
     container_name: keycloak
+    restart: on-failure
     environment:
       - _JAVA_OPTIONS=-Xmx512m -Xms256m
     extends:
       file: docker-compose/keycloak.yml
       service: keycloak
-  phpmyadmin:
-    container_name: phpmyadmin
-    image: phpmyadmin/phpmyadmin
-    restart: always
-    ports:
-      - "8082:80"
-    environment:
-      PMA_HOST: microservice-db
-      MYSQL_USER: root
-      MYSQL_PASSWORD:
+
+  #phpmyadmin:
+  #  container_name: microservice-phpmyadmin
+  #  image: phpmyadmin/phpmyadmin
+  #  environment:
+  #    - PMA_HOST=microservice-mariadb
+  #    - PMA_USER=root
+  #  ports:
+  #    - 9090:80
+  #  depends_on:
+  #    - microservice-mariadb
+
   elasticsearch:
     container_name: elasticsearch
     image: docker.elastic.co/elasticsearch/elasticsearch:7.11.1
@@ -39,8 +48,6 @@ services:
       # Use single node discovery in order to disable production mode and avoid bootstrap checks.
       # see: https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html
       discovery.type: single-node
-    networks:
-      - elk
 
   logstash:
     container_name: logstash
@@ -61,8 +68,6 @@ services:
       LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     depends_on:
       - elasticsearch
-    networks:
-      - elk
 
   kibana:
     container_name: kibana
@@ -71,11 +76,10 @@ services:
       - "5601:5601"
     depends_on:
       - elasticsearch
-    networks:
-      - elk
 
   jaegertracing:
     container_name: jaeger
+    restart: on-failure
     image: jaegertracing/all-in-one:latest
     environment:
       - ES_TAGS_AS_FIELDS_ALL=true
@@ -87,13 +91,12 @@ services:
       - "16686:16686"
       - "5778:5778"
       - "14268:14268"
-    networks:
-      - elk
 
 configs:
   logstash_pipeline:
     file: ./elk/logstash/pipeline/logstash.conf
 
 networks:
-  elk:
-    driver: bridge
+  default:
+    external:
+      name: skillshapes-network
