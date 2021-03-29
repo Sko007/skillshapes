@@ -101,14 +101,16 @@ public class SkillShape extends PanacheEntityBase implements Serializable {
         if (skillShape == null) {
             throw new IllegalArgumentException("skillShape can't be null");
         }
-        var entity = SkillShape.<SkillShape>findById(skillShape.id);
-        if (entity != null) {
-            entity.title = skillShape.title;
-            entity.category = skillShape.category;
-            entity.skills = skillShape.skills;
-            entity.owners = skillShape.owners;
+        Optional<SkillShape> entity = findOneWithEagerRelationships(skillShape.id);
+        if (entity.isPresent()) {
+            SkillShape sh = entity.get();
+            sh.title = skillShape.title;
+            sh.category = skillShape.category;
+            sh.skills = skillShape.skills;
+            sh.owners = skillShape.owners;
+            return sh;
         }
-        return entity;
+        return null;
     }
 
     public static SkillShape persistOrUpdate(SkillShape skillShape) {
@@ -129,5 +131,9 @@ public class SkillShape extends PanacheEntityBase implements Serializable {
 
     public static Optional<SkillShape> findOneWithEagerRelationships(Long id) {
         return find("select skillShape from SkillShape skillShape left join fetch skillShape.skills left join fetch skillShape.owners where skillShape.id =?1", id).firstResultOptional();
+    }
+
+    public static PanacheQuery<SkillShape> findAllByUserId(Long id){
+        return SkillShape.find("select distinct skillShape from SkillShape skillShape left join fetch skillShape.skills left join fetch skillShape.owners where owner_id=?1", id);
     }
 }

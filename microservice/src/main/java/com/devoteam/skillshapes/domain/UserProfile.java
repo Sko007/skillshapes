@@ -14,6 +14,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -112,6 +113,10 @@ public class UserProfile extends PanacheEntityBase implements Serializable {
         } else {
             return update(userProfile);
         }
+    }
+
+    public static Optional<UserProfile> findOneByEmail(String email) {
+        return find("email", email).firstResultOptional();
     }
 
 

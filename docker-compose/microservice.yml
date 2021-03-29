@@ -1,0 +1,25 @@
+version: "2"
+services:
+  microservice:
+    container_name: microservice
+    image: 10.99.70.79:5000/skillshapes/microservice:latest
+    environment:
+      - _JAVA_OPTIONS=-Xmx1g -Xms256m
+      - SPRING_PROFILES_ACTIVE=prod,swagger,api-docs,microservice"
+      - EUREKA_CLIENT_SERVICE_URL_DEFAULTZONE=http://admin:admin@jhipster-registry:8761/eureka
+      - CLOUD_CONFIG_URI=http://admin:admin@jhipster-registry:8761/config/master
+      - DATASOURCE_URL=jdbc:mariadb://microservice-mariadb:3306/skillshapes
+      - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_ISSUER_URI=http://keycloak:9080/auth/realms/jhipster
+      - SECURITY_OAUTH2_CLIENT_PROVIDER_OIDC_LOGOUT_URL=http://keycloak:9080/auth/realms/jhipster/protocol/openid-connect/logout
+      - JAEGER_ENDPOINT=http://jaeger:14268/api/traces
+      - ELASTICSEARCH_HOSTS=elasticsearch:9200
+      #      - JHIPSTER_SLEEP=60
+      - EUREKA_HOSTNAME=
+    expose:
+      - "8081"
+    ports:
+      - 8081:8081
+    restart: on-failure
+    extra_hosts:
+      - "microservice:127.0.0.1"
+      - "microservice:0.0.0.0"

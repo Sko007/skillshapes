@@ -6,6 +6,7 @@ import { cleanEntity } from 'app/shared/util/entity-utils';
 import { REQUEST, SUCCESS, FAILURE } from 'app/shared/reducers/action-type.util';
 
 import { ISkillshapes } from 'app/shared/model/skillshape.model';
+import { apiPrefix } from 'app/shared/util/url-utils';
 
 export const ACTION_TYPES = {
   FETCH_SKILLSHAPES: 'skillshapes/FETCH_SKILLSHAPES',
@@ -105,13 +106,11 @@ export default (state: SkillshapesState = initialState, action): SkillshapesStat
   }
 };
 
-const apiUrl = 'api/skillshapes';
-
 // Actions
 export const getUserData: ICrudPutAction<ISkillshapes> = () => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.FETCH_SKILLSHAPES,
-    payload: axios.get<ISkillshapes>('http://localhost:3000/FirstFetch'),
+    payload: axios.get<ISkillshapes>(`${apiPrefix}/api/account`),
   });
   // eslint-disable-next-line no-console
   // console.log(`check the result ${JSON.stringify(result)}`);
@@ -121,7 +120,7 @@ export const getUserData: ICrudPutAction<ISkillshapes> = () => async dispatch =>
 export const getTechnologies: ICrudPutAction<ISkillshapes> = () => async dispatch => {
   const result = await dispatch({
     type: ACTION_TYPES.FETCH_TECHNOLOGIES,
-    payload: axios.get<ISkillshapes>('http://localhost:3000/SecondFetch'),
+    payload: axios.get<ISkillshapes>(`${apiPrefix}/api/skill-shapes/profile`),
   });
   // eslint-disable-next-line no-console
   // console.log(`check the result for Technologie ${JSON.stringify(result)}`);
