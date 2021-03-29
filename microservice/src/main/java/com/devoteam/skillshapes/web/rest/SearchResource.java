@@ -1,7 +1,6 @@
 package com.devoteam.skillshapes.web.rest;
 
 import com.devoteam.skillshapes.annotations.SearchableEntity;
-import io.quarkus.runtime.StartupEvent;
 import org.hibernate.search.engine.search.query.dsl.SearchQueryOptionsStep;
 import org.hibernate.search.engine.search.sort.dsl.FieldSortOptionsStep;
 import org.hibernate.search.engine.search.sort.dsl.SearchSortFactory;
@@ -12,7 +11,6 @@ import org.jboss.resteasy.annotations.jaxrs.QueryParam;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.transaction.Transactional;
 import javax.ws.rs.GET;
@@ -28,25 +26,34 @@ import java.util.Optional;
 public class SearchResource {
 
     private final Logger log = LoggerFactory.getLogger(UserProfileResource.class);
+
     @Inject
     SearchSession searchSession;
+
     private List<String> fields;
     private List<String> sortFields;
 
-    @Transactional
-    void onStart(@Observes StartupEvent ev) throws Exception {
-        Class entity = getEntityClass();
+    Class entity = null;
 
-        if (entity != null) {
-            initializeLists(entity);
-            Method count = entity.getMethod("count");
-            if (count != null) {
-                Object c = count.invoke(entity);
-                if ((Long) c > 0) {
-                    log.info("Elastic Search Mass Indexer started  " + entity);
-                    searchSession.massIndexer().startAndWait();
+    @Transactional
+    void prepare() {
+        try{
+            entity = getEntityClass();
+
+            if (entity != null) {
+                initializeLists(entity);
+                Method count = entity.getMethod("count");
+                if (count != null) {
+                    Object c = count.invoke(entity);
+                    if ((Long) c > 0) {
+                        log.info("Elastic Search Mass Indexer started  " + entity);
+                        searchSession.massIndexer().startAndWait();
+                    }
                 }
             }
+        }
+        catch(Exception e){
+            e.printStackTrace();
         }
     }
 
@@ -94,20 +101,25 @@ public class SearchResource {
     @Transactional
     public List<?> search(@QueryParam String pattern,
                           @QueryParam Optional<Integer> size) throws Exception {
-        Class entity = getEntityClass();
-        SearchQueryOptionsStep step = searchSession.search(getEntityClass())
-            .where(f ->
-                pattern == null || pattern.trim().isEmpty() ?
-                    f.matchAll() :
-                    f.simpleQueryString()
-                        .fields(fields.toArray(new String[0])).matching(pattern)
-            );
+        if(entity == null){
+            prepare();
+            return new ArrayList();
+        }
+        else {
+            SearchQueryOptionsStep step = searchSession.search(getEntityClass())
+                .where(f ->
+                    pattern == null || pattern.trim().isEmpty() ?
+                        f.matchAll() :
+                        f.simpleQueryString()
+                            .fields(fields.toArray(new String[0])).matching(pattern)
+                );
 
-        if (sortFields.size() > 0) step = step.sort(f -> {
-            return sortInnerFields((SearchSortFactory) f, sortFields);
-        });
+            if (sortFields.size() > 0) step = step.sort(f -> {
+                return sortInnerFields((SearchSortFactory) f, sortFields);
+            });
 
-        return step.fetchHits(size.orElse(20));
+            return step.fetchHits(size.orElse(20));
+        }
     }
 
     /**
