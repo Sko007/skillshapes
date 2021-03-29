@@ -1,6 +1,5 @@
 package com.devoteam.skillshapes.service;
 
-import com.devoteam.skillshapes.domain.Skill;
 import com.devoteam.skillshapes.domain.SkillShape;
 import com.devoteam.skillshapes.service.dto.SkillShapeDTO;
 import com.devoteam.skillshapes.service.mapper.SkillShapeMapper;
